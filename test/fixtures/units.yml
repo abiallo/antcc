@@ -1,0 +1,21 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  cp: MyString
+  weaponrange: 1
+  description: MyText
+  friendicon: MyString
+  neutralicon: MyString
+  enemyicon: MyString
+  unknownicon: MyString
+
+two:
+  name: MyString
+  cp: MyString
+  weaponrange: 1
+  description: MyText
+  friendicon: MyString
+  neutralicon: MyString
+  enemyicon: MyString
+  unknownicon: MyString
