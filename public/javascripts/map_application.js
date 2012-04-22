@@ -1,5 +1,5 @@
-var centerLatitude = 24.464699;
-var centerLongitude = 54.337749;
+var centerLatitude = 40.40;
+var centerLongitude = 16.40;
 var initlatlng = new google.maps.LatLng(centerLatitude,centerLongitude);
 var startZoom = 13;
 var map;
