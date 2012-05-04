@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>AntCC</title>
+  <title>GeosBook</title>
   <%= stylesheet_link_tag :all %>
   <%= javascript_include_tag 'jquery-1.6.4', 'rails', 'application' %>
   <%= csrf_meta_tag %>
 </head>
 <body>
 	<div id="header">
-		<h1> <%= link_to "AntCC", root_path %></h1>
+		<h1> <%= link_to "GeosBook", root_path %></h1>
 		<div id="user_bar">
 			<% if logged_in? %>
 			  <%= link_to "Map", tracks_path %> |
@@ -26,7 +26,7 @@
 		<%= yield %>
     </div>
     <div id="footer">
-    	A simple site built for the C4I field study
+    	An initial site built with RubyOnRails & GoogleMaps 
     </div>
 </body>
 </html>
