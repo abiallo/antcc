@@ -24,7 +24,7 @@ class Tracks < ActiveRecord::Base
 end
 
 #track = Tracks.find(:first, :conditions=>["cstName = ?","pluto33"])
-#puts"okok"
+puts"okok"
 #puts track.cstId
 
 
@@ -34,9 +34,12 @@ thr = Thread.new do
   while true do
     trackArray = Tracks.find(:all)
     i = 0
+    puts i
+    puts trackArray.length
 while (i < trackArray.length)
+  puts i
   track = trackArray[i]
-  if (track.speed != 0)
+  if (track.speed != nil) 
    time = Time.now
    timegmt = time.getgm
    lat1 = track.lat
@@ -46,9 +49,16 @@ while (i < trackArray.length)
    if ((postime == nil) || (deltaTime > 300))
      postime = time
      end
-      
+   puts "ok2"  
    brng = track.course
-   speed = track.speed*1000/3600
+   puts "ok3"
+   puts brng
+   puts track.course
+   puts track.speed
+   puts time
+   puts lat1
+   
+   speed = (track.speed)*1000/3600
    puts("R "+ R.to_s)
    puts("speed m/s = " + speed.to_s)
    puts("brng "+ brng.to_s)
