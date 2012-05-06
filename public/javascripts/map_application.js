@@ -284,11 +284,13 @@ function setEventsOnMarker(marker,latlng,track,inputDeleteForm,inputUpdateForm) 
 
   google.maps.event.addListener(marker,'rightclick',function(){
     infoDeleteWindow.setContent(inputDeleteForm);
-    infoDeleteWindow.open(map,marker);
+    infoDeleteWindow.setPosition(marker.getPosition());
+    infoDeleteWindow.open(map);
   });
   google.maps.event.addListener(marker,'dblclick',function(){
     infoUpdateWindow.setContent(inputUpdateForm);
-    infoUpdateWindow.open(map,marker);
+    infoUpdateWindow.setPosition(marker.getPosition());
+    infoUpdateWindow.open(map);
   });
 
   google.maps.event.addListener(marker,'dragstart',function(){
