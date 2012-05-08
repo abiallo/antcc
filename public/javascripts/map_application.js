@@ -32,9 +32,33 @@ var hookMarker = new google.maps.Marker({
                         map: map,
                         icon: hookImage});
 var hookedTrack;
+var hookedMarker;
+var hookMarkerForm = document.createElement("form");
+var trackHookVisibility = false;
+var markerHookVisibility = false;
 var geoForm = document.createElement("form");
 var displayLat;
 var displayLong;
+var placesFlag = false;
+ var drawingManager = new google.maps.drawing.DrawingManager({
+      drawingControl: true,
+      drawingControlOptions: {
+        position: google.maps.ControlPosition.TOP_CENTER,
+        drawingModes: [google.maps.drawing.OverlayType.MARKER, google.maps.drawing.OverlayType.CIRCLE,
+                                           google.maps.drawing.OverlayType.POLYGON,
+                                           google.maps.drawing.OverlayType.POLYLINE,
+                                           google.maps.drawing.OverlayType.RECTANGLE]
+      },
+      circleOptions: {
+        fillColor: '#ffff00',
+        fillOpacity: 0.2,
+        strokeWeight: 5,
+        clickable: false,
+        zIndex: 1,
+        editable: true
+      }
+    });
+///////////////////////////////////////////////////
 function buildImage(track) {
   if (track.category == 'land') {
     if (track.icon == 'unknown') {image = new google.maps.MarkerImage("/images/unkland0.png",null,null, new google.maps.Point(17,17));}
@@ -223,10 +247,60 @@ function createUpdateTrackForm(track,marker,location) {
 
   return inputForm;
 }
+
 /////////////////////////////////////////////
 //click on marker 
 /////////////////////////////////////////////
-function displayHook(marker,track,location,visibility)
+function displayMarkerHook(marker,visibility)
+{
+ if (visibility==true){
+   hookedMarker = marker;
+   hookMarker.setPosition(marker.getPosition());
+   hookMarker.setMap(map);
+  //Hook HTML DOM form element
+  hookMarkerForm.id = "hookmarkerpanel";
+  hookMarkerForm.setAttribute("action","");
+  hookMarkerForm.onsubmit = function() { hookMarker.setMap(null); 
+  	                    document.getElementById("sidebar-title").removeChild(hookMarkerForm);
+  	                    marker.setMap(null);
+  	                    markerHookVisibility = false;
+  	                    return false;};
+  hookMarkerForm.innerHTML =  
+    '<fieldset style="width:200px;">' +
+    '<label for="latitude">Lat </label>' + marker.getPosition().lat() +
+    '<br>' +
+    '<label for="longitude">Lng </label>' + marker.getPosition().lng() +
+    '<br>' +
+    '<label for="category">Category </label>' +   
+    '<br>' +
+    '<label for="icon">Identity </label>' +  
+    '<br>' +
+    '<input type="submit" id="cancelMarker" value="Delete Marker" />' +
+    '<input type="button" id="centerMarker" value="Center" onclick="centerMapOnMarkerHook();" />' +
+    '</fieldset>';
+
+    if (trackHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookForm);
+    	trackHookVisibility = false;
+    }
+    document.getElementById("sidebar-title").appendChild(hookMarkerForm);
+    markerHookVisibility = true;
+    setEventsOnMarker(marker);
+ }
+ else {
+  hookMarker.setMap(null);
+  document.getElementById("sidebar-title").removeChild(hookMarkerForm);
+  markerHookVisibility = false;
+ }
+}
+function centerMapOnMarkerHook() {
+	map.setCenter(hookedMarker.getPosition());
+}
+
+/////////////////////////////////////////////
+//click on track 
+/////////////////////////////////////////////
+function displayTrackHook(marker,track,location,visibility)
 {
  if (visibility==true){
    hookedTrack = track;
@@ -237,6 +311,7 @@ function displayHook(marker,track,location,visibility)
   hookForm.setAttribute("action","");
   hookForm.onsubmit = function() { hookMarker.setMap(null); 
   	                    document.getElementById("sidebar-title").removeChild(hookForm);
+  	                    trackHookVisibility = false;
   	                    deleteTrack(location,track,marker);
   	                    return false;};
   hookForm.innerHTML =  
@@ -262,11 +337,17 @@ function displayHook(marker,track,location,visibility)
     '<input type="submit" id="cancel" value="Delete Track" />' +
     '<input type="button" id="prova" value="Center" onclick="centerMapOnHook();" />' +
     '</fieldset>';
+    if (markerHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookMarkerForm);
+    	markerHookVisibility = false;
+    }
     document.getElementById("sidebar-title").appendChild(hookForm);
+    trackHookVisibility = true;
  }
  else {
   hookMarker.setMap(null);
   document.getElementById("sidebar-title").removeChild(hookForm);
+  trackHookVisibility = false;
  }
 }
 function centerMapOnHook() {
@@ -276,10 +357,10 @@ function centerMapOnHook() {
     var hooklatlng = new google.maps.LatLng(centerLatitude,centerLongitude); 
 	map.setCenter(hooklatlng);
 }
-function setEventsOnMarker(marker,latlng,track,inputDeleteForm,inputUpdateForm) {
+function setEventsOnTrack(marker,latlng,track,inputDeleteForm,inputUpdateForm) {
 
   google.maps.event.addListener(marker,'click',function(){
-   displayHook(marker,track,latlng,true);
+   displayTrackHook(marker,track,latlng,true);
   });
 
   google.maps.event.addListener(marker,'rightclick',function(){
@@ -301,6 +382,13 @@ function setEventsOnMarker(marker,latlng,track,inputDeleteForm,inputUpdateForm) 
     updateInfoWindow(marker,event.latLng,track);
   });
 }
+////////////////////////////////////////////////////////////////////////////
+function setEventsOnMarker(marker) {
+
+  google.maps.event.addListener(marker,'click',function(){
+   displayMarkerHook(marker,true);
+  });
+}
 
 ////////////////////////////////////////////////////////////////////////////
 //after track creation to create a marker
@@ -320,7 +408,7 @@ function createMarker(track) {
     markerArray.push(marker);
     var inputDeleteForm=createDeleteTrackForm(track,marker,latlng);
     var inputUpdateForm=createUpdateTrackForm(track,marker,latlng);
-    setEventsOnMarker(marker,latlng,track,inputDeleteForm,inputUpdateForm);
+    setEventsOnTrack(marker,latlng,track,inputDeleteForm,inputUpdateForm);
 
     image = '';
 
@@ -418,10 +506,8 @@ function listTracks() {
   }); //end of .ajax request
   initPostime();
 }
-
+////////////////////////////////////////////
 function initPostime(){
-	      // just for simulation purposes
-//	      alert("initPostime");
 	   var track;
 	   var updatedTrack;
 	   for (var i = 0 ; i < tracks.length ; i++) {
@@ -522,6 +608,7 @@ function updateTrack(marker,id) {
 	    } // end on success
 	}); // end of the new Ajax.Request() call
 }
+
 //////////////////////////////////////////////////////////////////////
 function displayGeoPanel() {
 	  //Hook HTML DOM form element
@@ -540,7 +627,7 @@ function displayGeoPanel() {
     '<input type="text" id="geolng" name="geo[lng]" maxlength="10" ' + 
      'value="'+ centerLongitude + '"/>' +
     '<br>' +
-    '<input type="button" id="geo1" value="Geo1" />' +
+    '<input type="button" id="geo1" value="Places" onclick="placesOnOff()"/>' +
     '<input type="button" id="geo2" value="Geo2" />' +
     '<br>' +
     '<label for="ntracks">NTracks </label>' +
@@ -549,7 +636,35 @@ function displayGeoPanel() {
     '</fieldset>';
     document.getElementById("sidebar-title").appendChild(geoForm);
  }
+//////////////////////////////////////////////////////////////////////
+function placesOnOff(){
+	if (placesFlag == false) {
+		placesFlag = true;
+		$("#geo1").prop('value','Search');
+		drawingManager.setOptions({
+            drawingControlOptions: {
+                   position: google.maps.ControlPosition.TOP_CENTER,
+                   drawingModes: [google.maps.drawing.OverlayType.MARKER]
+            }
+        });
+	}
+	else {
+	    placesFlag = false;
+//        document.getElementById("geo1").value = "Places";
+		$("#geo1").prop("value","Places");
+		drawingManager.setOptions({
+           drawingControlOptions: {
+                    position: google.maps.ControlPosition.TOP_CENTER,
+                    drawingModes: [google.maps.drawing.OverlayType.MARKER,
+                                           google.maps.drawing.OverlayType.CIRCLE,
+                                           google.maps.drawing.OverlayType.POLYGON,
+                                           google.maps.drawing.OverlayType.POLYLINE,
+                                           google.maps.drawing.OverlayType.RECTANGLE] 
+           }
+        });
+	};
 
+}
 //////////////////////////////////////////////////////////////////////
 // when the page is loaded
 /////////////////////////////////////////////////////////////////////
@@ -567,31 +682,8 @@ function initialize() {
 //  var ge = new GoogleEarth(map);
  ////////////////////////////////////////////////////
  ////
- var drawingManager = new google.maps.drawing.DrawingManager({
-//      drawingMode: google.maps.drawing.OverlayType.MARKER,
-      drawingControl: true,
-      drawingControlOptions: {
-        position: google.maps.ControlPosition.TOP_CENTER,
-        drawingModes: [google.maps.drawing.OverlayType.MARKER, google.maps.drawing.OverlayType.CIRCLE,
-                                           google.maps.drawing.OverlayType.POLYGON,
-                                           google.maps.drawing.OverlayType.POLYLINE,
-                                           google.maps.drawing.OverlayType.RECTANGLE]
-      },
-//      markerOptions: {
-//        icon: new google.maps.MarkerImage('http://www.example.com/icon.png')
-//      },
-      circleOptions: {
-        fillColor: '#ffff00',
-        fillOpacity: 0.3,
-        strokeWeight: 5,
-        clickable: false,
-        zIndex: 1,
-        editable: true
-      }
-    });
     drawingManager.setMap(map);
- /////////////////////////////////////////////////////////////
-// display geo panel
+/////////////////////////////////////////////////////////////
     displayGeoPanel();
 //////////////////////////////////////////////////////////////
     listTracks();
@@ -600,5 +692,12 @@ function initialize() {
     google.maps.event.addListener(map,'mousemove',function(event){
            displayLatLong(event.latLng);});  
     }
+    google.maps.event.addListener(drawingManager, 'overlaycomplete', function(event) {
+//  if (event.type == google.maps.drawing.OverlayType.CIRCLE) {
+//    var radius = event.overlay.getRadius();
+       if (event.type == google.maps.drawing.OverlayType.MARKER) {  	
+  	        displayMarkerHook(event.overlay,true);
+       }
+    });
 //////////////////////////////////////////////////////////////
 window.onload = initialize;
