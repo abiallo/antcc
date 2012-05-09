@@ -18,7 +18,7 @@ var infoDeleteWindow = new google.maps.InfoWindow({
     });
 var hookOptions = {
       strokeColor: "#FF0000",
-      strokeOpacity: 0.8,
+      strokeOpacity: 0.5,
       strokeWeight: 2,
       fillColor: "#000000",
       fillOpacity: 0.10,
@@ -33,14 +33,17 @@ var hookMarker = new google.maps.Marker({
                         icon: hookImage});
 var hookedTrack;
 var hookedMarker;
+var hookedCircle = null;
 var hookMarkerForm = document.createElement("form");
+var hookCircleForm = document.createElement("form");
 var trackHookVisibility = false;
 var markerHookVisibility = false;
+var circleHookVisibility = false;
 var geoForm = document.createElement("form");
 var displayLat;
 var displayLong;
 var placesFlag = false;
- var drawingManager = new google.maps.drawing.DrawingManager({
+var drawingManager = new google.maps.drawing.DrawingManager({
       drawingControl: true,
       drawingControlOptions: {
         position: google.maps.ControlPosition.TOP_CENTER,
@@ -50,10 +53,10 @@ var placesFlag = false;
                                            google.maps.drawing.OverlayType.RECTANGLE]
       },
       circleOptions: {
-        fillColor: '#ffff00',
-        fillOpacity: 0.2,
-        strokeWeight: 5,
-        clickable: false,
+        fillColor: '#000000',
+        fillOpacity: 0.05,
+        strokeWeight: 2,       
+        clickable: true,
         zIndex: 1,
         editable: true
       }
@@ -254,6 +257,10 @@ function createUpdateTrackForm(track,marker,location) {
 function displayMarkerHook(marker,visibility)
 {
  if (visibility==true){
+   if (hookedCircle != null) {	
+   	hookedCircle.setOptions({strokeColor: '#000000'});
+   	hookedCircle.setMap(map);
+   } 	
    hookedMarker = marker;
    hookMarker.setPosition(marker.getPosition());
    hookMarker.setMap(map);
@@ -283,9 +290,12 @@ function displayMarkerHook(marker,visibility)
     	document.getElementById("sidebar-title").removeChild(hookForm);
     	trackHookVisibility = false;
     }
+    if (circleHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookCircleForm);
+    	circleHookVisibility = false;
+    }
     document.getElementById("sidebar-title").appendChild(hookMarkerForm);
     markerHookVisibility = true;
-    setEventsOnMarker(marker);
  }
  else {
   hookMarker.setMap(null);
@@ -296,6 +306,66 @@ function displayMarkerHook(marker,visibility)
 function centerMapOnMarkerHook() {
 	map.setCenter(hookedMarker.getPosition());
 }
+/////////////////////////////////////////////
+//click on circle 
+/////////////////////////////////////////////
+function displayCircleHook(circle,visibility)
+{
+ if (visibility==true){
+   if (hookedCircle != null) {	
+   	hookedCircle.setOptions({strokeColor: '#000000'});
+   	hookedCircle.setMap(map);
+   }
+   hookedCircle = circle;
+//   hookMarker.setPosition(circle.getCenter());
+  hookMarker.setMap(null);
+  circle.setOptions({strokeColor: '#FF0000'});
+  //Hook HTML DOM form element
+  hookCircleForm.id = "hookcirclepanel";
+  hookCircleForm.setAttribute("action","");
+  hookCircleForm.onsubmit = function() { hookMarker.setMap(null); 
+  	                    document.getElementById("sidebar-title").removeChild(hookCircleForm);
+  	                    circle.setMap(null);
+  	                    circleHookVisibility = false;
+  	                    hookedCircle = null;
+  	                    return false;};
+  hookCircleForm.innerHTML =  
+    '<fieldset style="width:200px;">' +
+    '<label for="latitude">Lat </label>' + circle.getCenter().lat() +
+    '<br>' +
+    '<label for="longitude">Lng </label>' + circle.getCenter().lng() +
+    '<br>' +
+    '<label for="radius">Radius (m) </label>' + circle.getRadius() +
+    '<br>' +    
+    '<label for="category">Category </label>' +   
+    '<br>' +
+    '<label for="icon">Identity </label>' +  
+    '<br>' +
+    '<input type="submit" id="cancelcircle" value="Delete Circle" />' +
+    '<input type="button" id="centercircle" value="Center" onclick="centerMapOnCircleHook();" />' +
+    '</fieldset>';
+
+    if (trackHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookForm);
+    	trackHookVisibility = false;
+    }
+    if (markerHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookMarkerForm);
+    	markerHookVisibility = false;
+    }
+    document.getElementById("sidebar-title").appendChild(hookCircleForm);
+    circleHookVisibility = true;
+ }
+ else {
+//  hookMarker.setMap(null);
+  circle.setOptions({strokeColor: '#000000'});
+  document.getElementById("sidebar-title").removeChild(hookCircleForm);
+  circleHookVisibility = false;
+ }
+}
+function centerMapOnCircleHook() {
+	map.setCenter(hookedCircle.getCenter());
+}
 
 /////////////////////////////////////////////
 //click on track 
@@ -303,6 +373,10 @@ function centerMapOnMarkerHook() {
 function displayTrackHook(marker,track,location,visibility)
 {
  if (visibility==true){
+   if (hookedCircle != null) {	
+   	hookedCircle.setOptions({strokeColor: '#000000'});
+   	hookedCircle.setMap(map);
+   }
    hookedTrack = track;
    hookMarker.setPosition(location);
    hookMarker.setMap(map);
@@ -341,6 +415,10 @@ function displayTrackHook(marker,track,location,visibility)
     	document.getElementById("sidebar-title").removeChild(hookMarkerForm);
     	markerHookVisibility = false;
     }
+    if (circleHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookCircleForm);
+    	circleHookVisibility = false;
+    }
     document.getElementById("sidebar-title").appendChild(hookForm);
     trackHookVisibility = true;
  }
@@ -351,7 +429,6 @@ function displayTrackHook(marker,track,location,visibility)
  }
 }
 function centerMapOnHook() {
-//	alert(hookedTrack.lat);
     centerLatitude = hookedTrack.lat;
     centerLongitude = hookedTrack.long;
     var hooklatlng = new google.maps.LatLng(centerLatitude,centerLongitude); 
@@ -387,6 +464,12 @@ function setEventsOnMarker(marker) {
 
   google.maps.event.addListener(marker,'click',function(){
    displayMarkerHook(marker,true);
+  });
+}
+////////////////////////////////////////////////////////////////////////////
+function setEventsOnCircle(circle) {
+  google.maps.event.addListener(circle,'click',function(){
+   displayCircleHook(circle,true);
   });
 }
 
@@ -520,7 +603,6 @@ function initPostime(){
             dataType: "json",
             success: function(data, status){ 
 //               updatedTrack=data.content.track;
-//               alert(updatedTrack.postime);
 	        } // end on success
 	      }); // end of the new Ajax.Request() call
         }; // end of for loop
@@ -644,7 +726,7 @@ function placesOnOff(){
 		drawingManager.setOptions({
             drawingControlOptions: {
                    position: google.maps.ControlPosition.TOP_CENTER,
-                   drawingModes: [google.maps.drawing.OverlayType.MARKER]
+                   drawingModes: [google.maps.drawing.OverlayType.CIRCLE]
             }
         });
 	}
@@ -693,11 +775,17 @@ function initialize() {
            displayLatLong(event.latLng);});  
     }
     google.maps.event.addListener(drawingManager, 'overlaycomplete', function(event) {
-//  if (event.type == google.maps.drawing.OverlayType.CIRCLE) {
-//    var radius = event.overlay.getRadius();
-       if (event.type == google.maps.drawing.OverlayType.MARKER) {  	
-  	        displayMarkerHook(event.overlay,true);
+       if (event.type == google.maps.drawing.OverlayType.CIRCLE) {
+//            var radius = event.overlay.getRadius();
+            setEventsOnCircle(event.overlay);
+            displayCircleHook(event.overlay,true);
        }
+       else {
+          if (event.type == google.maps.drawing.OverlayType.MARKER) {
+          	   setEventsOnMarker(event.overlay);  	
+  	           displayMarkerHook(event.overlay,true);
+          }
+         }
     });
 //////////////////////////////////////////////////////////////
 window.onload = initialize;
