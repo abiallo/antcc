@@ -27,7 +27,7 @@
 			<% if logged_in? %>
 			  <%= link_to "Map", tracks_path %> |
 			  <%= link_to "New Article", new_article_path %> |
-			  <%= link_to "Edit Password", edit_user_path(current_user)%> |
+			  <%= link_to "Edit Profile", edit_user_path(current_user)%> |
 			  <%= link_to "Logout", logout_path %>
 			<% else %>
 			  <%= link_to "Registration", new_user_path %> |
