@@ -25,6 +25,7 @@
 		<h1> <%= link_to "GeosBook", root_path %></h1>
 		<div id="user_bar">
 			<% if logged_in? %>
+			  <%= current_user.name + "  "%> |
 			  <%= link_to "Map", tracks_path %> |
 			  <%= link_to "New Article", new_article_path %> |
 			  <%= link_to "Edit Profile", edit_user_path(current_user)%> |
