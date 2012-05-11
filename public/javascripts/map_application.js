@@ -556,10 +556,19 @@ function setEventsOnCircle(circle) {
   google.maps.event.addListener(circle,'click',function(){
    displayCircleHook(circle,true);
   });
+  google.maps.event.addListener(circle,'radius_changed',function(){
+   displayCircleHook(circle,true);
+  });
+  google.maps.event.addListener(circle,'center_changed',function(){
+   displayCircleHook(circle,true);
+  });    
 }
 ////////////////////////////////////////////////////////////////////////////
 function setEventsOnRectangle(rectangle) {
   google.maps.event.addListener(rectangle,'click',function(){
+   displayRectangleHook(rectangle,true);
+  });
+  google.maps.event.addListener(rectangle,'bounds_changed',function(){
    displayRectangleHook(rectangle,true);
   });
 }
