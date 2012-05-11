@@ -37,10 +37,12 @@ var hookedOverlay = null;
 var hookMarkerForm = document.createElement("form");
 var hookCircleForm = document.createElement("form");
 var hookRectangleForm = document.createElement("form");
+var hookPolylineForm = document.createElement("form");
 var trackHookVisibility = false;
 var markerHookVisibility = false;
 var circleHookVisibility = false;
 var rectangleHookVisibility = false;
+var polylineHookVisibility = false;
 var geoForm = document.createElement("form");
 var displayLat;
 var displayLong;
@@ -65,6 +67,12 @@ var drawingManager = new google.maps.drawing.DrawingManager({
       rectangleOptions: {
         fillColor: '#000000',
         fillOpacity: 0.05,
+        strokeWeight: 2,       
+        clickable: true,
+        zIndex: 1,
+        editable: true
+      },
+      polylineOptions: {
         strokeWeight: 2,       
         clickable: true,
         zIndex: 1,
@@ -308,6 +316,10 @@ function displayMarkerHook(marker,visibility)
     	document.getElementById("sidebar-title").removeChild(hookRectangleForm);
     	rectangleHookVisibility = false;
     }    
+    if (polylineHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookPolylineForm);
+    	polylineHookVisibility = false;
+    }
     document.getElementById("sidebar-title").appendChild(hookMarkerForm);
     markerHookVisibility = true;
  }
@@ -371,6 +383,10 @@ function displayCircleHook(circle,visibility)
     	document.getElementById("sidebar-title").removeChild(hookRectangleForm);
     	rectangleHookVisibility = false;
     }
+    if (polylineHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookPolylineForm);
+    	polylineHookVisibility = false;
+    }
     document.getElementById("sidebar-title").appendChild(hookCircleForm);
     circleHookVisibility = true;
  }
@@ -433,6 +449,10 @@ function displayRectangleHook(rectangle,visibility)
     	document.getElementById("sidebar-title").removeChild(hookCircleForm);
     	circleHookVisibility = false;
     }
+    if (polylineHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookPolylineForm);
+    	polylineHookVisibility = false;
+    }
     
     document.getElementById("sidebar-title").appendChild(hookRectangleForm);
     rectangleHookVisibility = true;
@@ -447,7 +467,64 @@ function displayRectangleHook(rectangle,visibility)
 function centerMapOnRectangleHook() {
 	map.setCenter(hookedOverlay.getBounds().getCenter());
 }
+/////////////////////////////////////////////
+//click on polyline 
+/////////////////////////////////////////////
+function displayPolylineHook(polyline,visibility)
+{
+ if (visibility==true){
+   if (hookedOverlay != null) {	
+   	hookedOverlay.setOptions({strokeColor: '#000000'});
+   	hookedOverlay.setMap(map);
+   }
+   hookedOverlay = polyline;
+  hookMarker.setMap(null);
+  polyline.setOptions({strokeColor: '#FF0000'});
+  //Hook HTML DOM form element
+  hookPolylineForm.id = "hookpolylinepanel";
+  hookPolylineForm.setAttribute("action","");
+  hookPolylineForm.onsubmit = function() { hookMarker.setMap(null); 
+  	                    document.getElementById("sidebar-title").removeChild(hookPolylineForm);
+  	                    polyline.setMap(null);
+  	                    polylineHookVisibility = false;
+  	                    hookedOverlay = null;
+  	                    return false;};
+  hookPolylineForm.innerHTML =  
+    '<fieldset style="width:200px;">' +
+    '<label for="category">Category </label>' +   
+    '<br>' +
+    '<label for="icon">Identity </label>' +  
+    '<br>' +
+    '<input type="submit" id="cancelpolyline" value="Delete Polyline" />' +
+    '</fieldset>';
 
+    if (trackHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookForm);
+    	trackHookVisibility = false;
+    }
+    if (markerHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookMarkerForm);
+    	markerHookVisibility = false;
+    }
+    if (circleHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookCircleForm);
+    	circleHookVisibility = false;
+    }
+    if (rectangleHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookRectangleForm);
+    	rectangleHookVisibility = false;
+    }
+    
+    document.getElementById("sidebar-title").appendChild(hookPolylineForm);
+    polylineHookVisibility = true;
+ }
+ else {
+
+  polyline.setOptions({strokeColor: '#000000'});
+  document.getElementById("sidebar-title").removeChild(hookPolylineForm);
+  polylineHookVisibility = false;
+ }
+}
 /////////////////////////////////////////////
 //click on track 
 /////////////////////////////////////////////
@@ -503,6 +580,10 @@ function displayTrackHook(marker,track,location,visibility)
     if (rectangleHookVisibility == true){
     	document.getElementById("sidebar-title").removeChild(hookRectangleForm);
     	rectangleHookVisibility = false;
+    }
+    if (polylineHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookPolylineForm);
+    	polylineHookVisibility = false;
     }
     document.getElementById("sidebar-title").appendChild(hookForm);
     trackHookVisibility = true;
@@ -570,6 +651,12 @@ function setEventsOnRectangle(rectangle) {
   });
   google.maps.event.addListener(rectangle,'bounds_changed',function(){
    displayRectangleHook(rectangle,true);
+  });
+}
+////////////////////////////////////////////////////////////////////////////
+function setEventsOnPolyline(polyline) {
+  google.maps.event.addListener(polyline,'click',function(){
+   displayPolylineHook(polyline,true);
   });
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -887,6 +974,10 @@ function initialize() {
           	setEventsOnRectangle(event.overlay);  	
   	        displayRectangleHook(event.overlay,true);
   	        break;
+          case google.maps.drawing.OverlayType.POLYLINE :
+          	setEventsOnPolyline(event.overlay);  	
+  	        displayPolylineHook(event.overlay,true);
+  	        break;  	      
   	      default:
        } //switch
     });
