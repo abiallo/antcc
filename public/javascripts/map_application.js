@@ -38,11 +38,13 @@ var hookMarkerForm = document.createElement("form");
 var hookCircleForm = document.createElement("form");
 var hookRectangleForm = document.createElement("form");
 var hookPolylineForm = document.createElement("form");
+var hookPolygonForm = document.createElement("form");
 var trackHookVisibility = false;
 var markerHookVisibility = false;
 var circleHookVisibility = false;
 var rectangleHookVisibility = false;
 var polylineHookVisibility = false;
+var polygonHookVisibility = false;
 var geoForm = document.createElement("form");
 var displayLat;
 var displayLong;
@@ -73,6 +75,14 @@ var drawingManager = new google.maps.drawing.DrawingManager({
         editable: true
       },
       polylineOptions: {
+        strokeWeight: 2,       
+        clickable: true,
+        zIndex: 1,
+        editable: true
+      },
+      polygonOptions: {
+        fillColor: '#000000',
+        fillOpacity: 0.05,
         strokeWeight: 2,       
         clickable: true,
         zIndex: 1,
@@ -320,6 +330,10 @@ function displayMarkerHook(marker,visibility)
     	document.getElementById("sidebar-title").removeChild(hookPolylineForm);
     	polylineHookVisibility = false;
     }
+    if (polygonHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookPolygonForm);
+    	polygonHookVisibility = false;
+    }    
     document.getElementById("sidebar-title").appendChild(hookMarkerForm);
     markerHookVisibility = true;
  }
@@ -387,6 +401,10 @@ function displayCircleHook(circle,visibility)
     	document.getElementById("sidebar-title").removeChild(hookPolylineForm);
     	polylineHookVisibility = false;
     }
+    if (polygonHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookPolygonForm);
+    	polygonHookVisibility = false;
+    }    
     document.getElementById("sidebar-title").appendChild(hookCircleForm);
     circleHookVisibility = true;
  }
@@ -453,7 +471,10 @@ function displayRectangleHook(rectangle,visibility)
     	document.getElementById("sidebar-title").removeChild(hookPolylineForm);
     	polylineHookVisibility = false;
     }
-    
+    if (polygonHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookPolygonForm);
+    	polygonHookVisibility = false;
+    }    
     document.getElementById("sidebar-title").appendChild(hookRectangleForm);
     rectangleHookVisibility = true;
  }
@@ -514,7 +535,10 @@ function displayPolylineHook(polyline,visibility)
     	document.getElementById("sidebar-title").removeChild(hookRectangleForm);
     	rectangleHookVisibility = false;
     }
-    
+    if (polygonHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookPolygonForm);
+    	polygonHookVisibility = false;
+    }    
     document.getElementById("sidebar-title").appendChild(hookPolylineForm);
     polylineHookVisibility = true;
  }
@@ -525,6 +549,68 @@ function displayPolylineHook(polyline,visibility)
   polylineHookVisibility = false;
  }
 }
+/////////////////////////////////////////////
+//click on polygon 
+/////////////////////////////////////////////
+function displayPolygonHook(polygon,visibility)
+{
+ if (visibility==true){
+   if (hookedOverlay != null) {	
+   	hookedOverlay.setOptions({strokeColor: '#000000'});
+   	hookedOverlay.setMap(map);
+   }
+   hookedOverlay = polygon;
+  hookMarker.setMap(null);
+  polygon.setOptions({strokeColor: '#FF0000'});
+  //Hook HTML DOM form element
+  hookPolygonForm.id = "hookpolygonpanel";
+  hookPolygonForm.setAttribute("action","");
+  hookPolygonForm.onsubmit = function() { hookMarker.setMap(null); 
+  	                    document.getElementById("sidebar-title").removeChild(hookPolygonForm);
+  	                    polygon.setMap(null);
+  	                    polygonHookVisibility = false;
+  	                    hookedOverlay = null;
+  	                    return false;};
+  hookPolygonForm.innerHTML =  
+    '<fieldset style="width:200px;">' +
+    '<label for="category">Category </label>' +   
+    '<br>' +
+    '<label for="icon">Identity </label>' +  
+    '<br>' +
+    '<input type="submit" id="cancelpolygon" value="Delete Polygon" />' +
+    '</fieldset>';
+
+    if (trackHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookForm);
+    	trackHookVisibility = false;
+    }
+    if (markerHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookMarkerForm);
+    	markerHookVisibility = false;
+    }
+    if (circleHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookCircleForm);
+    	circleHookVisibility = false;
+    }
+    if (rectangleHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookRectangleForm);
+    	rectangleHookVisibility = false;
+    }
+    if (polylineHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookPolylineForm);
+    	polylineHookVisibility = false;
+    }    
+    document.getElementById("sidebar-title").appendChild(hookPolygonForm);
+    polygonHookVisibility = true;
+ }
+ else {
+
+  polygon.setOptions({strokeColor: '#000000'});
+  document.getElementById("sidebar-title").removeChild(hookPolygonForm);
+  polygonHookVisibility = false;
+ }
+}
+
 /////////////////////////////////////////////
 //click on track 
 /////////////////////////////////////////////
@@ -585,6 +671,10 @@ function displayTrackHook(marker,track,location,visibility)
     	document.getElementById("sidebar-title").removeChild(hookPolylineForm);
     	polylineHookVisibility = false;
     }
+    if (polygonHookVisibility == true){
+    	document.getElementById("sidebar-title").removeChild(hookPolygonForm);
+    	polygonHookVisibility = false;
+    }    
     document.getElementById("sidebar-title").appendChild(hookForm);
     trackHookVisibility = true;
  }
@@ -657,6 +747,12 @@ function setEventsOnRectangle(rectangle) {
 function setEventsOnPolyline(polyline) {
   google.maps.event.addListener(polyline,'click',function(){
    displayPolylineHook(polyline,true);
+  });
+}
+////////////////////////////////////////////////////////////////////////////
+function setEventsOnPolygon(polygon) {
+  google.maps.event.addListener(polygon,'click',function(){
+   displayPolygonHook(polygon,true);
   });
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -977,6 +1073,10 @@ function initialize() {
           case google.maps.drawing.OverlayType.POLYLINE :
           	setEventsOnPolyline(event.overlay);  	
   	        displayPolylineHook(event.overlay,true);
+  	        break;  	      
+          case google.maps.drawing.OverlayType.POLYGON :
+          	setEventsOnPolygon(event.overlay);  	
+  	        displayPolygonHook(event.overlay,true);
   	        break;  	      
   	      default:
        } //switch
