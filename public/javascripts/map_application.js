@@ -1,6 +1,7 @@
 var centerLatitude = 40.40;
 var centerLongitude = 16.40;
 var initlatlng = new google.maps.LatLng(centerLatitude,centerLongitude);
+var geocoder = new google.maps.Geocoder();
 var startZoom = 13;
 var map;
 var tracks = new Array();
@@ -244,7 +245,7 @@ function updateInfoWindow(marker,location,track) {
 
 }
 /////////////////////////////////////////////////////////
-//double clicking on a marker  
+//double clicking on a track  
 /////////////////////////////////////////////////////////
 function createUpdateTrackForm(track,marker,location) {
 
@@ -282,7 +283,7 @@ function createUpdateTrackForm(track,marker,location) {
 /////////////////////////////////////////////
 //click on marker 
 /////////////////////////////////////////////
-function displayMarkerHook(marker,visibility)
+function displayMarkerHook(marker,visibility,address)
 {
  if (visibility==true){
    if (hookedOverlay != null) {	
@@ -306,9 +307,10 @@ function displayMarkerHook(marker,visibility)
     '<br>' +
     '<label for="longitude">Lng </label>' + marker.getPosition().lng() +
     '<br>' +
-    '<label for="category">Category </label>' +   
+    '<label for="category">Address </label>' +   
     '<br>' +
-    '<label for="icon">Identity </label>' +  
+    '<input type="text" id="geoaddress" name="m[geoaddress]" style="width:200px;"' +
+    'value="'+  address + '"/>'+   
     '<br>' +
     '<input type="submit" id="cancelMarker" value="Delete Marker" />' +
     '<input type="button" id="centerMarker" value="Center" onclick="centerMapOnMarkerHook();" />' +
@@ -719,7 +721,7 @@ function setEventsOnTrack(marker,latlng,track,inputDeleteForm,inputUpdateForm) {
 function setEventsOnMarker(marker) {
 
   google.maps.event.addListener(marker,'click',function(){
-   displayMarkerHook(marker,true);
+   displayMarkerHook(marker,true,"");
   });
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -991,8 +993,11 @@ function displayGeoPanel() {
     '<input type="text" id="geolng" name="geo[lng]" maxlength="10" ' + 
      'value="'+ centerLongitude + '"/>' +
     '<br>' +
+    '<br>' +
+    '<input type="text" id="geocodetxt" name="geo[geocodetxt]" style="width:200px;" ' + 
+    '<br>' +
     '<input type="button" id="geo1" value="Places" onclick="placesOnOff()"/>' +
-    '<input type="button" id="geo2" value="Geo2" />' +
+    '<input type="button" id="geocode" value="Geocode" onclick="displayGeocode()"/>' +
     '<br>' +
     '<label for="ntracks">NTracks </label>' +
     '<input type="text" id="ntracks" name="geo[ntracks]" maxlength="4" ' + 
@@ -1000,6 +1005,54 @@ function displayGeoPanel() {
     '</fieldset>';
     document.getElementById("sidebar-title").appendChild(geoForm);
  }
+//////////////////////////////////////////////////////////////////////
+function displayGeocode(){
+	var geoTxt = document.getElementById("geopanel").geocodetxt.value;
+//    alert("display geocode " + geoTxt);
+//    var address = document.getElementById("address").value;
+    geocoder.geocode( { 'address': geoTxt}, function(results, status) {
+       
+       if (status == google.maps.GeocoderStatus.OK) {
+//       	  alert(results[0].formatted_address);
+          map.setCenter(results[0].geometry.location);
+          var marker = new google.maps.Marker({
+             map: map,
+             position: results[0].geometry.location
+          });
+          setEventsOnMarker(marker);  	
+  	      displayMarkerHook(marker,true,results[0].formatted_address);
+       } 
+       else {
+         alert("Geocode was not successful for the following reason: " + status);
+       }
+    }); 
+}
+//////////////////////////////////////////////////////////////////////
+function displayReverseGeocode() {
+//var input = document.getElementById("latlng").value;
+var geoTxt = document.getElementById("geopanel").geocodetxt.value;
+var latlngStr = input.split(",",2);
+var lat = parseFloat(latlngStr[0]);
+var lng = parseFloat(latlngStr[1]);
+var latlng = new google.maps.LatLng(lat, lng);
+geocoder.geocode({'latLng': latlng}, function(results, status) {
+if (status == google.maps.GeocoderStatus.OK) {
+if (results[1]) {
+map.setZoom(11);
+marker = new google.maps.Marker({
+position: latlng,
+map: map
+});
+infowindow.setContent(results[1].formatted_address);
+infowindow.open(map, marker);
+} else {
+alert("No results found");
+}
+} else {
+alert("Geocoder failed due to: " + status);
+}
+});
+} 
 //////////////////////////////////////////////////////////////////////
 function placesOnOff(){
 	if (placesFlag == false) {
@@ -1064,7 +1117,7 @@ function initialize() {
             break;
           case google.maps.drawing.OverlayType.MARKER :
           	setEventsOnMarker(event.overlay);  	
-  	        displayMarkerHook(event.overlay,true);
+  	        displayMarkerHook(event.overlay,true,"");
   	        break;
           case google.maps.drawing.OverlayType.RECTANGLE :
           	setEventsOnRectangle(event.overlay);  	

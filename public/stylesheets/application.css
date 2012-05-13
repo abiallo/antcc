@@ -249,7 +249,7 @@ label {
   margin-right:320px;}
 #sidebar {
   right: 0px;
-  display: block;
+  display:block;
 }
 #map_canvas {
 	position: absolute;
@@ -259,5 +259,11 @@ label {
 	height: 100%;
 	display:block;
 }
+#geocode {
+	position:relative;
+	left:0;
+	float:left;
+}
+
 
 
