@@ -787,8 +787,8 @@ function createMarker(track) {
 //////////////////////////////////////////////////////////
 function displayLatLong(location) {
   //retrieve lat and long of the click point
-  displayLat = format_number(location.lat(),4);
-  displayLong = format_number(location.lng(),4);
+  displayLat = location.lat().toFixed(4);
+  displayLong = location.lng().toFixed(4);
   document.getElementById("geolat").setAttribute("value",displayLat);
   document.getElementById("geolng").setAttribute("value",displayLong);  
 }
@@ -988,11 +988,11 @@ function displayGeoPanel() {
     '<fieldset style="width:100%;">' +
     '<label for="latitude">Lat </label>' +
     '<input type="text" id="geolat" name="geo[lat]" maxlength="10" ' + 
-     'value="'+ format_number(centerLatitude,4) + '"/>' +
+     'value="'+ centerLatitude.toFixed(4) + '"/>' +
     '<br>' +
     '<label for="longitude">Lng </label>' +
     '<input type="text" id="geolng" name="geo[lng]" maxlength="10" ' + 
-     'value="'+ format_number(centerLongitude,4) + '"/>' +
+     'value="'+ centerLongitude.toFixed(4) + '"/>' +
     '<br>' +
     '<input type="button" id="geo1" value="Find Address" style="width:90%;" onclick="displayReverseGeocode()"/>' +
     '<br>' +
