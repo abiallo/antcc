@@ -994,11 +994,11 @@ function displayGeoPanel() {
     '<input type="text" id="geolng" name="geo[lng]" maxlength="10" ' + 
      'value="'+ centerLongitude + '"/>' +
     '<br>' +
-    '<input type="button" id="geo1" value="Reverse Geocode" style="width:200px;" onclick="displayReverseGeocode()"/>' +
+    '<input type="button" id="geo1" value="Reverse Geocode" style="width:90%;" onclick="displayReverseGeocode()"/>' +
     '<br>' +
-    '<input type="text" id="geocodetxt" name="geo[geocodetxt]" style="width:200px;" ' + 
+    '<input type="text" id="geocodetxt" name="geo[geocodetxt]" style="width:90%;" ' + 
     '<br>' +
-    '<input type="button" id="geocode" value="Geocode" style="width:200px;" onclick="displayGeocode()"/>' +
+    '<input type="button" id="geocode" value="Geocode" style="width:90%;" onclick="displayGeocode()"/>' +
 
 
     '<br>' +
