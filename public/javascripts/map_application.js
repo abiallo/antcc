@@ -297,12 +297,12 @@ function displayMarkerHook(marker,visibility,address)
   hookMarkerForm.id = "hookmarkerpanel";
   hookMarkerForm.setAttribute("action","");
   hookMarkerForm.onsubmit = function() { hookMarker.setMap(null); 
-  	                    document.getElementById("sidebar-title").removeChild(hookMarkerForm);
+  	                    document.getElementById("sidebar").removeChild(hookMarkerForm);
   	                    marker.setMap(null);
   	                    markerHookVisibility = false;
   	                    return false;};
   hookMarkerForm.innerHTML =  
-    '<fieldset style="width:200px;">' +
+    '<fieldset style="width:100%;">' +
     '<label for="latitude">Lat </label>' + marker.getPosition().lat() +
     '<br>' +
     '<label for="longitude">Lng </label>' + marker.getPosition().lng() +
@@ -318,31 +318,31 @@ function displayMarkerHook(marker,visibility,address)
     '</fieldset>';
 
     if (trackHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookForm);
+    	document.getElementById("sidebar").removeChild(hookForm);
     	trackHookVisibility = false;
     }
     if (circleHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookCircleForm);
+    	document.getElementById("sidebar").removeChild(hookCircleForm);
     	circleHookVisibility = false;
     }
     if (rectangleHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookRectangleForm);
+    	document.getElementById("sidebar").removeChild(hookRectangleForm);
     	rectangleHookVisibility = false;
     }    
     if (polylineHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookPolylineForm);
+    	document.getElementById("sidebar").removeChild(hookPolylineForm);
     	polylineHookVisibility = false;
     }
     if (polygonHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookPolygonForm);
+    	document.getElementById("sidebar").removeChild(hookPolygonForm);
     	polygonHookVisibility = false;
     }    
-    document.getElementById("sidebar-title").appendChild(hookMarkerForm);
+    document.getElementById("sidebar").appendChild(hookMarkerForm);
     markerHookVisibility = true;
  }
  else {
   hookMarker.setMap(null);
-  document.getElementById("sidebar-title").removeChild(hookMarkerForm);
+  document.getElementById("sidebar").removeChild(hookMarkerForm);
   markerHookVisibility = false;
  }
 }
@@ -367,13 +367,13 @@ function displayCircleHook(circle,visibility)
   hookCircleForm.id = "hookcirclepanel";
   hookCircleForm.setAttribute("action","");
   hookCircleForm.onsubmit = function() { hookMarker.setMap(null); 
-  	                    document.getElementById("sidebar-title").removeChild(hookCircleForm);
+  	                    document.getElementById("sidebar").removeChild(hookCircleForm);
   	                    circle.setMap(null);
   	                    circleHookVisibility = false;
   	                    hookedOverlay = null;
   	                    return false;};
   hookCircleForm.innerHTML =  
-    '<fieldset style="width:200px;">' +
+    '<fieldset style="width:100%;">' +
     '<label for="latitude">Lat </label>' + circle.getCenter().lat() +
     '<br>' +
     '<label for="longitude">Lng </label>' + circle.getCenter().lng() +
@@ -389,32 +389,32 @@ function displayCircleHook(circle,visibility)
     '</fieldset>';
 
     if (trackHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookForm);
+    	document.getElementById("sidebar").removeChild(hookForm);
     	trackHookVisibility = false;
     }
     if (markerHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookMarkerForm);
+    	document.getElementById("sidebar").removeChild(hookMarkerForm);
     	markerHookVisibility = false;
     }
     if (rectangleHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookRectangleForm);
+    	document.getElementById("sidebar").removeChild(hookRectangleForm);
     	rectangleHookVisibility = false;
     }
     if (polylineHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookPolylineForm);
+    	document.getElementById("sidebar").removeChild(hookPolylineForm);
     	polylineHookVisibility = false;
     }
     if (polygonHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookPolygonForm);
+    	document.getElementById("sidebar").removeChild(hookPolygonForm);
     	polygonHookVisibility = false;
     }    
-    document.getElementById("sidebar-title").appendChild(hookCircleForm);
+    document.getElementById("sidebar").appendChild(hookCircleForm);
     circleHookVisibility = true;
  }
  else {
 //  hookMarker.setMap(null);
   circle.setOptions({strokeColor: '#000000'});
-  document.getElementById("sidebar-title").removeChild(hookCircleForm);
+  document.getElementById("sidebar").removeChild(hookCircleForm);
   circleHookVisibility = false;
  }
 }
@@ -439,13 +439,13 @@ function displayRectangleHook(rectangle,visibility)
   hookRectangleForm.id = "hookrectanglepanel";
   hookRectangleForm.setAttribute("action","");
   hookRectangleForm.onsubmit = function() { hookMarker.setMap(null); 
-  	                    document.getElementById("sidebar-title").removeChild(hookRectangleForm);
+  	                    document.getElementById("sidebar").removeChild(hookRectangleForm);
   	                    rectangle.setMap(null);
   	                    rectangleHookVisibility = false;
   	                    hookedOverlay = null;
   	                    return false;};
   hookRectangleForm.innerHTML =  
-    '<fieldset style="width:200px;">' +
+    '<fieldset style="width:100%;">' +
     '<label for="latitude">Lat </label>' + rectangle.getBounds().getCenter().lat() +
     '<br>' +
     '<label for="longitude">Lng </label>' + rectangle.getBounds().getCenter().lng() +
@@ -459,32 +459,32 @@ function displayRectangleHook(rectangle,visibility)
     '</fieldset>';
 
     if (trackHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookForm);
+    	document.getElementById("sidebar").removeChild(hookForm);
     	trackHookVisibility = false;
     }
     if (markerHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookMarkerForm);
+    	document.getElementById("sidebar").removeChild(hookMarkerForm);
     	markerHookVisibility = false;
     }
     if (circleHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookCircleForm);
+    	document.getElementById("sidebar").removeChild(hookCircleForm);
     	circleHookVisibility = false;
     }
     if (polylineHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookPolylineForm);
+    	document.getElementById("sidebar").removeChild(hookPolylineForm);
     	polylineHookVisibility = false;
     }
     if (polygonHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookPolygonForm);
+    	document.getElementById("sidebar").removeChild(hookPolygonForm);
     	polygonHookVisibility = false;
     }    
-    document.getElementById("sidebar-title").appendChild(hookRectangleForm);
+    document.getElementById("sidebar").appendChild(hookRectangleForm);
     rectangleHookVisibility = true;
  }
  else {
 
   rectangle.setOptions({strokeColor: '#000000'});
-  document.getElementById("sidebar-title").removeChild(hookRectangleForm);
+  document.getElementById("sidebar").removeChild(hookRectangleForm);
   rectangleHookVisibility = false;
  }
 }
@@ -508,13 +508,13 @@ function displayPolylineHook(polyline,visibility)
   hookPolylineForm.id = "hookpolylinepanel";
   hookPolylineForm.setAttribute("action","");
   hookPolylineForm.onsubmit = function() { hookMarker.setMap(null); 
-  	                    document.getElementById("sidebar-title").removeChild(hookPolylineForm);
+  	                    document.getElementById("sidebar").removeChild(hookPolylineForm);
   	                    polyline.setMap(null);
   	                    polylineHookVisibility = false;
   	                    hookedOverlay = null;
   	                    return false;};
   hookPolylineForm.innerHTML =  
-    '<fieldset style="width:200px;">' +
+    '<fieldset style="width:100%;">' +
     '<label for="category">Category </label>' +   
     '<br>' +
     '<label for="icon">Identity </label>' +  
@@ -523,32 +523,32 @@ function displayPolylineHook(polyline,visibility)
     '</fieldset>';
 
     if (trackHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookForm);
+    	document.getElementById("sidebar").removeChild(hookForm);
     	trackHookVisibility = false;
     }
     if (markerHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookMarkerForm);
+    	document.getElementById("sidebar").removeChild(hookMarkerForm);
     	markerHookVisibility = false;
     }
     if (circleHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookCircleForm);
+    	document.getElementById("sidebar").removeChild(hookCircleForm);
     	circleHookVisibility = false;
     }
     if (rectangleHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookRectangleForm);
+    	document.getElementById("sidebar").removeChild(hookRectangleForm);
     	rectangleHookVisibility = false;
     }
     if (polygonHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookPolygonForm);
+    	document.getElementById("sidebar").removeChild(hookPolygonForm);
     	polygonHookVisibility = false;
     }    
-    document.getElementById("sidebar-title").appendChild(hookPolylineForm);
+    document.getElementById("sidebar").appendChild(hookPolylineForm);
     polylineHookVisibility = true;
  }
  else {
 
   polyline.setOptions({strokeColor: '#000000'});
-  document.getElementById("sidebar-title").removeChild(hookPolylineForm);
+  document.getElementById("sidebar").removeChild(hookPolylineForm);
   polylineHookVisibility = false;
  }
 }
@@ -569,13 +569,13 @@ function displayPolygonHook(polygon,visibility)
   hookPolygonForm.id = "hookpolygonpanel";
   hookPolygonForm.setAttribute("action","");
   hookPolygonForm.onsubmit = function() { hookMarker.setMap(null); 
-  	                    document.getElementById("sidebar-title").removeChild(hookPolygonForm);
+  	                    document.getElementById("sidebar").removeChild(hookPolygonForm);
   	                    polygon.setMap(null);
   	                    polygonHookVisibility = false;
   	                    hookedOverlay = null;
   	                    return false;};
   hookPolygonForm.innerHTML =  
-    '<fieldset style="width:200px;">' +
+    '<fieldset style="width:100%;">' +
     '<label for="category">Category </label>' +   
     '<br>' +
     '<label for="icon">Identity </label>' +  
@@ -584,32 +584,32 @@ function displayPolygonHook(polygon,visibility)
     '</fieldset>';
 
     if (trackHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookForm);
+    	document.getElementById("sidebar").removeChild(hookForm);
     	trackHookVisibility = false;
     }
     if (markerHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookMarkerForm);
+    	document.getElementById("sidebar").removeChild(hookMarkerForm);
     	markerHookVisibility = false;
     }
     if (circleHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookCircleForm);
+    	document.getElementById("sidebar").removeChild(hookCircleForm);
     	circleHookVisibility = false;
     }
     if (rectangleHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookRectangleForm);
+    	document.getElementById("sidebar").removeChild(hookRectangleForm);
     	rectangleHookVisibility = false;
     }
     if (polylineHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookPolylineForm);
+    	document.getElementById("sidebar").removeChild(hookPolylineForm);
     	polylineHookVisibility = false;
     }    
-    document.getElementById("sidebar-title").appendChild(hookPolygonForm);
+    document.getElementById("sidebar").appendChild(hookPolygonForm);
     polygonHookVisibility = true;
  }
  else {
 
   polygon.setOptions({strokeColor: '#000000'});
-  document.getElementById("sidebar-title").removeChild(hookPolygonForm);
+  document.getElementById("sidebar").removeChild(hookPolygonForm);
   polygonHookVisibility = false;
  }
 }
@@ -631,12 +631,12 @@ function displayTrackHook(marker,track,location,visibility)
   hookForm.id = "hookpanel";
   hookForm.setAttribute("action","");
   hookForm.onsubmit = function() { hookMarker.setMap(null); 
-  	                    document.getElementById("sidebar-title").removeChild(hookForm);
+  	                    document.getElementById("sidebar").removeChild(hookForm);
   	                    trackHookVisibility = false;
   	                    deleteTrack(location,track,marker);
   	                    return false;};
   hookForm.innerHTML =  
-    '<fieldset style="width:200px;">' +
+    '<fieldset style="width:100%;">' +
     '<label for="id">Id </label>' + track.id +
     '<br>' +
     '<label for="cstId">TrackId </label>' + track.cstId +
@@ -659,31 +659,31 @@ function displayTrackHook(marker,track,location,visibility)
     '<input type="button" id="prova" value="Center" onclick="centerMapOnHook();" />' +
     '</fieldset>';
     if (markerHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookMarkerForm);
+    	document.getElementById("sidebar").removeChild(hookMarkerForm);
     	markerHookVisibility = false;
     }
     if (circleHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookCircleForm);
+    	document.getElementById("sidebar").removeChild(hookCircleForm);
     	circleHookVisibility = false;
     }
     if (rectangleHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookRectangleForm);
+    	document.getElementById("sidebar").removeChild(hookRectangleForm);
     	rectangleHookVisibility = false;
     }
     if (polylineHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookPolylineForm);
+    	document.getElementById("sidebar").removeChild(hookPolylineForm);
     	polylineHookVisibility = false;
     }
     if (polygonHookVisibility == true){
-    	document.getElementById("sidebar-title").removeChild(hookPolygonForm);
+    	document.getElementById("sidebar").removeChild(hookPolygonForm);
     	polygonHookVisibility = false;
     }    
-    document.getElementById("sidebar-title").appendChild(hookForm);
+    document.getElementById("sidebar").appendChild(hookForm);
     trackHookVisibility = true;
  }
  else {
   hookMarker.setMap(null);
-  document.getElementById("sidebar-title").removeChild(hookForm);
+  document.getElementById("sidebar").removeChild(hookForm);
   trackHookVisibility = false;
  }
 }
@@ -950,7 +950,7 @@ function deleteTrack(location,track,marker) {
     	success: function(data,status){
     		marker.setMap(null);
     		hookMarker.setMap(null);
-            document.getElementById("sidebar-title").removeChild(hookForm);
+            document.getElementById("sidebar").removeChild(hookForm);
     	}
     })
 }
@@ -982,10 +982,10 @@ function displayGeoPanel() {
   geoForm.id = "geopanel";
   geoForm.setAttribute("action","");
   geoForm.onsubmit = function() {  
-  	                    document.getElementById("sidebar-title").removeChild(geoForm);
+  	                    document.getElementById("sidebar").removeChild(geoForm);
   	                    return false;};
   geoForm.innerHTML =  
-    '<fieldset style="width:200px;">' +
+    '<fieldset style="width:100%;">' +
     '<label for="latitude">Lat </label>' +
     '<input type="text" id="geolat" name="geo[lat]" maxlength="10" ' + 
      'value="'+ centerLatitude + '"/>' +
@@ -1006,7 +1006,7 @@ function displayGeoPanel() {
     '<input type="text" id="ntracks" name="geo[ntracks]" maxlength="4" ' + 
      'value="'+ nTracks + '"/>' +
     '</fieldset>';
-    document.getElementById("sidebar-title").appendChild(geoForm);
+    document.getElementById("sidebar").appendChild(geoForm);
  }
 //////////////////////////////////////////////////////////////////////
 function displayGeocode(){
