@@ -1,8 +1,8 @@
-var centerLatitude = 40.40;
-var centerLongitude = 16.40;
+var centerLatitude = 33.0;
+var centerLongitude = 36.0;
 var initlatlng = new google.maps.LatLng(centerLatitude,centerLongitude);
 var geocoder = new google.maps.Geocoder();
-var startZoom = 13;
+var startZoom = 4;
 var map;
 var tracks = new Array();
 var nTracks;
@@ -212,11 +212,11 @@ function updateInfoWindow(marker,location,track) {
     '<br>' +
     '<label for="latitude">Lat </label>' +
     '<input type="text" id="lat" name="m[lat]" maxlength="10" ' + 
-     'value="'+ lat + '"/>' +
+     'value="'+ format_number(lat,4) + '"/>' +
     '<br>' +
     '<label for="longitude">Lng </label>' +
     '<input type="text" id="long" name="m[long]" maxlength="10" value="' +
-      lng + '"/>' +
+      format_number(lng,4) + '"/>' +
     '<br>' +
     '<select name="m[category]">' +
        selectedOptionCategory +
@@ -262,9 +262,9 @@ function createUpdateTrackForm(track,marker,location) {
     '<br>' +
     '<label for="cstName">Name </label>' + track.cstName +
     '<br>' +
-    '<label for="latitude">Lat </label>' + track.lat +
+    '<label for="latitude">Lat </label>' + format_number(track.lat,4) +
     '<br>' +
-    '<label for="longitude">Lng </label>' + track.long +
+    '<label for="longitude">Lng </label>' + format_number(track.long,4) +
     '<br>' +
     '<label for="category">Category </label>' + track.category +
     '<br>' +
@@ -303,9 +303,9 @@ function displayMarkerHook(marker,visibility,address)
   	                    return false;};
   hookMarkerForm.innerHTML =  
     '<fieldset style="width:100%;">' +
-    '<label for="latitude">Lat </label>' + marker.getPosition().lat() +
+    '<label for="latitude">Lat </label>' + format_number(marker.getPosition().lat(),4) +
     '<br>' +
-    '<label for="longitude">Lng </label>' + marker.getPosition().lng() +
+    '<label for="longitude">Lng </label>' + format_number(marker.getPosition().lng(),4) +
     '<br>' +
     '<label for="category">Address </label>' +   
     '<br>' +
@@ -314,7 +314,7 @@ function displayMarkerHook(marker,visibility,address)
     '<br>' +
     '<input type="submit" id="cancelMarker" value="Delete Marker" />' +
     '<input type="button" id="centerMarker" value="Center" onclick="centerMapOnMarkerHook();" />' +
-    '<input type="button" id="addressMarker" value="Address" onclick="displayReverseGeocodeOnHook();" />' +
+    '<input type="button" id="addressMarker" value="Find Address" onclick="displayReverseGeocodeOnHook();" />' +
     '</fieldset>';
 
     if (trackHookVisibility == true){
@@ -374,11 +374,11 @@ function displayCircleHook(circle,visibility)
   	                    return false;};
   hookCircleForm.innerHTML =  
     '<fieldset style="width:100%;">' +
-    '<label for="latitude">Lat </label>' + circle.getCenter().lat() +
+    '<label for="latitude">Lat </label>' + format_number(circle.getCenter().lat(),4) +
     '<br>' +
-    '<label for="longitude">Lng </label>' + circle.getCenter().lng() +
+    '<label for="longitude">Lng </label>' + format_number(circle.getCenter().lng(),4) +
     '<br>' +
-    '<label for="radius">Radius (m) </label>' + circle.getRadius() +
+    '<label for="radius">Radius (m) </label>' + format_number(circle.getRadius(),0) +
     '<br>' +    
     '<label for="category">Category </label>' +   
     '<br>' +
@@ -446,9 +446,9 @@ function displayRectangleHook(rectangle,visibility)
   	                    return false;};
   hookRectangleForm.innerHTML =  
     '<fieldset style="width:100%;">' +
-    '<label for="latitude">Lat </label>' + rectangle.getBounds().getCenter().lat() +
+    '<label for="latitude">Lat </label>' + format_number(rectangle.getBounds().getCenter().lat(),4) +
     '<br>' +
-    '<label for="longitude">Lng </label>' + rectangle.getBounds().getCenter().lng() +
+    '<label for="longitude">Lng </label>' + format_number(rectangle.getBounds().getCenter().lng(),4) +
     '<br>' +
     '<label for="category">Category </label>' +   
     '<br>' +
@@ -643,9 +643,9 @@ function displayTrackHook(marker,track,location,visibility)
     '<br>' +
     '<label for="cstName">Name </label>' + track.cstName +
     '<br>' +
-    '<label for="latitude">Lat </label>' + track.lat +
+    '<label for="latitude">Lat </label>' + format_number(track.lat,4) +
     '<br>' +
-    '<label for="longitude">Lng </label>' + track.long +
+    '<label for="longitude">Lng </label>' + format_number(track.long,4) +
     '<br>' +
     '<label for="category">Category </label>' + track.category + 
     '<br>' +
@@ -787,8 +787,8 @@ function createMarker(track) {
 //////////////////////////////////////////////////////////
 function displayLatLong(location) {
   //retrieve lat and long of the click point
-  displayLat = location.lat();
-  displayLong = location.lng();
+  displayLat = format_number(location.lat(),4);
+  displayLong = format_number(location.lng(),4);
   document.getElementById("geolat").setAttribute("value",displayLat);
   document.getElementById("geolng").setAttribute("value",displayLong);  
 }
@@ -812,11 +812,11 @@ function createTrackInfoWindow(location) {
     '<label for="cstName">Name </label>' +
     '<input type="text" id="cstName" name="track[cstName]" style="width:60%;"/>'+
     '<br>' +
-    '<label for="latitude">Lat </label>' + lat + 
+    '<label for="latitude">Lat </label>' + format_number(lat,4) + 
     '<input type="hidden" id="latitude" name="track[lat]" maxlength="10" value="' +
       lat + '"/>' +
     '<br>' +
-    '<label for="longitude">Lng </label>' + lng +
+    '<label for="longitude">Lng </label>' + format_number(lng,4) +
     '<input type="hidden" id="longitude" name="track[long]" maxlength="10" value="' +
       lng + '"/>' +
     '<br>' +
@@ -988,13 +988,13 @@ function displayGeoPanel() {
     '<fieldset style="width:100%;">' +
     '<label for="latitude">Lat </label>' +
     '<input type="text" id="geolat" name="geo[lat]" maxlength="10" ' + 
-     'value="'+ centerLatitude + '"/>' +
+     'value="'+ format_number(centerLatitude,4) + '"/>' +
     '<br>' +
     '<label for="longitude">Lng </label>' +
     '<input type="text" id="geolng" name="geo[lng]" maxlength="10" ' + 
-     'value="'+ centerLongitude + '"/>' +
+     'value="'+ format_number(centerLongitude,4) + '"/>' +
     '<br>' +
-    '<input type="button" id="geo1" value="Reverse Geocode" style="width:90%;" onclick="displayReverseGeocode()"/>' +
+    '<input type="button" id="geo1" value="Find Address" style="width:90%;" onclick="displayReverseGeocode()"/>' +
     '<br>' +
     '<input type="text" id="geocodetxt" name="geo[geocodetxt]" style="width:90%;" ' + 
     '<br>' +
@@ -1195,5 +1195,34 @@ function initialize() {
   	      default:
        } //switch
     });
+/////////////////////////////////////////////////////////////
+function format_number(pnumber,decimals){
+	    if (isNaN(pnumber)) { return 0};
+	    if (pnumber=='') { return 0};
+	    var snum = new String(pnumber);
+	    var sec = snum.split('.');
+	    var whole = parseFloat(sec[0]);
+	    var result = '';
+	    if(sec.length > 1){
+	        var dec = new String(sec[1]);
+	        dec = String(parseFloat(sec[1])/Math.pow(10,(dec.length - decimals)));
+	        dec = String(whole + Math.round(parseFloat(dec))/Math.pow(10,decimals));
+	        var dot = dec.indexOf('.');
+	        if(dot == -1){
+	            dec += '.';
+	            dot = dec.indexOf('.');
+	        }
+	        while(dec.length <= dot + decimals) { dec += '0'; }
+	        result = dec;
+	    } else{
+	        var dot;
+	        var dec = new String(whole);
+	        dec += '.';
+	        dot = dec.indexOf('.');
+	        while(dec.length <= dot + decimals) { dec += '0'; }
+	        result = dec;
+	    }
+	    return result;
+	}
 //////////////////////////////////////////////////////////////
 window.onload = initialize;
