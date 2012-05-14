@@ -999,15 +999,38 @@ function displayGeoPanel() {
     '<input type="text" id="geocodetxt" name="geo[geocodetxt]" style="width:90%;" ' + 
     '<br>' +
     '<input type="button" id="geocode" value="Geocode" style="width:90%;" onclick="displayGeocode()"/>' +
-
-
-    '<br>' +
+    '<input type="button" id="myposition" value="My Position" style="width:90%;" onclick="displayMyPosition()"/>' +
     '<label for="ntracks">NTracks </label>' +
     '<input type="text" id="ntracks" name="geo[ntracks]" maxlength="4" ' + 
      'value="'+ nTracks + '"/>' +
     '</fieldset>';
     document.getElementById("sidebar").appendChild(geoForm);
  }
+//////////////////////////////////////////////////////////////////////
+
+function displayMyPosition()
+  {
+  if (navigator.geolocation)
+    {
+    navigator.geolocation.getCurrentPosition(showMyPosition);
+    }
+  else{alert("Geolocation is not supported by this browser.");}
+  }
+  
+function showMyPosition(position){
+//   var myLatlng=position.coords.latitude+","+position.coords.longitude;
+   var myLat = parseFloat(position.coords.latitude);
+   var myLng = parseFloat(position.coords.longitude);
+   var myLatLng = new google.maps.LatLng(myLat,myLng);
+   map.setCenter(myLatLng);
+   var marker = new google.maps.Marker({
+                map: map,
+                position: myLatLng
+          });
+          setEventsOnMarker(marker);  	
+  	      displayMarkerHook(marker,true," ");
+}
+
 //////////////////////////////////////////////////////////////////////
 function displayGeocode(){
 	var geoTxt = document.getElementById("geopanel").geocodetxt.value;
