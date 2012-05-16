@@ -303,13 +303,13 @@ function displayMarkerHook(marker,visibility,address)
   	                    return false;};
   hookMarkerForm.innerHTML =  
     '<fieldset style="width:100%;">' +
-    '<label for="latitude">Lat </label>' + format_number(marker.getPosition().lat(),4) +
+    '<label for="latitude">Lat </label>' + marker.getPosition().lat().toFixed(4) +
     '<br>' +
-    '<label for="longitude">Lng </label>' + format_number(marker.getPosition().lng(),4) +
+    '<label for="longitude">Lng </label>' + marker.getPosition().lng().toFixed(4) +
     '<br>' +
     '<label for="category">Address </label>' +   
     '<br>' +
-    '<input type="text" id="addresstxt" name="m[addresstxt]" style="width:200px;"' +
+    '<input type="text" id="addresstxt" name="m[addresstxt]" style="width:100%;"' +
     'value="'+  address + '"/>'+   
     '<br>' +
     '<input type="submit" id="cancelMarker" value="Delete Marker" />' +
