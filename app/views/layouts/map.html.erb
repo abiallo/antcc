@@ -26,7 +26,7 @@
 		<div id="user_bar">
 			<% if logged_in? %>
 			  <%= current_user.name + "  "%> |
-			  <%= link_to "Map", tracks_path %> |
+			  <%= link_to "Select Map", tracks_path %> |
 			  <%= link_to "New Article", new_article_path %> |
 			  <%= link_to "Edit Profile", edit_user_path(current_user)%> |
 			  <%= link_to "Logout", logout_path %>

@@ -13,6 +13,18 @@ class User < ActiveRecord::Base
            :order => 'published_at DESC, title ASC',
            :dependent => :nullify
   has_many :replies, :through => :articles, :source => :comments
+  has_many :geosmaps,
+            :order => 'name ASC',
+            :dependent => :nullify
+  has_many :geosconnections,
+           :order => 'email ASC',
+           :dependent => :nullify
+  has_and_belongs_to_many :geoscois
+  has_and_belongs_to_many :geosmaps
+#  has_many :geosparticipants
+#  belongs_to :parent, class_name: "User", foreign_key: "user_id"
+#  has_many :children, class_name: "User", foreign_key: "user_id"
+
   before_save :encrypt_new_password
   def self.authenticate(email, password)
     user = find_by_email(email)

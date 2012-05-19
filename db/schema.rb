@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120510031724) do
+ActiveRecord::Schema.define(:version => 20120519080225) do
 
   create_table "articles", :force => true do |t|
     t.string   "title"
@@ -40,6 +40,120 @@ ActiveRecord::Schema.define(:version => 20120510031724) do
     t.string   "name"
     t.string   "email"
     t.text     "body"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "geoscircles", :force => true do |t|
+    t.string   "name"
+    t.float    "lat"
+    t.float    "lng"
+    t.integer  "radius"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "geoscircles_geosmaps", :id => false, :force => true do |t|
+    t.integer "geoscircles_id"
+    t.integer "geosmaps_id"
+  end
+
+  create_table "geoscois", :force => true do |t|
+    t.string   "name"
+    t.text     "note"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "geoscois_geosmaps", :id => false, :force => true do |t|
+    t.integer "geoscois_id"
+    t.integer "geosmaps_id"
+  end
+
+  create_table "geoscois_users", :id => false, :force => true do |t|
+    t.integer "geoscois_id"
+    t.integer "users_id"
+  end
+
+  create_table "geosconnections", :force => true do |t|
+    t.string   "email"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "geosmaps", :force => true do |t|
+    t.float    "centerlat"
+    t.float    "centerlng"
+    t.string   "name"
+    t.integer  "zoom"
+    t.string   "type"
+    t.boolean  "milflag"
+    t.integer  "user_id"
+    t.text     "note"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "geosmaps_geosmarkers", :id => false, :force => true do |t|
+    t.integer "geosmaps_id"
+    t.integer "geosmarkers_id"
+  end
+
+  create_table "geosmaps_geospolygons", :id => false, :force => true do |t|
+    t.integer "geosmaps_id"
+    t.integer "geospolygons_id"
+  end
+
+  create_table "geosmaps_geospolylines", :id => false, :force => true do |t|
+    t.integer "geosmaps_id"
+    t.integer "geospolylines_id"
+  end
+
+  create_table "geosmaps_geosrectangles", :id => false, :force => true do |t|
+    t.integer "geosmaps_id"
+    t.integer "geosrectangles_id"
+  end
+
+  create_table "geosmaps_tracks", :id => false, :force => true do |t|
+    t.integer "geosmaps_id"
+    t.integer "tracks_id"
+  end
+
+  create_table "geosmaps_users", :id => false, :force => true do |t|
+    t.integer "geosmaps_id"
+    t.integer "users_id"
+  end
+
+  create_table "geosmarkers", :force => true do |t|
+    t.string   "name"
+    t.float    "lat"
+    t.float    "lng"
+    t.string   "icon"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "geospolygons", :force => true do |t|
+    t.string   "name"
+    t.string   "geometry"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "geospolylines", :force => true do |t|
+    t.string   "name"
+    t.string   "geometry"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "geosrectangles", :force => true do |t|
+    t.string   "name"
+    t.float    "latSW"
+    t.float    "lngSW"
+    t.float    "latNE"
+    t.float    "lngNE"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
