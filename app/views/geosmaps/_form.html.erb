@@ -10,11 +10,17 @@
       </ul>
     </div>
   <% end %>
-
+  <% if @geosmap.name == "_default"+current_user.email%>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%=  @geosmap.name %>
+  </div>
+   <% else %>
   <div class="field">
     <%= f.label :name %><br />
     <%= f.text_field :name %>
-  </div>
+  </div>    
+   <% end %>
   <div class="field">
     <%= f.label :centerlat %><br />
     <%= f.text_field :centerlat %>

@@ -42,6 +42,49 @@ class GeosmapsController < ApplicationController
       end
     end
   end
+ 
+  # DELETE /geosmaps/1
+  # DELETE /geosmaps/1.xml
+  def destroy
+    @geosmap = Geosmap.find(params[:id])
+    respond_to do |format|
+      if @geosmap.name == "_default"+current_user.email
+          format.html { render :action => "edit"  }
+          format.xml  { render :xml => @geosmap.errors, :status => :unprocessable_entity }
+      else
+          @geosmap.destroy
+          format.html { redirect_to(geomaps_url, :notice => 'Geosmap was successfully deleted.') }
+          format.xml  { head :ok }
+      end
+    end
+  end
+  
+  # GET /geosmaps/new
+  # GET /geosmaps/new.xml
+  def new
+    @geosmap = Geosmap.new
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.xml  { render :xml => @geosmap }
+    end
+  end
+
+  # POST /geosmaps
+  # POST /geosmaps.xml
+  def create
+    @geosmap = current_user.geosmaps.new(params[:geosmap])
+
+    respond_to do |format|
+      if @geosmap.save
+        format.html { redirect_to(@geosmap, :notice => 'Geosmap was successfully created.') }
+        format.xml  { render :xml => @geosmap, :status => :created, :location => @geosmap }
+      else
+        format.html { render :action => "new" }
+        format.xml  { render :xml => @geosmap.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
     
 end
 
