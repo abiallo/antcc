@@ -12,8 +12,8 @@ Category.create [{:name=>'Maps'},
                   {:name=>'Sharing'}]
 
 
-user = User.create :email => 'abiallo@gmail.com', 
-                   :password => 'secret',
-                   :password_confirmation => 'secret'
+#user = User.create :email => 'abiallo@gmail.com', 
+ #                  :password => 'secret',
+  #                 :password_confirmation => 'secret'
 
 

@@ -5,7 +5,7 @@ class CreateGeosmaps < ActiveRecord::Migration
       t.float :centerlng
       t.string :name
       t.integer :zoom
-      t.string :type
+      t.string :maptype
       t.boolean :milflag
       t.integer :user_id
       t.text :note

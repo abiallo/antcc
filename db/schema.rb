@@ -87,7 +87,7 @@ ActiveRecord::Schema.define(:version => 20120519080225) do
     t.float    "centerlng"
     t.string   "name"
     t.integer  "zoom"
-    t.string   "type"
+    t.string   "maptype"
     t.boolean  "milflag"
     t.integer  "user_id"
     t.text     "note"
@@ -191,19 +191,6 @@ ActiveRecord::Schema.define(:version => 20120519080225) do
     t.datetime "postime"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "units", :force => true do |t|
-    t.string   "name"
-    t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "cp"
-    t.integer  "weaponrange"
-    t.string   "friendicon"
-    t.string   "neutralicon"
-    t.string   "enemyicon"
-    t.string   "unknownicon"
   end
 
   create_table "users", :force => true do |t|
