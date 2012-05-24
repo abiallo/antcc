@@ -8,16 +8,16 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
     if @user.save
       @geosmap = Geosmap.new
-      @geosmap.name = "_default"
+      @geosmap.name = "_default"+@user.email
       @geosmap.centerlat = 33.0
       @geosmap.centerlng = 36.0
       @geosmap.user_id = @user.id
       @geosmap.zoom = 4
       @geosmap.maptype = "ROADMAP"
       @geosmap.milflag = true
-      @geosmap.note = "default map create for the user " + @user.name
-      @geosmap.save 
-      redirect_to articles_path, :notice => 'User successfully added.'
+      @geosmap.note = "default map created for the user " + @user.name
+      @geosmap.save
+      redirect_to articles_path, :notice => 'User successfully added. Default map successfully created'
     else
       render :action => 'new'
     end

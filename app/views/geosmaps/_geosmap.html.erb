@@ -1,0 +1,13 @@
+<%= div_for geosmap do %>
+   <h3>
+   	<%= link_to geosmap.name, geosmap %>
+   	<% if geosmap.owned_by? current_user %>
+     	<span class='actions'>
+     		<%= link_to "Edit", edit_geosmap_path(geosmap)%>
+   	    	<%= link_to "Delete", geosmap, :confirm=>"Are you sure?",
+   		       :method=>:delete %>
+        </span>
+    <% end %>
+   </h3>
+   <%= simple_format geosmap.note %>
+ <% end %>
