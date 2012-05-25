@@ -88,7 +88,7 @@ ActiveRecord::Schema.define(:version => 20120519080225) do
     t.string   "name"
     t.integer  "zoom"
     t.string   "maptype"
-    t.boolean  "milflag"
+    t.string  "milflag"
     t.integer  "user_id"
     t.text     "note"
     t.datetime "created_at"
@@ -121,8 +121,8 @@ ActiveRecord::Schema.define(:version => 20120519080225) do
   end
 
   create_table "geosmaps_users", :id => false, :force => true do |t|
-    t.integer "geosmaps_id"
-    t.integer "users_id"
+    t.integer "geosmap_id"
+    t.integer "user_id"
   end
 
   create_table "geosmarkers", :force => true do |t|

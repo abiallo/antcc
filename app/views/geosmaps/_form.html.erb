@@ -17,33 +17,33 @@
   </div>
    <% else %>
   <div class="field">
-    <%= f.label :name %><br />
+    <%= f.label :name %>
     <%= f.text_field :name %>
   </div>    
    <% end %>
   <div class="field">
-    <%= f.label :centerlat %><br />
+    <%= f.label :centerlat %>
     <%= f.text_field :centerlat %>
   </div>
   <div class="field">
-    <%= f.label :centerlng %><br />
+    <%= f.label :centerlng %>
     <%= f.text_field :centerlng %>
   </div>
     <div class="field">
-    <%= f.label :zoom %><br />
+    <%= f.label :zoom %>(0-21)
     <%= f.text_field :zoom %>
   </div>
   <div class="field">
-    <%= f.label :milflag %><br />
-    <%= f.text_field :milflag %>
+    <%= f.label :milflag %>
+    <%= select "geosmap",:milflag,{"False" => "false", "True" => "true"}%>
   </div>
 
   <div class="field">
-    <%= f.label :maptype %><br />
-    <%= f.text_field :maptype %>
+    <%= f.label :maptype %>
+    <%= select "geosmap",:maptype,{"ROADMAP" => "ROADMAP", "HYBRID" => "HYBRID", "TERRAIN" => "TERRAIN", "SATELLITE" => "SATELLITE"}%>
   </div>
   <div class="field">
-    <%= f.label :note %><br />
+    <%= f.label :note %>
     <%= f.text_area :note %>
   </div>
   <div class="actions">

@@ -987,11 +987,11 @@ function displayGeoPanel() {
   geoForm.innerHTML =  
     '<fieldset style="width:100%;">' +
     '<label for="latitude">Lat </label>' +
-    '<input type="text" id="geolat" name="geo[lat]" maxlength="10" ' + 
+    '<input type="text" id="geolat" name="geo[lat]" maxlength="10" style="width:90%;' + 
      'value="'+ centerLatitude.toFixed(4) + '"/>' +
     '<br>' +
     '<label for="longitude">Lng </label>' +
-    '<input type="text" id="geolng" name="geo[lng]" maxlength="10" ' + 
+    '<input type="text" id="geolng" name="geo[lng]" maxlength="10" style="width:90%;' + 
      'value="'+ centerLongitude.toFixed(4) + '"/>' +
     '<br>' +
     '<input type="button" id="geo1" value="Find Address" style="width:90%;" onclick="displayReverseGeocode()"/>' +
@@ -1001,7 +1001,7 @@ function displayGeoPanel() {
     '<input type="button" id="geocode" value="Geocode" style="width:90%;" onclick="displayGeocode()"/>' +
     '<input type="button" id="myposition" value="My Position" style="width:90%;" onclick="displayMyPosition()"/>' +
     '<label for="ntracks">NTracks </label>' +
-    '<input type="text" id="ntracks" name="geo[ntracks]" maxlength="4" ' + 
+    '<input type="text" id="ntracks" name="geo[ntracks]" maxlength="4" style="width:90%;' + 
      'value="'+ nTracks + '"/>' +
     '</fieldset>';
     document.getElementById("sidebar").appendChild(geoForm);

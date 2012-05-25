@@ -14,7 +14,7 @@ class UsersController < ApplicationController
       @geosmap.user_id = @user.id
       @geosmap.zoom = 4
       @geosmap.maptype = "ROADMAP"
-      @geosmap.milflag = true
+      @geosmap.milflag = "true"
       @geosmap.note = "default map created for the user " + @user.name
       @geosmap.save
       redirect_to articles_path, :notice => 'User successfully added. Default map successfully created'

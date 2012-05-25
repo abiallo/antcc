@@ -263,5 +263,25 @@ label {
 	float:left;
 }
 
+#sidebar form label{
+	width: 50px;
+	display: block;
+	text-align: left;
+	padding-right: 5px;
+	float: left;
+	line-height: 14px;
+	vertical-align: center;
+	background-color: #F0F0F0;
+	border: 1px solid #ccc;
+	margin-right: 10px;
+	margin-bottom: 2px;
+	margin-top: 2px;
+}
 
-
+#sidebar form input[type=text]  {
+	float:left;
+	font-size: 10px;
+	width: 90%;
+	padding: 1px;
+	border: 1px solid #ccc;
+}

@@ -53,7 +53,7 @@ class GeosmapsController < ApplicationController
           format.xml  { render :xml => @geosmap.errors, :status => :unprocessable_entity }
       else
           @geosmap.destroy
-          format.html { redirect_to(geomaps_url, :notice => 'Geosmap was successfully deleted.') }
+          format.html { redirect_to(@geosmap, :notice => 'Geosmap was successfully deleted.') }
           format.xml  { head :ok }
       end
     end
