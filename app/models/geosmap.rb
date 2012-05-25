@@ -1,5 +1,14 @@
 class Geosmap < ActiveRecord::Base
   validates :name, :presence => true
+  validates :centerlat, :presence => true
+  validates_numericality_of :centerlat, :greater_than_or_equal_to => -180.0, :less_than_or_equal_to => 180.0
+  validates :centerlng, :presence => true
+  validates_numericality_of :centerlng, :greater_than_or_equal_to => 0.0, :less_than_or_equal_to => 360.0
+  validates :zoom, :presence => true
+  validates_numericality_of :zoom, :greater_than_or_equal_to => 0, :less_than_or_equal_to => 21, :only_integer => true
+  validates :maptype, :presence => true  
+  validates_inclusion_of :maptype, :in => ['HYBRID', 'ROADMAP', 'SATELLITE', 'TERRAIN']
+  validates :milflag, :presence => true
   belongs_to :user
   has_and_belongs_to_many :geoscircles
   has_and_belongs_to_many :geosmarkers

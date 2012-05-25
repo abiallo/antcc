@@ -74,6 +74,7 @@ class GeosmapsController < ApplicationController
   # POST /geosmaps.xml
   def create
     @geosmap = current_user.geosmaps.new(params[:geosmap])
+    @geosmap.user_id = current_user.id
 
     respond_to do |format|
       if @geosmap.save
