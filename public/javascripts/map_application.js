@@ -3,7 +3,14 @@ var centerLongitude = 36.0;
 var initlatlng = new google.maps.LatLng(centerLatitude,centerLongitude);
 var geocoder = new google.maps.Geocoder();
 var startZoom = 4;
+var myOptions = {
+      zoom: startZoom,
+      scaleControl: true,
+      center: new google.maps.LatLng(centerLatitude,centerLongitude),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
 var map;
+var geosmap;
 var tracks = new Array();
 var nTracks;
 var infoCreateWindow = new google.maps.InfoWindow({
@@ -309,7 +316,7 @@ function displayMarkerHook(marker,visibility,address)
     '<br>' +
     '<label for="category">Address </label>' +   
     '<br>' +
-    '<input type="text" id="addresstxt" name="m[addresstxt]" style="width:100%;"' +
+    '<input type="text" id="addresstxt" name="m[addresstxt]" style="width:90%;"' +
     'value="'+  address + '"/>'+   
     '<br>' +
     '<input type="submit" id="cancelMarker" value="Delete Marker" />' +
@@ -945,6 +952,7 @@ function createTrack (location) {
 ////////////////////////////////////////////////////////////
 function deleteTrack(location,track,marker) {
     $.ajax({
+    	async: false,
     	type: "PUT",
     	url: "destroy/"+track.id,
     	success: function(data,status){
@@ -986,6 +994,7 @@ function displayGeoPanel() {
   	                    return false;};
   geoForm.innerHTML =  
     '<fieldset style="width:100%;">' +
+    '<label for="map">Map: </label>' +  geosmap.name +   
     '<label for="latitude">Lat </label>' +
     '<input type="text" id="geolat" name="geo[lat]" maxlength="10" style="width:90%;' + 
      'value="'+ centerLatitude.toFixed(4) + '"/>' +
@@ -1149,14 +1158,8 @@ function placesOnOff(){
 function initialize() {
 //  handleResize();
 
-  var myOptions = {
-      zoom: startZoom,
-      scaleControl: true,
-      center: new google.maps.LatLng(centerLatitude,centerLongitude),
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-  map = new google.maps.Map(document.getElementById("map_canvas"),
-        myOptions);
+  loadCurrentMap();
+   
 //  var ge = new GoogleEarth(map);
  ////////////////////////////////////////////////////
  ////
@@ -1195,6 +1198,45 @@ function initialize() {
   	      default:
        } //switch
     });
+/////////////////////////////////////////////////////////////
+function loadCurrentMap() {
+
+  $.ajax({
+  	async: false,
+  	type: "GET",
+	url: "currentmap",
+	dataType: "json",
+    success: function(data, status){
+    	geosmap = data.geosmap;
+    	myOptions = {
+           zoom: geosmap.zoom,
+           scaleControl: true,
+           center: new google.maps.LatLng(geosmap.centerlat,geosmap.centerlng),
+           mapTypeId: google.maps.MapTypeId.ROADMAP
+//           mapTypeId: ROADMAP
+        };
+        map = new google.maps.Map(document.getElementById("map_canvas"),
+                        myOptions);              
+        switch (geosmap.maptype) {
+          case 'ROADMAP':
+                  map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+//                  alert(geosmap.maptype);
+          break;
+          case 'HYBRID':
+                  map.setMapTypeId(google.maps.MapTypeId.HYBRID);
+          break;
+          case 'TERRAIN':
+                  map.setMapTypeId(google.maps.MapTypeId.TERRAIN);
+          break;
+          case 'SATELLITE':
+                  map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+          break;
+        };        
+    }        
+  }); //end of .ajax request
+//     	alert("3 "+ geosmap.zoom);
+
+}
 /////////////////////////////////////////////////////////////
 function format_number(pnumber,decimals){
 	    if (isNaN(pnumber)) { return 0};

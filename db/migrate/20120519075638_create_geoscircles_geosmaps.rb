@@ -1,8 +1,8 @@
 class CreateGeoscirclesGeosmaps < ActiveRecord::Migration
   def self.up
     create_table :geoscircles_geosmaps, :id => false do |t|
-      t.references :geoscircles
-      t.references :geosmaps
+      t.references :geoscircle
+      t.references :geosmap
     end
   end
 

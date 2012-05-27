@@ -6,6 +6,8 @@
      		<%= link_to "Edit", edit_geosmap_path(geosmap)%>
    	    	<%= link_to "Delete", geosmap, :confirm=>"Are you sure?",
    		       :method=>:delete %>
+
+   		    <%= link_to "Display", {:controller=> 'geosmaps', :id => geosmap.id, :action=> "display" } %>
         </span>
     <% end %>
    </h3>

@@ -1,4 +1,5 @@
 class TracksController < ApplicationController
+  before_filter  :load_geosmap
   layout 'map' # will use the layout app/views/layouts/map.html.erb
 
   def create
@@ -18,15 +19,16 @@ class TracksController < ApplicationController
 #    render :text=>(Track.find :all).to_json
   end
   def list
-    render :text=>(Track.find :all).to_json
+   render :text=>(Track.find :all).to_json
+#   render :text=>(@geosmap.tracks.find :all).to_json
   end
   
   def destroy
     track = Track.find(params[:id])
     if track.destroy
-     res = {:success=>true,:content=>"track deleted"}
+     res = {:success=>true,:content=>"track deleted", :notice => "ppppppppppppp"}
     else
-     res = {:success=>false,:content=>"delete operation failed"}
+     res = {:success=>false,:content=>"delete operation failed", :notice => "prrrrrrrrrr"}
     end
     render :text=>res.to_json
   end
@@ -53,5 +55,8 @@ class TracksController < ApplicationController
       res = {:success=>false,:content=>"track update not possible"}
    end
    render :text=>res.to_json
+  end
+  def load_geosmap
+    @geosmap = Geosmap.find(params[:geosmap_id])
   end
 end

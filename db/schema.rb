@@ -54,8 +54,8 @@ ActiveRecord::Schema.define(:version => 20120519080225) do
   end
 
   create_table "geoscircles_geosmaps", :id => false, :force => true do |t|
-    t.integer "geoscircles_id"
-    t.integer "geosmaps_id"
+    t.integer "geoscircle_id"
+    t.integer "geosmap_id"
   end
 
   create_table "geoscois", :force => true do |t|
@@ -66,13 +66,13 @@ ActiveRecord::Schema.define(:version => 20120519080225) do
   end
 
   create_table "geoscois_geosmaps", :id => false, :force => true do |t|
-    t.integer "geoscois_id"
-    t.integer "geosmaps_id"
+    t.integer "geoscoi_id"
+    t.integer "geosmap_id"
   end
 
   create_table "geoscois_users", :id => false, :force => true do |t|
-    t.integer "geoscois_id"
-    t.integer "users_id"
+    t.integer "geoscoi_id"
+    t.integer "user_id"
   end
 
   create_table "geosconnections", :force => true do |t|
@@ -96,28 +96,28 @@ ActiveRecord::Schema.define(:version => 20120519080225) do
   end
 
   create_table "geosmaps_geosmarkers", :id => false, :force => true do |t|
-    t.integer "geosmaps_id"
-    t.integer "geosmarkers_id"
+    t.integer "geosmap_id"
+    t.integer "geosmarker_id"
   end
 
   create_table "geosmaps_geospolygons", :id => false, :force => true do |t|
-    t.integer "geosmaps_id"
-    t.integer "geospolygons_id"
+    t.integer "geosmap_id"
+    t.integer "geospolygon_id"
   end
 
   create_table "geosmaps_geospolylines", :id => false, :force => true do |t|
-    t.integer "geosmaps_id"
-    t.integer "geospolylines_id"
+    t.integer "geosmap_id"
+    t.integer "geospolyline_id"
   end
 
   create_table "geosmaps_geosrectangles", :id => false, :force => true do |t|
-    t.integer "geosmaps_id"
-    t.integer "geosrectangles_id"
+    t.integer "geosmap_id"
+    t.integer "geosrectangle_id"
   end
 
   create_table "geosmaps_tracks", :id => false, :force => true do |t|
-    t.integer "geosmaps_id"
-    t.integer "tracks_id"
+    t.integer "geosmap_id"
+    t.integer "track_id"
   end
 
   create_table "geosmaps_users", :id => false, :force => true do |t|

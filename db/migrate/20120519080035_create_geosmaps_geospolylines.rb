@@ -1,8 +1,8 @@
 class CreateGeosmapsGeospolylines < ActiveRecord::Migration
   def self.up
     create_table :geosmaps_geospolylines, :id => false do |t|
-      t.references :geosmaps
-      t.references :geospolylines
+      t.references :geosmap
+      t.references :geospolyline
     end
   end
 

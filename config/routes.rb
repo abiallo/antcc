@@ -16,8 +16,13 @@ Antcc::Application.routes.draw do
   match '/destroy/:id' => "tracks#destroy"
   match '/update/:id' => "tracks#update"
   match '/updatepostime/:id' => "tracks#updatepostime"
-  resources :geosmaps
-  resources :tracks
+  match '/geosmaps/:id/display' => "geosmaps#display"
+  match '/geosmaps/:id/currentmap' => "geosmaps#currentmap"
+  
+  resources :geosmaps do
+   resources :tracks
+  end
+  # match '/geosmaps/:id/list'  => "tracks/list"
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

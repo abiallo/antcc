@@ -12,15 +12,15 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :title %><br />
+    <%= f.label :title %>
     <%= f.text_field :title %>
   </div>
   <div class="field">
-    <%= f.label :location %><br />
+    <%= f.label :location %>
     <%= f.text_field :location %>
   </div>
   <div class="field">
-  	<%= f.label "Categories" %><br />
+  	<%= f.label "Categories" %>
   	<% for category in Category.all %>
   	  <%= check_box_tag 'article[category_ids][]', category.id,
   	        @article.category_ids.include?(category.id),
@@ -30,15 +30,15 @@
   	<% end %>
   </div>
   <div class="field">
-    <%= f.label :excerpt %><br />
+    <%= f.label :excerpt %>
     <%= f.text_field :excerpt %>
   </div>
   <div class="field">
-    <%= f.label :body %><br />
+    <%= f.label :body %>
     <%= f.text_area :body %>
   </div>
   <div class="field">
-    <%= f.label :published_at %><br />
+    <%= f.label :published_at %>
     <%= f.datetime_select :published_at %>
   </div>
   <div class="actions">

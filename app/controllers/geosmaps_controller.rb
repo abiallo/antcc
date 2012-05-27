@@ -1,5 +1,5 @@
 class GeosmapsController < ApplicationController
-  before_filter :authenticate, :except => [:index]  
+  before_filter :authenticate, :except => [:index, :show]  
   # GET /geosmaps
   # GET /geosmaps.xml
   def index
@@ -86,7 +86,22 @@ class GeosmapsController < ApplicationController
       end
     end
   end
-    
+  def display
+      @geosmap = Geosmap.find(params[:id])
+#     layout 'map' # will use the layout app/views/layouts/map.html.erb
+#     render :nothing => true
+
+      render 'tracks/index', :layout => 'map'
+
+  end
+  
+  def currentmap
+      puts ("currentmap--------------------------------------------") 
+      @geosmap = Geosmap.find(params[:id])
+#     layout 'map' # will use the layout app/views/layouts/map.html.erb
+#     render :nothing => true
+      render :text => Geosmap.find(params[:id]).to_json
+  end  
 end
 
 

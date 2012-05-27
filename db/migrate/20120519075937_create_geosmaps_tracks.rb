@@ -1,8 +1,8 @@
 class CreateGeosmapsTracks < ActiveRecord::Migration
   def self.up
     create_table :geosmaps_tracks, :id => false do |t|
-      t.references :geosmaps
-      t.references :tracks
+      t.references :geosmap
+      t.references :track
     end
   end
 

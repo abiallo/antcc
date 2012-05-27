@@ -1,8 +1,8 @@
 class CreateGeosmapsGeospolygons < ActiveRecord::Migration
   def self.up
     create_table :geosmaps_geospolygons, :id => false do |t|
-      t.references :geosmaps
-      t.references :geospolygons
+      t.references :geosmap
+      t.references :geospolygon
     end
   end
 

@@ -25,7 +25,7 @@ p {
 	padding: 5px;
 }
 
-a {
+a { 
 	color: #D95E16;
 	padding: 0 2px;
 	text-decoration: none;
@@ -33,11 +33,15 @@ a {
 
 a:hover {
 	background-color: #FF813C;
-	color: #FFFFFF;
+	color: #F0F0F0;
 }
 
-.notice {color: green;}
-.alert {color: red;}
+.notice {color: green;
+         position: static; 
+         float: right;}
+.alert {color: red;   
+        position: static;
+        float: right;}
 
 #header, #main, #footer {
 	width: 100%;
@@ -171,7 +175,7 @@ a:hover {
 }
 
 #main h3 .actions{
-	display: none;
+	display: inline;
 	font-weight: normal;
 	font-size: 10px;
 }
@@ -264,13 +268,10 @@ label {
 }
 
 #sidebar form label{
-	width: 50px;
-	display: block;
-	text-align: left;
+	width: 40px;
 	padding-right: 5px;
-	float: left;
+	clear:both;
 	line-height: 14px;
-	vertical-align: center;
 	background-color: #F0F0F0;
 	border: 1px solid #ccc;
 	margin-right: 10px;

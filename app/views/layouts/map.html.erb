@@ -26,7 +26,6 @@
 		<div id="user_bar">
 			<% if logged_in? %>
 			  <%= current_user.name + "  "%> |
-			  <%= link_to "Default Map", tracks_path %> |
 			  <%= link_to "Select Map", geosmaps_path %> |
 			  <%= link_to "New Map", new_geosmap_path %> |
 			  <%= link_to "New Article", new_article_path %> |
@@ -38,15 +37,15 @@
 
 			<% end %>  
 		</div>
-	</div>
-	<div id="main">
 		<%= content_tag :p, notice, :class=> 'notice' if notice.present?%>
 		<%= content_tag :p, alert, :class=> 'alert' if alert.present?%>
+	</div>
+	<div id="main">
+
 		<%= yield %>
     </div>
 <!--    <div id="footer">
     	An experimental site built with RubyOnRails & GoogleMaps
-    </div>
--->    
+    </div>  -->    
 </body>
 </html>

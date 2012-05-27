@@ -3,15 +3,14 @@ class ApplicationController < ActionController::Base
   
   protected
   
-  # returns the currently logged in suer or nil if there is not one
+  # returns the currently logged in user or nil if there is not one
   def current_user
     return unless session[:user_id]
     @current_user ||= User.find_by_id(session[:user_id])
   end
-  
   # make current_user available in templates as a helper
   helper_method :current_user
-  
+#  helper_method :current_geosmap
   # filter method to enforce a login requirement
   # apply as a before_filter on any controller you want to protect
   def authenticate
