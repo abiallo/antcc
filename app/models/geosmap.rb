@@ -7,7 +7,7 @@ class Geosmap < ActiveRecord::Base
   validates :zoom, :presence => true
   validates_numericality_of :zoom, :greater_than_or_equal_to => 0, :less_than_or_equal_to => 21, :only_integer => true
   validates :maptype, :presence => true  
-  validates_inclusion_of :maptype, :in => ['HYBRID', 'ROADMAP', 'SATELLITE', 'TERRAIN']
+  validates_inclusion_of :maptype, :in => ['HYBRID', 'ROADMAP', 'SATELLITE', 'TERRAIN', 'hybrid','terrain','roadmap','satellite']
   validates :milflag, :presence => true
   validates :milflag, :inclusion => {:in => ["true", "false"]}
   belongs_to :user

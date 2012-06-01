@@ -18,7 +18,13 @@ Antcc::Application.routes.draw do
   match '/updatepostime/:id' => "tracks#updatepostime"
   match '/geosmaps/:id/display' => "geosmaps#display"
   match '/geosmaps/:id/currentmap' => "geosmaps#currentmap"
-  
+  match '/geosmaps/:id/update' => "geosmaps#update"
+  match '/geosmaps/:id/save' => "geosmaps#save"
+  match '/geosmaps/:id/list' => "tracks#list"
+  match '/geosmaps/:id/create' => "tracks#create"
+  match '/geosmaps/:id/destroy/:id' => "tracks#destroy"
+  match '/geosmaps/:id/update/:id' => "tracks#update"
+  match '/geosmaps/:id/updatepostime/:id' => "tracks#updatepostime"
   resources :geosmaps do
    resources :tracks
   end

@@ -250,11 +250,16 @@ label {
   font-family: sans-serif;
   font-size: 10px;
   border-bottom: 1px solid gray;
-  right: 0px;
+  right: 5px;
   display:block;
   
 }
-
+#sidebar form {
+    width: 91%;
+	text-align: left;
+	font-family: sans-serif;
+    font-size: 10px;
+}
 #map_canvas {
 	position: absolute;
 	width: 100%;
@@ -268,21 +273,34 @@ label {
 }
 
 #sidebar form label{
-	width: 40px;
+	width: 20%;
 	padding-right: 5px;
 	clear:both;
-	line-height: 14px;
 	background-color: #F0F0F0;
 	border: 1px solid #ccc;
 	margin-right: 10px;
-	margin-bottom: 2px;
-	margin-top: 2px;
 }
 
 #sidebar form input[type=text]  {
 	float:left;
 	font-size: 10px;
-	width: 90%;
+	width: 50%;
 	padding: 1px;
 	border: 1px solid #ccc;
+}
+#sidebar form input[type=submit]{
+	margin-top: 5px;
+	margin-bottom: 5px;
+	clear:both;
+	float:left;
+	font-family: sans-serif;
+    font-size: 10px;
+}
+
+#sidebar form input[type=button]{
+    margin-top: 5px;
+	margin-bottom: 5px;
+	float:left;
+	font-family: sans-serif;
+    font-size: 10px;
 }

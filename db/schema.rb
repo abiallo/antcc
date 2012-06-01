@@ -88,7 +88,7 @@ ActiveRecord::Schema.define(:version => 20120519080225) do
     t.string   "name"
     t.integer  "zoom"
     t.string   "maptype"
-    t.string  "milflag"
+    t.string   "milflag"
     t.integer  "user_id"
     t.text     "note"
     t.datetime "created_at"
@@ -199,6 +199,7 @@ ActiveRecord::Schema.define(:version => 20120519080225) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name"
+    t.integer  "geosmap_id"
   end
 
 end

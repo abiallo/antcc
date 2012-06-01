@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  
+@@geosmap=Geosmap.new
   protected
   
   # returns the currently logged in user or nil if there is not one
@@ -10,7 +10,10 @@ class ApplicationController < ActionController::Base
   end
   # make current_user available in templates as a helper
   helper_method :current_user
-#  helper_method :current_geosmap
+  def current_geosmap
+     @current_geosmap ||= Geosmap.find_by_id([:geosmap_id])
+  end
+  helper_method :current_geosmap
   # filter method to enforce a login requirement
   # apply as a before_filter on any controller you want to protect
   def authenticate

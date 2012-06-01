@@ -210,19 +210,19 @@ function updateInfoWindow(marker,location,track) {
   inputForm.innerHTML =  
     '<fieldset style="width:250px;">' +
     '<label for="cstId">TrackId </label>' +
-    '<input type="text" id="cstId" name="m[cstId]"' +
+    '<input type="text" id="cstId" name="m[cstId]" style="width:60%;"' +
     'value="'+  track.cstId + '"/>'+
     '<br>' +
     '<label for="cstName">Name </label>' + 
-    '<input type="text" id="cstName" name="m[cstName]"' +
+    '<input type="text" id="cstName" name="m[cstName]"style="width:60%;"' +
     'value="'+  track.cstName + '"/>'+
     '<br>' +
     '<label for="latitude">Lat </label>' +
-    '<input type="text" id="lat" name="m[lat]" maxlength="10" ' + 
+    '<input type="text" id="lat" name="m[lat]" maxlength="10" style="width:60%;"' + 
      'value="'+ format_number(lat,4) + '"/>' +
     '<br>' +
     '<label for="longitude">Lng </label>' +
-    '<input type="text" id="long" name="m[long]" maxlength="10" value="' +
+    '<input type="text" id="long" name="m[long]" style="width:60%;" maxlength="10" value="' +
       format_number(lng,4) + '"/>' +
     '<br>' +
     '<select name="m[category]">' +
@@ -234,11 +234,11 @@ function updateInfoWindow(marker,location,track) {
     '</select>' + 
     '<br>' +   
     '<label for="course">Course </label>' +
-    '<input type="text" id="course" name="m[course]"' +
+    '<input type="text" id="course" name="m[course]" style="width:60%;"' +
     'value="'+  track.course + '"/>'+
     '<br>' +
     '<label for="speed">Speed </label>' + 
-    '<input type="text" id="speed" name="m[speed]"' +
+    '<input type="text" id="speed" name="m[speed]" style="width:60%;"' +
     'value="'+  track.speed + '"/>'+
     '<br>' +
 
@@ -248,6 +248,45 @@ function updateInfoWindow(marker,location,track) {
   infoUpdateWindow.setContent(inputForm);
   infoUpdateWindow.setPosition(location);
   infoUpdateWindow.open(map);
+  return;
+
+}
+////////////////////////////////////////////////////////////////////
+// on submit Save button click
+///////////////////////////////////////////////////////////////////
+function saveGeosmap() {
+
+  //create an HTML DOM form element
+  var saveForm = document.createElement("form");
+  saveForm.id = "saveFormId";
+  saveForm.setAttribute("action","");
+  saveForm.onsubmit = function() {confirmSaveGeosmap(); return false;};
+  saveForm.innerHTML =  
+    '<fieldset style="width:250px;">' +
+    '<label for="name">Name </label>' + 
+    '<input type="text" id="geosmapName" name="geosmap[name]"' +
+    'value="'+  geosmap.name + '"/>'+
+    '<br>' +
+    '<label for="latitude">Lat </label>' +
+    '<input type="text" id="geosmapLat" name="geosmap[centerlat]" maxlength="10" ' + 
+     'value="'+ geosmap.centerlat + '"/>' +
+    '<br>' +
+    '<label for="longitude">Lng </label>' +
+    '<input type="text" id="geosmapLng" name="geosmap[centerlng]" maxlength="10" value="' +
+      geosmap.centerlng + '"/>' +
+    '<br>' +
+    '<label for="zoom">Zoom </label>' +
+    '<input type="text" id="geosmapZoom" name="geosmap[zoom]"' +
+    'value="'+  geosmap.zoom + '"/>'+
+    '<br>' +
+    '<label for="maptype">MapType </label>' + 
+    '<input type="text" id="geosmapMaptype" name="geosmap[maptype]"' +
+    'value="'+  geosmap.maptype + '"/>'+
+    '<br>' +
+
+    '<input type="submit" value="Confirm" />' +
+    '</fieldset>';
+      document.getElementById("sidebar").appendChild(saveForm);
   return;
 
 }
@@ -924,7 +963,7 @@ function updateListTracks() {
         }; // end of for loop
 	} // end of function
   }); //end of .ajax request
-    t=setTimeout("updateListTracks()",10000);
+    t=setTimeout("updateListTracks()",30000);
 }
 /////////////////////////////////////////////////////////////
 // on submit Create button click
@@ -966,9 +1005,6 @@ function deleteTrack(location,track,marker) {
 // on submit Save (after update) button click
 /////////////////////////////////////////////////////////////////////////
 function updateTrack(marker,id) {
-//    lat = location.lat();
-//    lng = location.lng();
-//    var locationString = location.toUrlValue();
     var formValues=$("form#updateFormId").serialize();
     var updatedTrack;
     $.ajax({
@@ -979,11 +1015,26 @@ function updateTrack(marker,id) {
         dataType: "json",
         success: function(data, status){    	
              updatedTrack=data.content.track;
-//             updateListTracks();
 	    } // end on success
 	}); // end of the new Ajax.Request() call
 }
-
+/////////////////////////////////////////////////////////////////////////
+// on submit Confirm (after Save) button click
+/////////////////////////////////////////////////////////////////////////
+function confirmSaveGeosmap() {
+    var formValues=$("form#saveFormId").serialize();
+    $.ajax({
+    	async: false,
+    	type: "PUT",
+	    url: "save",
+	    data: formValues,
+        dataType: "json",
+        success: function(data, status){    	
+//             geosmap=data.content.track;
+	    } // end on success
+	}); // end of the new Ajax.Request() call
+    document.getElementById("sidebar").removeChild(saveForm);
+}
 //////////////////////////////////////////////////////////////////////
 function displayGeoPanel() {
 	  //Hook HTML DOM form element
@@ -995,6 +1046,8 @@ function displayGeoPanel() {
   geoForm.innerHTML =  
     '<fieldset style="width:100%;">' +
     '<label for="map">Map: </label>' +  geosmap.name +   
+    '<input type="button" id="savemap" value="Save Map" style="width:90%;" onclick="saveMap()"/>' +
+    '<br>' +
     '<label for="latitude">Lat </label>' +
     '<input type="text" id="geolat" name="geo[lat]" maxlength="10" style="width:90%;' + 
      'value="'+ centerLatitude.toFixed(4) + '"/>' +
@@ -1015,6 +1068,18 @@ function displayGeoPanel() {
     '</fieldset>';
     document.getElementById("sidebar").appendChild(geoForm);
  }
+//////////////////////////////////////////////////////////////////////
+function saveMap() {
+//    var formValues=$("form#updateFormId").serialize();
+//    var updatedTrack;
+geosmap.zoom = map.getZoom();
+geosmap.centerlat = map.getCenter().lat();
+geosmap.centerlng = map.getCenter().lng();
+geosmap.maptype = map.getMapTypeId();
+
+saveGeosmap();	
+}
+
 //////////////////////////////////////////////////////////////////////
 
 function displayMyPosition()
@@ -1043,12 +1108,10 @@ function showMyPosition(position){
 //////////////////////////////////////////////////////////////////////
 function displayGeocode(){
 	var geoTxt = document.getElementById("geopanel").geocodetxt.value;
-//    alert("display geocode " + geoTxt);
 //    var address = document.getElementById("address").value;
     geocoder.geocode( { 'address': geoTxt}, function(results, status) {
        
        if (status == google.maps.GeocoderStatus.OK) {
-//       	  alert(results[0].formatted_address);
           map.setCenter(results[0].geometry.location);
           var marker = new google.maps.Marker({
              map: map,
@@ -1099,7 +1162,6 @@ function displayReverseGeocode() {
 var lat = parseFloat(document.getElementById("geolat").value);
 var lng = parseFloat(document.getElementById("geolng").value);
 var latlng = new google.maps.LatLng(lat, lng);
-//alert (latlng);
 geocoder.geocode({'latLng': latlng}, function(results, status) {
 
         var marker = new google.maps.Marker({
@@ -1213,14 +1275,12 @@ function loadCurrentMap() {
            scaleControl: true,
            center: new google.maps.LatLng(geosmap.centerlat,geosmap.centerlng),
            mapTypeId: google.maps.MapTypeId.ROADMAP
-//           mapTypeId: ROADMAP
         };
         map = new google.maps.Map(document.getElementById("map_canvas"),
                         myOptions);              
         switch (geosmap.maptype) {
           case 'ROADMAP':
                   map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
-//                  alert(geosmap.maptype);
           break;
           case 'HYBRID':
                   map.setMapTypeId(google.maps.MapTypeId.HYBRID);
@@ -1231,10 +1291,20 @@ function loadCurrentMap() {
           case 'SATELLITE':
                   map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
           break;
-        };        
+          case 'roadmap':
+                  map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+          break;
+          case 'hybrid':
+                  map.setMapTypeId(google.maps.MapTypeId.HYBRID);
+          break;
+          case 'terrain':
+                  map.setMapTypeId(google.maps.MapTypeId.TERRAIN);
+          break;
+          case 'satellite':
+                  map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+          break;        };        
     }        
   }); //end of .ajax request
-//     	alert("3 "+ geosmap.zoom);
 
 }
 /////////////////////////////////////////////////////////////

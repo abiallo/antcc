@@ -1,8 +1,10 @@
 class GeosmapsController < ApplicationController
+
   before_filter :authenticate, :except => [:index, :show]  
   # GET /geosmaps
   # GET /geosmaps.xml
   def index
+          puts ("index geosmap--------------------------------------------") 
     @geosmaps = Geosmap.where(:user_id => current_user.id).all
 
     respond_to do |format|
@@ -14,6 +16,7 @@ class GeosmapsController < ApplicationController
   # GET /geosmaps/1
   # GET /geosmaps/1.xml
   def show
+          puts ("show geosmap--------------------------------------------") 
     @geosmap = Geosmap.find(params[:id])
 
     respond_to do |format|
@@ -24,14 +27,31 @@ class GeosmapsController < ApplicationController
   
     # GET /geosmaps/1/edit
   def edit
+          puts ("edit geosmap--------------------------------------------") 
     @geosmap = Geosmap.find(params[:id])
   end
   
-  # PUT /articles/1
-  # PUT /articles/1.xml
+  # PUT /geosmaps/1
+  # PUT /geosmaps/1.xml
   def update
+          puts ("update geosmap--------------------------------------------") 
     @geosmap = Geosmap.find(params[:id])
+    respond_to do |format|
+      if @geosmap.update_attributes(params[:geosmap])
+        format.html { redirect_to(@geosmap, :notice => 'Geosmap was successfully updated.') }
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "edit" }
+        format.xml  { render :xml => @geosmap.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+  # PUT /geosmaps/1
+  # PUT /geosmaps/1.xml
+  def save
+    puts ("save geosmap--------------------------------------------") 
 
+    @geosmap = Geosmap.find(params[:id])
     respond_to do |format|
       if @geosmap.update_attributes(params[:geosmap])
         format.html { redirect_to(@geosmap, :notice => 'Geosmap was successfully updated.') }
@@ -46,6 +66,7 @@ class GeosmapsController < ApplicationController
   # DELETE /geosmaps/1
   # DELETE /geosmaps/1.xml
   def destroy
+    puts ("destroy geosmap--------------------------------------------") 
     @geosmap = Geosmap.find(params[:id])
     respond_to do |format|
       if @geosmap.name == "_default"+current_user.email
@@ -62,7 +83,9 @@ class GeosmapsController < ApplicationController
   # GET /geosmaps/new
   # GET /geosmaps/new.xml
   def new
+    puts ("new geosmap--------------------------------------------") 
     @geosmap = Geosmap.new
+    @geosmap.user_id = current_user.id
 
     respond_to do |format|
       format.html # new.html.erb
@@ -73,11 +96,13 @@ class GeosmapsController < ApplicationController
   # POST /geosmaps
   # POST /geosmaps.xml
   def create
+    puts ("create geosmap--------------------------------------------") 
     @geosmap = current_user.geosmaps.new(params[:geosmap])
     @geosmap.user_id = current_user.id
 
     respond_to do |format|
       if @geosmap.save
+#       format.html {render :text => Geosmap.find(params[:id]).to_json}
         format.html { redirect_to(@geosmap, :notice => 'Geosmap was successfully created.') }
         format.xml  { render :xml => @geosmap, :status => :created, :location => @geosmap }
       else
@@ -87,7 +112,10 @@ class GeosmapsController < ApplicationController
     end
   end
   def display
+      puts ("display geosmap--------------------------------------------") 
       @geosmap = Geosmap.find(params[:id])
+      current_user.geosmap_id = @geosmap.id
+      current_user.save
 #     layout 'map' # will use the layout app/views/layouts/map.html.erb
 #     render :nothing => true
 
@@ -96,7 +124,7 @@ class GeosmapsController < ApplicationController
   end
   
   def currentmap
-      puts ("currentmap--------------------------------------------") 
+      puts ("currentmap geosmap--------------------------------------------") 
       @geosmap = Geosmap.find(params[:id])
 #     layout 'map' # will use the layout app/views/layouts/map.html.erb
 #     render :nothing => true
