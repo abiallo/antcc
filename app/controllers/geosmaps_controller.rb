@@ -54,7 +54,8 @@ class GeosmapsController < ApplicationController
     @geosmap = Geosmap.find(params[:id])
     respond_to do |format|
       if @geosmap.update_attributes(params[:geosmap])
-        format.html { redirect_to(@geosmap, :notice => 'Geosmap was successfully updated.') }
+#        format.html { redirect_to(@geosmap, :notice => 'Geosmap was successfully updated.') }
+        format.html { render 'tracks/index' }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
