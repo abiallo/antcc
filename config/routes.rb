@@ -22,11 +22,15 @@ Antcc::Application.routes.draw do
   match '/geosmaps/:id/save' => "geosmaps#save"
   match '/geosmaps/:id/list' => "tracks#list"
   match '/geosmaps/:id/create' => "tracks#create"
+  match '/geosmaps/:id/createmarker' => "geosmarkers#create"
   match '/geosmaps/:id/destroy/:id' => "tracks#destroy"
+  match '/geosmaps/:id/destroymarker/:id' => "geosmarkers#destroy"
   match '/geosmaps/:id/update/:id' => "tracks#update"
+  match '/geosmaps/:id/updatemarker/:id' => "geosmarkers#update"
   match '/geosmaps/:id/updatepostime/:id' => "tracks#updatepostime"
   resources :geosmaps do
    resources :tracks
+   resources :geosmarkers
   end
   # match '/geosmaps/:id/list'  => "tracks/list"
   # The priority is based upon order of creation:

@@ -1,0 +1,2 @@
+module GeosmarkersHelper
+end

@@ -41,6 +41,7 @@ var hookMarker = new google.maps.Marker({
                         icon: hookImage});
 var hookedTrack;
 var hookedMarker;
+var hookedGeosmarker;
 var hookedOverlay = null;
 var hookMarkerForm = document.createElement("form");
 var hookCircleForm = document.createElement("form");
@@ -329,7 +330,7 @@ function createUpdateTrackForm(track,marker,location) {
 /////////////////////////////////////////////
 //click on marker 
 /////////////////////////////////////////////
-function displayMarkerHook(marker,visibility,address)
+function displayMarkerHook(marker,visibility,address,geosmarker)
 {
  if (visibility==true){
    if (hookedOverlay != null) {	
@@ -337,30 +338,53 @@ function displayMarkerHook(marker,visibility,address)
    	hookedOverlay.setMap(map);
    } 	
    hookedMarker = marker;
+   hookedGeosmarker = geosmarker;
+   var geosmarkername;
+   var geosmarkeraddress;
+   if (geosmarker == null) {
+   	geosmarkername="";
+   	geosmarkeraddress="";
+   }
+   else {
+   	geosmarkername=geosmarker.name;
+   	geosmarkeraddress=geosmarker.address;
+   }
    hookMarker.setPosition(marker.getPosition());
    hookMarker.setMap(map);
   //Hook HTML DOM form element
   hookMarkerForm.id = "hookmarkerpanel";
   hookMarkerForm.setAttribute("action","");
-  hookMarkerForm.onsubmit = function() { hookMarker.setMap(null); 
+  hookMarkerForm.onsubmit = function() {
+  	                    deleteMarker(geosmarker,marker); 
+  	                    hookMarker.setMap(null); 
   	                    document.getElementById("sidebar").removeChild(hookMarkerForm);
   	                    marker.setMap(null);
   	                    markerHookVisibility = false;
   	                    return false;};
   hookMarkerForm.innerHTML =  
     '<fieldset style="width:100%;">' +
+    '<label for="name">Name </label>'  +
+    '<input type="text" id="namemarkertxt" name="geosmarker[name]" value="' + geosmarkername + '"/>' +
+    '<br>' +
+
     '<label for="latitude">Lat </label>' + marker.getPosition().lat().toFixed(4) +
+    '<input type="hidden" id="markerlatid" name="geosmarker[lat]" value="' +
+     marker.getPosition().lat().toFixed(4) + '"/>' +
     '<br>' +
     '<label for="longitude">Lng </label>' + marker.getPosition().lng().toFixed(4) +
+    '<input type="hidden" id="markerlngid" name="geosmarker[lng]" value="' +
+     marker.getPosition().lng().toFixed(4) + '"/>' +
     '<br>' +
+    
     '<label for="category">Address </label>' +   
     '<br>' +
-    '<input type="text" id="addresstxt" name="m[addresstxt]" style="width:90%;"' +
-    'value="'+  address + '"/>'+   
+    '<input type="text" id="addresstxt" name="geosmarker[address]" style="width:90%;"' +
+    'value="'+  geosmarkeraddress + '"/>'+   
     '<br>' +
     '<input type="submit" id="cancelMarker" value="Delete Marker" />' +
     '<input type="button" id="centerMarker" value="Center" onclick="centerMapOnMarkerHook();" />' +
     '<input type="button" id="addressMarker" value="Find Address" onclick="displayReverseGeocodeOnHook();" />' +
+    '<input type="button" id="saveMarker" value="Update Marker" onclick="saveMarkerOnDB();" />' +
     '</fieldset>';
 
     if (trackHookVisibility == true){
@@ -395,7 +419,35 @@ function displayMarkerHook(marker,visibility,address)
 function centerMapOnMarkerHook() {
 	map.setCenter(hookedMarker.getPosition());
 }
-/////////////////////////////////////////////
+function saveMarkerOnDB(){
+    var formValues=$("form#hookmarkerpanel").serialize();
+    $.ajax({
+    	async: false,
+    	type: "POST",
+	    url: "updatemarker/"+hookedGeosmarker.id,
+	    data: formValues,
+        dataType: "json",
+        success: function(data, status){
+        	 hookedGeosmarker=data.content.geosmarker;
+        	 google.maps.event.clearListeners(hookedMarker,'click');
+        	 setEventsOnMarker(hookedMarker,hookedGeosmarker);          	    	
+	    } // end on success
+	}); // end of the new Ajax.Request() call
+//	updateListTracks();	
+}
+////////////////////////////////////////////////////////////
+//
+////////////////////////////////////////////////////////////
+function deleteMarker(geosmarker,marker) {
+    $.ajax({
+    	async: false,
+    	type: "PUT",
+    	url: "destroymarker/"+geosmarker.id,
+    	success: function(data,status){
+
+    	}
+    })
+}/////////////////////////////////////////////
 //click on circle 
 /////////////////////////////////////////////
 function displayCircleHook(circle,visibility)
@@ -765,10 +817,10 @@ function setEventsOnTrack(marker,latlng,track,inputDeleteForm,inputUpdateForm) {
   });
 }
 ////////////////////////////////////////////////////////////////////////////
-function setEventsOnMarker(marker) {
+function setEventsOnMarker(marker,geosmarker) {
 
   google.maps.event.addListener(marker,'click',function(){
-   displayMarkerHook(marker,true,"");
+   displayMarkerHook(marker,true,"",geosmarker);
   });
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -1101,14 +1153,29 @@ function showMyPosition(position){
                 map: map,
                 position: myLatLng
           });
-          setEventsOnMarker(marker);  	
-  	      displayMarkerHook(marker,true," ");
+	
+  	      displayMarkerHook(marker,true," ",null);
+          var geosmarker;
+          var formValues=$("form#hookmarkerpanel").serialize();
+          $.ajax({
+    	      async: false,
+    	      type: "POST",
+	          url: "createmarker",
+	          data: formValues,
+              dataType: "json",
+              success: function(data, status){ 
+            	geosmarker = data.geosmarker;
+
+              	displayMarkerHook(marker,true,"",geosmarker); 
+  	            setEventsOnMarker(marker,geosmarker);    	
+                	    } // end on success
+	         }); // end of the new Ajax.Request() call
+
 }
 
 //////////////////////////////////////////////////////////////////////
 function displayGeocode(){
 	var geoTxt = document.getElementById("geopanel").geocodetxt.value;
-//    var address = document.getElementById("address").value;
     geocoder.geocode( { 'address': geoTxt}, function(results, status) {
        
        if (status == google.maps.GeocoderStatus.OK) {
@@ -1117,8 +1184,26 @@ function displayGeocode(){
              map: map,
              position: results[0].geometry.location
           });
-          setEventsOnMarker(marker);  	
-  	      displayMarkerHook(marker,true,results[0].formatted_address);
+
+  	      displayMarkerHook(marker,true,results[0].formatted_address,null);
+
+          var geosmarker;
+          var formValues=$("form#hookmarkerpanel").serialize();
+          $.ajax({
+    	      async: false,
+    	      type: "POST",
+	          url: "createmarker",
+	          data: formValues,
+              dataType: "json",
+              success: function(data, status){ 
+              geosmarker = data.geosmarker;
+ 	
+              displayMarkerHook(marker,true,"",geosmarker);
+              setEventsOnMarker(marker,geosmarker);    	
+                	    } // end on success
+	         }); // end of the new Ajax.Request() call
+
+
        } 
        else {
          alert("Geocode was not successful for the following reason: " + status);
@@ -1127,24 +1212,14 @@ function displayGeocode(){
 }
 //////////////////////////////////////////////////////////////////////
 function displayReverseGeocodeOnHook() {
-//var input = document.getElementById("latlng").value;
-//var geoTxt = document.getElementById("geopanel").geocodetxt.value;
+
 var latlng = hookedMarker.getPosition();
-//var latlngStr = input.split(",",2);
-//var lat = parseFloat(latlngStr[0]);
-//var lng = parseFloat(latlngStr[1]);
-//var latlng = new google.maps.LatLng(lat, lng);
 geocoder.geocode({'latLng': latlng}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
-           if (results[1]) {
-//map.setZoom(11);
-//marker = new google.maps.Marker({
-//position: latlng,
-//map: map
-//});
-//infowindow.setContent(results[1].formatted_address);
-//infowindow.open(map, marker);
-              displayMarkerHook(hookedMarker, true, results[1].formatted_address)
+           if (results[0]) {
+           	  hookedGeosmarker.address = results[0].formatted_address;
+           	  hookedGeosmarker.name = document.getElementById("hookmarkerpanel").namemarkertxt.value;
+              displayMarkerHook(hookedMarker, true, results[0].formatted_address,hookedGeosmarker)
            } else {
                alert("No results found");
              }
@@ -1155,10 +1230,6 @@ geocoder.geocode({'latLng': latlng}, function(results, status) {
 } 
 //////////////////////////////////////////////////////////////////////
 function displayReverseGeocode() {
-//var input = document.getElementById("geocodetxt").value;
-//var latlngStr = input.split(",",2);
-//var lat = parseFloat(latlngStr[0]);
-//var lng = parseFloat(latlngStr[1]);
 var lat = parseFloat(document.getElementById("geolat").value);
 var lng = parseFloat(document.getElementById("geolng").value);
 var latlng = new google.maps.LatLng(lat, lng);
@@ -1167,21 +1238,41 @@ geocoder.geocode({'latLng': latlng}, function(results, status) {
         var marker = new google.maps.Marker({
                position: latlng,
                map: map
-//map.setZoom(11);
               });
         map.setCenter(latlng);
+          	      displayMarkerHook(marker,true," ",null);
+          var geosmarker;
+          var formValues=$("form#hookmarkerpanel").serialize();
+          $.ajax({
+    	      async: false,
+    	      type: "POST",
+	          url: "createmarker",
+	          data: formValues,
+              dataType: "json",
+              success: function(data, status){ 
+            	geosmarker = data.geosmarker;
+            	hookedGeosmarker = geosmarker;
+ 
+              	displayMarkerHook(marker,true,"",geosmarker);
+   	            setEventsOnMarker(marker,geosmarker);               	   	
+                	    } // end on success
+	         }); // end of the new Ajax.Request() call
         if (status == google.maps.GeocoderStatus.OK) {
-           if (results[1]) {
-//infowindow.setContent(results[1].formatted_address);
-//infowindow.open(map, marker);
-              displayMarkerHook(marker, true, results[1].formatted_address)
+           if (results[0]) {
+           	  hookedGeosmarker.address = results[0].formatted_address;
+           	  hookedGeosmarker.name = document.getElementById("hookmarkerpanel").namemarkertxt.value;
+              displayMarkerHook(marker, true, results[0].formatted_address,hookedGeosmarker)
            } else {
                alert("No results found");
-               displayMarkerHook(marker, true, "");
+           	  hookedGeosmarker.address = "";
+           	  hookedGeosmarker.name = document.getElementById("hookmarkerpanel").namemarkertxt.value;    
+               displayMarkerHook(marker, true, "", hookedGeosmarker);
              }
          } else {
              alert("Geocoder status: " + status);
-             displayMarkerHook(marker, true, "");
+           	  hookedGeosmarker.address = "";
+           	  hookedGeosmarker.name = document.getElementById("hookmarkerpanel").namemarkertxt.value;   
+               displayMarkerHook(marker, true, "", hookedGeosmarker);
            }
         });
 } 
@@ -1242,8 +1333,22 @@ function initialize() {
             displayCircleHook(event.overlay,true);
             break;
           case google.maps.drawing.OverlayType.MARKER :
-          	setEventsOnMarker(event.overlay);  	
-  	        displayMarkerHook(event.overlay,true,"");
+            var geosmarker;
+
+  	        displayMarkerHook(event.overlay,true,"",null);
+  	        var formValues=$("form#hookmarkerpanel").serialize();
+            $.ajax({
+    	      async: false,
+    	      type: "POST",
+	          url: "createmarker",
+	          data: formValues,
+              dataType: "json",
+              success: function(data, status){ 
+              	geosmarker = data.geosmarker;
+              	displayMarkerHook(event.overlay,true,"",geosmarker); 
+  	          	setEventsOnMarker(event.overlay,geosmarker);  	
+                	    } // end on success
+	         }); // end of the new Ajax.Request() call
   	        break;
           case google.maps.drawing.OverlayType.RECTANGLE :
           	setEventsOnRectangle(event.overlay);  	
