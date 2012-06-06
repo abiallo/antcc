@@ -40,5 +40,11 @@ class GeosmarkersController < ApplicationController
      render :text=>res.to_json
   end
 
+  def list
+    puts ("list markers--------------------------------------------")    
+    @geosmap = Geosmap.find(current_user.geosmap_id)
+    render :text => (@geosmap.geosmarkers).to_json
+#    render :text=>(Track.find :all).to_json
+  end
   
 end

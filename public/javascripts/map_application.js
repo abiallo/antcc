@@ -13,11 +13,14 @@ var map;
 var geosmap;
 var tracks = new Array();
 var nTracks;
+var geosmarkers = new Array();
+var nGeosmarkers;
 var infoCreateWindow = new google.maps.InfoWindow({
     disableAutoPan: false
     });
 var image='';
 var markerArray=new Array();
+var geosmarkerArray=new Array();
 var infoUpdateWindow = new google.maps.InfoWindow({
     disableAutoPan: false
     });
@@ -880,7 +883,28 @@ function createMarker(track) {
 
     return marker;  
 }
-//////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+//after marker creation to create a marker
+///////////////////////////////////////////////////////////////////////////
+
+function createGeosmarker(geosmarker) {
+//    buildImage(marker);// set image with the correct symbol
+    var lat=geosmarker.lat;
+    var lng=geosmarker.lng;
+    var latlng = new google.maps.LatLng(lat,lng);
+    var marker = new google.maps.Marker({
+                        position: latlng,
+                        map: map,
+                        title:geosmarker.name,
+                        draggable: true});
+//                        icon: image});
+    geosmarkerArray.push(marker);
+    setEventsOnMarker(marker,geosmarker);
+
+//    image = '';
+
+    return marker;  
+}//////////////////////////////////////////////////////////
 // mouse mouvement on the map 
 //////////////////////////////////////////////////////////
 function displayLatLong(location) {
@@ -972,6 +996,29 @@ function listTracks() {
   }); //end of .ajax request
   initPostime();
 }
+///////////////////////////////////////////////////////////////////////////////
+// during initialisation of page
+///////////////////////////////////////////////////////////////////////////////
+function listMarkers() {
+  $.ajax({
+  	async: false,
+  	type: "GET",
+	url: "listmarkers",
+	dataType: "json",
+    success: function(data, status){
+        var geosmarker;
+		var marker;
+		geosmarkers = data;
+		nGeosmarkers = geosmarkers.length;
+        for (var i = 0 ; i < geosmarkers.length ; i++) {
+          geosmarker = geosmarkers[i].geosmarker;  
+          marker=createGeosmarker(geosmarker);
+
+        }; // end of for loop
+	} // end of function
+  }); //end of .ajax request
+  initPostime();
+}
 ////////////////////////////////////////////
 function initPostime(){
 	   var track;
@@ -1031,7 +1078,6 @@ function createTrack (location) {
 	    data: formValues,
         dataType: "json",
         success: function(data, status){    	
-//             var marker = createMarker(data.track);
              infoCreateWindow.close();
 	    } // end on success
 	}); // end of the new Ajax.Request() call
@@ -1321,6 +1367,7 @@ function initialize() {
     displayGeoPanel();
 //////////////////////////////////////////////////////////////
     listTracks();
+    listMarkers();
     google.maps.event.addListener(map,'click',function(event){
            createTrackInfoWindow(event.latLng);});  
     google.maps.event.addListener(map,'mousemove',function(event){

@@ -21,6 +21,7 @@ Antcc::Application.routes.draw do
   match '/geosmaps/:id/update' => "geosmaps#update"
   match '/geosmaps/:id/save' => "geosmaps#save"
   match '/geosmaps/:id/list' => "tracks#list"
+  match '/geosmaps/:id/listmarkers' => "geosmarkers#list"
   match '/geosmaps/:id/create' => "tracks#create"
   match '/geosmaps/:id/createmarker' => "geosmarkers#create"
   match '/geosmaps/:id/destroy/:id' => "tracks#destroy"
