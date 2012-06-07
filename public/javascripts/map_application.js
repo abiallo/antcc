@@ -14,6 +14,7 @@ var geosmap;
 var tracks = new Array();
 var nTracks;
 var geosmarkers = new Array();
+var geoscircles = new Array();
 var nGeosmarkers;
 var infoCreateWindow = new google.maps.InfoWindow({
     disableAutoPan: false
@@ -21,6 +22,7 @@ var infoCreateWindow = new google.maps.InfoWindow({
 var image='';
 var markerArray=new Array();
 var geosmarkerArray=new Array();
+var geoscircleArray=new Array();
 var infoUpdateWindow = new google.maps.InfoWindow({
     disableAutoPan: false
     });
@@ -45,6 +47,7 @@ var hookMarker = new google.maps.Marker({
 var hookedTrack;
 var hookedMarker;
 var hookedGeosmarker;
+var hookedGeoscircle;
 var hookedOverlay = null;
 var hookMarkerForm = document.createElement("form");
 var hookCircleForm = document.createElement("form");
@@ -453,7 +456,7 @@ function deleteMarker(geosmarker,marker) {
 }/////////////////////////////////////////////
 //click on circle 
 /////////////////////////////////////////////
-function displayCircleHook(circle,visibility)
+function displayCircleHook(circle,visibility,geoscircle)
 {
  if (visibility==true){
    if (hookedOverlay != null) {	
@@ -461,13 +464,26 @@ function displayCircleHook(circle,visibility)
    	hookedOverlay.setMap(map);
    }
    hookedOverlay = circle;
+   hookedGeoscircle = geoscircle;
+   var geoscirclename;
+   var geoscircleradius;
+   if (geoscircle == null) {
+   	geoscirclename="";
+   	geoscircleradius=0;
+   }
+   else {
+   	geoscirclename=geoscircle.name;
+   	geoscircleradius=geoscircle.radius;
+   }
 //   hookMarker.setPosition(circle.getCenter());
   hookMarker.setMap(null);
   circle.setOptions({strokeColor: '#FF0000'});
   //Hook HTML DOM form element
   hookCircleForm.id = "hookcirclepanel";
   hookCircleForm.setAttribute("action","");
-  hookCircleForm.onsubmit = function() { hookMarker.setMap(null); 
+  hookCircleForm.onsubmit = function() {
+  	                    deleteCircle(geoscircle,circle); 
+  	                    hookMarker.setMap(null); 
   	                    document.getElementById("sidebar").removeChild(hookCircleForm);
   	                    circle.setMap(null);
   	                    circleHookVisibility = false;
@@ -475,18 +491,23 @@ function displayCircleHook(circle,visibility)
   	                    return false;};
   hookCircleForm.innerHTML =  
     '<fieldset style="width:100%;">' +
-    '<label for="latitude">Lat </label>' + format_number(circle.getCenter().lat(),4) +
+    '<label for="name">Name </label>'  +
+    '<input type="text" id="namecircletxt" name="geoscircle[name]" value="' + geoscirclename + '"/>' +
     '<br>' +
-    '<label for="longitude">Lng </label>' + format_number(circle.getCenter().lng(),4) +
+    '<label for="latitude">Lat </label>' + circle.getCenter().lat().toFixed(4) +
+    '<input type="hidden" id="circlelatid" name="geoscircle[lat]" value="' +
+     circle.getCenter().lat().toFixed(4) + '"/>' +
     '<br>' +
-    '<label for="radius">Radius (m) </label>' + format_number(circle.getRadius(),0) +
+    '<label for="longitude">Lng </label>' + circle.getCenter().lng().toFixed(4) +
+    '<input type="hidden" id="circlelngid" name="geoscircle[lng]" value="' +
+     circle.getCenter().lng().toFixed(4) + '"/>' +
+    '<br>' +
+    '<label for="radius">Rad. (m) </label>' + circle.getRadius().toFixed(0) +
+    '<input type="hidden" id="namecircleradius" name="geoscircle[radius]" value="' + circle.getRadius() + '"/>' +
     '<br>' +    
-    '<label for="category">Category </label>' +   
-    '<br>' +
-    '<label for="icon">Identity </label>' +  
-    '<br>' +
     '<input type="submit" id="cancelcircle" value="Delete Circle" />' +
     '<input type="button" id="centercircle" value="Center" onclick="centerMapOnCircleHook();" />' +
+    '<input type="button" id="saveCircle" value="Update Circle" onclick="saveCircleOnDB();" />' +
     '</fieldset>';
 
     if (trackHookVisibility == true){
@@ -522,7 +543,35 @@ function displayCircleHook(circle,visibility)
 function centerMapOnCircleHook() {
 	map.setCenter(hookedOverlay.getCenter());
 }
+////////////////////////////////////////////////////////////
+//
+////////////////////////////////////////////////////////////
+function deleteCircle(geoscircle,circle) {
+    $.ajax({
+    	async: false,
+    	type: "PUT",
+    	url: "destroycircle/"+geoscircle.id,
+    	success: function(data,status){
 
+    	}
+    })
+}
+function saveCircleOnDB(){
+    var formValues=$("form#hookcirclepanel").serialize();
+    $.ajax({
+    	async: false,
+    	type: "POST",
+	    url: "updatecircle/"+hookedGeoscircle.id,
+	    data: formValues,
+        dataType: "json",
+        success: function(data, status){
+        	 hookedGeoscircle=data.content.geoscircle;
+        	 google.maps.event.clearListeners(hookedOverlay,'click');
+        	 setEventsOnCircle(hookedOverlay,hookedGeoscircle);          	    	
+	    } // end on success
+	}); // end of the new Ajax.Request() call
+//	updateListTracks();	
+}
 /////////////////////////////////////////////
 //click on rectangle 
 /////////////////////////////////////////////
@@ -827,15 +876,15 @@ function setEventsOnMarker(marker,geosmarker) {
   });
 }
 ////////////////////////////////////////////////////////////////////////////
-function setEventsOnCircle(circle) {
+function setEventsOnCircle(circle,geoscircle) {
   google.maps.event.addListener(circle,'click',function(){
-   displayCircleHook(circle,true);
+   displayCircleHook(circle,true,geoscircle);
   });
   google.maps.event.addListener(circle,'radius_changed',function(){
-   displayCircleHook(circle,true);
+   displayCircleHook(circle,true,geoscircle);
   });
   google.maps.event.addListener(circle,'center_changed',function(){
-   displayCircleHook(circle,true);
+   displayCircleHook(circle,true,geoscircle);
   });    
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -904,7 +953,35 @@ function createGeosmarker(geosmarker) {
 //    image = '';
 
     return marker;  
-}//////////////////////////////////////////////////////////
+}
+////////////////////////////////////////////////////////////////////////////
+//after circle creation to create a geoscircle
+///////////////////////////////////////////////////////////////////////////
+
+function createGeoscircle(geoscircle) {
+//    buildImage(marker);// set image with the correct symbol
+    var lat=geoscircle.lat;
+    var lng=geoscircle.lng;
+    var latlng = new google.maps.LatLng(lat,lng);
+    var circleoptions = {
+    	                center: latlng,
+                        editable: true,
+                        map: map,
+                        radius: geoscircle.radius,
+                        title:geoscircle.name,
+                        fillColor: '#000000',
+                        fillOpacity: 0.05,
+                        strokeWeight: 2,       
+                        clickable: true,
+                        zIndex: 1,
+                        draggable: true
+                        };
+    var circle = new google.maps.Circle(circleoptions);
+    geoscircleArray.push(circle);
+    setEventsOnCircle(circle,geoscircle);
+    return circle;  
+}
+//////////////////////////////////////////////////////////
 // mouse mouvement on the map 
 //////////////////////////////////////////////////////////
 function displayLatLong(location) {
@@ -1017,7 +1094,26 @@ function listMarkers() {
         }; // end of for loop
 	} // end of function
   }); //end of .ajax request
-  initPostime();
+}
+///////////////////////////////////////////////////////////////////////////////
+// during initialisation of page
+///////////////////////////////////////////////////////////////////////////////
+function listCircles() {
+  $.ajax({
+  	async: false,
+  	type: "GET",
+	url: "listcircles",
+	dataType: "json",
+    success: function(data, status){
+        var geoscircle;
+		var circle;
+		geoscircles = data;
+        for (var i = 0 ; i < geoscircles.length ; i++) {
+          geoscircle = geoscircles[i].geoscircle;  
+          circle=createGeoscircle(geoscircle);
+        }; // end of for loop
+	} // end of function
+  }); //end of .ajax request
 }
 ////////////////////////////////////////////
 function initPostime(){
@@ -1356,7 +1452,6 @@ function placesOnOff(){
 /////////////////////////////////////////////////////////////////////
 function initialize() {
 //  handleResize();
-
   loadCurrentMap();
    
 //  var ge = new GoogleEarth(map);
@@ -1368,16 +1463,29 @@ function initialize() {
 //////////////////////////////////////////////////////////////
     listTracks();
     listMarkers();
+    listCircles();
     google.maps.event.addListener(map,'click',function(event){
            createTrackInfoWindow(event.latLng);});  
     google.maps.event.addListener(map,'mousemove',function(event){
            displayLatLong(event.latLng);});  
-    }
     google.maps.event.addListener(drawingManager, 'overlaycomplete', function(event) {
        switch(event.type) {
           case google.maps.drawing.OverlayType.CIRCLE :
-            setEventsOnCircle(event.overlay);
-            displayCircleHook(event.overlay,true);
+            var geoscircle;
+  	        displayCircleHook(event.overlay,true,null);
+  	        var formValues=$("form#hookcirclepanel").serialize();
+            $.ajax({
+    	      async: false,
+    	      type: "POST",
+	          url: "createcircle",
+	          data: formValues,
+              dataType: "json",
+              success: function(data, status){
+              	geoscircle = data.geoscircle;
+              	displayCircleHook(event.overlay,true,geoscircle); 
+  	          	setEventsOnCircle(event.overlay,geoscircle);  	
+                	    } // end on success
+	         }); // end of the new Ajax.Request() call
             break;
           case google.maps.drawing.OverlayType.MARKER :
             var geosmarker;
@@ -1412,6 +1520,7 @@ function initialize() {
   	      default:
        } //switch
     });
+ }
 /////////////////////////////////////////////////////////////
 function loadCurrentMap() {
 

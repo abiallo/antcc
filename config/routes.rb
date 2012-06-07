@@ -29,9 +29,15 @@ Antcc::Application.routes.draw do
   match '/geosmaps/:id/update/:id' => "tracks#update"
   match '/geosmaps/:id/updatemarker/:id' => "geosmarkers#update"
   match '/geosmaps/:id/updatepostime/:id' => "tracks#updatepostime"
+  match '/geosmaps/:id/listcircles' => "geoscircles#list"
+  match '/geosmaps/:id/createcircle' => "geoscircles#create"
+  match '/geosmaps/:id/destroycircle/:id' => "geoscircles#destroy"
+  match '/geosmaps/:id/updatecircle/:id' => "geoscircles#update"
+
   resources :geosmaps do
    resources :tracks
    resources :geosmarkers
+   resources :geoscircles
   end
   # match '/geosmaps/:id/list'  => "tracks/list"
   # The priority is based upon order of creation:
