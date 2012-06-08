@@ -696,11 +696,11 @@ function saveRectangleOnDB(){
     $.ajax({
     	async: false,
     	type: "POST",
-	    url: "updaterectangle/"+hookedGeosrectangle.id,
+	    url: "updaterectangle/"+hookedRectangle.id,
 	    data: formValues,
         dataType: "json",
         success: function(data, status){
-        	 hookedGeosrectangle=data.content.geosrectangle;
+        	 hookedRectangle=data.content.geosrectangle;
         	 google.maps.event.clearListeners(hookedOverlay,'click');
         	 setEventsOnRectangle(hookedOverlay,hookedGeosrectangle);          	    	
 	    } // end on success
@@ -1047,36 +1047,6 @@ function createGeoscircle(geoscircle) {
     setEventsOnCircle(circle,geoscircle);
     return circle;  
 }
-////////////////////////////////////////////////////////////////////////////
-//after rectangle creation to create a geosrectangle
-///////////////////////////////////////////////////////////////////////////
-
-function createGeosrectangle(geosrectangle) {
-//    buildImage(marker);// set image with the correct symbol
-    var latSW=geosrectangle.latSW;
-    var lngSW=geosrectangle.lngSW;
-    var latlngSW = new google.maps.LatLng(latSW,lngSW);
-    var latNE=geosrectangle.latNE;
-    var lngNE=geosrectangle.lngNE;
-    var latlngNE = new google.maps.LatLng(latNE,lngNE);
-    var geosrectanglebounds = new google.maps.LatLngBounds(latlngSW,latlngNE);
-    var rectangleoptions = {
-    	                bounds: geosrectanglebounds,
-                        editable: true,
-                        map: map,
-                        title:geosrectangle.name,
-                        fillColor: '#000000',
-                        fillOpacity: 0.05,
-                        strokeWeight: 2,       
-                        clickable: true,
-                        zIndex: 1,
-                        draggable: true
-                        };
-    var rectangle = new google.maps.Rectangle(rectangleoptions);
-    geosrectangleArray.push(rectangle);
-    setEventsOnRectangle(rectangle,geosrectangle);
-    return rectangle;  
-}
 //////////////////////////////////////////////////////////
 // mouse mouvement on the map 
 //////////////////////////////////////////////////////////
@@ -1207,23 +1177,6 @@ function listCircles() {
         for (var i = 0 ; i < geoscircles.length ; i++) {
           geoscircle = geoscircles[i].geoscircle;  
           circle=createGeoscircle(geoscircle);
-        }; // end of for loop
-	} // end of function
-  }); //end of .ajax request
-}
-function listRectangles() {
-  $.ajax({
-  	async: false,
-  	type: "GET",
-	url: "listrectangles",
-	dataType: "json",
-    success: function(data, status){
-        var geosrectangle;
-	var rectangle;
-	geosrectangles = data;
-        for (var i = 0 ; i < geosrectangles.length ; i++) {
-          geosrectangle = geosrectangles[i].geosrectangle;  
-          rectangle=createGeosrectangle(geosrectangle);
         }; // end of for loop
 	} // end of function
   }); //end of .ajax request
@@ -1577,7 +1530,6 @@ function initialize() {
     listTracks();
     listMarkers();
     listCircles();
-    listRectangles();
     google.maps.event.addListener(map,'click',function(event){
            createTrackInfoWindow(event.latLng);});  
     google.maps.event.addListener(map,'mousemove',function(event){
