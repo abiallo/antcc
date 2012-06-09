@@ -15,7 +15,9 @@ var tracks = new Array();
 var nTracks;
 var geosmarkers = new Array();
 var geoscircles = new Array();
-var geosrectangles = new Array(); 
+var geosrectangles = new Array();
+var geospolygons = new Array(); 
+var geospolylines = new Array(); 
 var nGeosmarkers;
 var infoCreateWindow = new google.maps.InfoWindow({
     disableAutoPan: false
@@ -25,6 +27,8 @@ var markerArray=new Array();
 var geosmarkerArray=new Array();
 var geoscircleArray=new Array();
 var geosrectangleArray=new Array();
+var geospolygonArray=new Array();
+var geospolylineArray=new Array();
 var infoUpdateWindow = new google.maps.InfoWindow({
     disableAutoPan: false
     });
@@ -51,6 +55,8 @@ var hookedMarker;
 var hookedGeosmarker;
 var hookedGeoscircle;
 var hookedGeosrectangle;
+var hookedGeospolygon;
+var hookedGeospolyline;
 var hookedOverlay = null;
 var hookMarkerForm = document.createElement("form");
 var hookCircleForm = document.createElement("form");
@@ -710,20 +716,33 @@ function saveRectangleOnDB(){
 /////////////////////////////////////////////
 //click on polyline 
 /////////////////////////////////////////////
-function displayPolylineHook(polyline,visibility)
+function displayPolylineHook(polyline,visibility,geospolyline)
 {
  if (visibility==true){
    if (hookedOverlay != null) {	
    	hookedOverlay.setOptions({strokeColor: '#000000'});
    	hookedOverlay.setMap(map);
    }
-   hookedOverlay = polyline;
-  hookMarker.setMap(null);
-  polyline.setOptions({strokeColor: '#FF0000'});
-  //Hook HTML DOM form element
-  hookPolylineForm.id = "hookpolylinepanel";
-  hookPolylineForm.setAttribute("action","");
-  hookPolylineForm.onsubmit = function() { hookMarker.setMap(null); 
+ hookedOverlay = polyline;
+ hookedGeospolyline = geospolyline;
+ var geospolylinename;
+ var geospolylinegeometry;
+ if (geospolyline == null) {
+ 	geospolylinename="";
+ 	geospolylinegeometry="";
+ }
+ else {
+ 	geospolylinename=geospolyline.name;
+ 	geospolylinegeometry=geospolyline.geometry; 	
+ }  
+ hookMarker.setMap(null);
+ polyline.setOptions({strokeColor: '#FF0000'});
+ //Hook HTML DOM form element
+ hookPolylineForm.id = "hookpolylinepanel";
+ hookPolylineForm.setAttribute("action","");
+ hookPolylineForm.onsubmit = function() {
+ 	                    deletePolyline (geospolyline,polyline);
+ 	                    hookMarker.setMap(null); 
   	                    document.getElementById("sidebar").removeChild(hookPolylineForm);
   	                    polyline.setMap(null);
   	                    polylineHookVisibility = false;
@@ -731,11 +750,14 @@ function displayPolylineHook(polyline,visibility)
   	                    return false;};
   hookPolylineForm.innerHTML =  
     '<fieldset style="width:100%;">' +
-    '<label for="category">Category </label>' +   
+    '<label for="name">Name </label>'  +
+    '<input type="text" id="namepolylinetxt" name="geospolyline[name]" value="' + geospolylinename + '"/>' +
     '<br>' +
-    '<label for="icon">Identity </label>' +  
+    '<input type="hidden" id="polylinegeometryid" name="geospolyline[geometry]" value="' +
+     google.maps.geometry.encoding.encodePath(polyline.getPath()) + '"/>' +
     '<br>' +
     '<input type="submit" id="cancelpolyline" value="Delete Polyline" />' +
+    '<input type="button" id="savePolyline" value="Update Polyline" onclick="savePolylineOnDB();" />' +
     '</fieldset>';
 
     if (trackHookVisibility == true){
@@ -768,23 +790,65 @@ function displayPolylineHook(polyline,visibility)
   polylineHookVisibility = false;
  }
 }
+function deletePolyline(geospolyline,polyline) {
+    $.ajax({
+    	async: false,
+    	type: "PUT",
+    	url: "destroypolyline/"+geospolyline.id,
+    	success: function(data,status){
+
+    	}
+    })
+}
+function savePolylineOnDB(){
+    var formValues=$("form#hookpolylinepanel").serialize();
+    $.ajax({
+    	async: false,
+    	type: "POST",
+	    url: "updatepolyline/"+hookedGeospolyline.id,
+	    data: formValues,
+        dataType: "json",
+        success: function(data, status){
+        	 hookedGeospolyline=data.content.geospolyline;
+        	 google.maps.event.clearListeners(hookedOverlay,'click');
+        	 setEventsOnPolyline(hookedOverlay,hookedGeospolyline);          	    	
+	    } // end on success
+	}); // end of the new Ajax.Request() call
+//	updateListTracks();	
+}
+
+
 /////////////////////////////////////////////
 //click on polygon 
 /////////////////////////////////////////////
-function displayPolygonHook(polygon,visibility)
+function displayPolygonHook(polygon,visibility,geospolygon)
 {
  if (visibility==true){
    if (hookedOverlay != null) {	
    	hookedOverlay.setOptions({strokeColor: '#000000'});
    	hookedOverlay.setMap(map);
    }
-   hookedOverlay = polygon;
+ hookedOverlay = polygon;
+ hookedGeospolygon = geospolygon;
+ var geospolygonname;
+ var geospolygongeometry;
+ if (geospolygon == null) {
+ 	geospolygonname="";
+ 	geospolygongeometry="";
+ }
+ else {
+ 	geospolygonname=geospolygon.name;
+ 	geospolygongeometry=geospolygon.geometry; 	
+ }   
+   
   hookMarker.setMap(null);
   polygon.setOptions({strokeColor: '#FF0000'});
   //Hook HTML DOM form element
   hookPolygonForm.id = "hookpolygonpanel";
   hookPolygonForm.setAttribute("action","");
-  hookPolygonForm.onsubmit = function() { hookMarker.setMap(null); 
+  hookPolygonForm.onsubmit = function() {
+  	                    deletePolygon(geospolygon, polygon); 
+  	                    hookMarker.setMap(null); 
   	                    document.getElementById("sidebar").removeChild(hookPolygonForm);
   	                    polygon.setMap(null);
   	                    polygonHookVisibility = false;
@@ -792,11 +856,14 @@ function displayPolygonHook(polygon,visibility)
   	                    return false;};
   hookPolygonForm.innerHTML =  
     '<fieldset style="width:100%;">' +
-    '<label for="category">Category </label>' +   
+    '<label for="name">Name </label>'  +
+    '<input type="text" id="namepolygontxt" name="geospolygon[name]" value="' + geospolygonname + '"/>' +
     '<br>' +
-    '<label for="icon">Identity </label>' +  
+    '<input type="hidden" id="polygongeometryid" name="geospolygon[geometry]" value="' +
+     google.maps.geometry.encoding.encodePath(polygon.getPath()) + '"/>' +
     '<br>' +
     '<input type="submit" id="cancelpolygon" value="Delete Polygon" />' +
+    '<input type="button" id="savePolygon" value="Update Polygon" onclick="savePolygonOnDB();" />' +
     '</fieldset>';
 
     if (trackHookVisibility == true){
@@ -829,6 +896,33 @@ function displayPolygonHook(polygon,visibility)
   polygonHookVisibility = false;
  }
 }
+function deletePolygon(geospolygon,polygon) {
+    $.ajax({
+    	async: false,
+    	type: "PUT",
+    	url: "destroypolygon/"+geospolygon.id,
+    	success: function(data,status){
+
+    	}
+    })
+}
+function savePolygonOnDB(){
+    var formValues=$("form#hookpolygonpanel").serialize();
+    $.ajax({
+    	async: false,
+    	type: "POST",
+	    url: "updatepolygon/"+hookedGeospolygon.id,
+	    data: formValues,
+        dataType: "json",
+        success: function(data, status){
+        	 hookedGeospolygon=data.content.geospolygon;
+        	 google.maps.event.clearListeners(hookedOverlay,'click');
+        	 setEventsOnPolygon(hookedOverlay,hookedGeospolygon);          	    	
+	    } // end on success
+	}); // end of the new Ajax.Request() call
+//	updateListTracks();	
+}
+
 
 /////////////////////////////////////////////
 //click on track 
@@ -963,15 +1057,15 @@ function setEventsOnRectangle(rectangle,geosrectangle) {
   });
 }
 ////////////////////////////////////////////////////////////////////////////
-function setEventsOnPolyline(polyline) {
+function setEventsOnPolyline(polyline,geospolyline) {
   google.maps.event.addListener(polyline,'click',function(){
-   displayPolylineHook(polyline,true);
+   displayPolylineHook(polyline,true,geospolyline);
   });
 }
 ////////////////////////////////////////////////////////////////////////////
-function setEventsOnPolygon(polygon) {
+function setEventsOnPolygon(polygon,geospolygon) {
   google.maps.event.addListener(polygon,'click',function(){
-   displayPolygonHook(polygon,true);
+   displayPolygonHook(polygon,true,geospolygon);
   });
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -1076,6 +1170,54 @@ function createGeosrectangle(geosrectangle) {
     geosrectangleArray.push(rectangle);
     setEventsOnRectangle(rectangle,geosrectangle);
     return rectangle;  
+}
+////////////////////////////////////////////////////////////////////////////
+//after polyline creation to create a geospolyline
+///////////////////////////////////////////////////////////////////////////
+
+function createGeospolyline(geospolyline) {
+//    buildImage(marker);// set image with the correct symbol
+    var geometry=geospolyline.geometry;
+    var polylineoptions = {
+    	                path: google.maps.geometry.encoding.decodePath(geometry),
+                        editable: true,
+                        map: map,
+                        title:geospolyline.name,
+ //                       fillColor: '#000000',
+ //                       fillOpacity: 0.05,
+                        strokeWeight: 2,       
+                        clickable: true,
+                        zIndex: 1,
+                        draggable: true
+                        };
+    var polyline = new google.maps.Polyline(polylineoptions);
+    geospolylineArray.push(polyline);
+    setEventsOnPolyline(polyline,geospolyline);
+    return polyline;  
+}
+////////////////////////////////////////////////////////////////////////////
+//after polygon creation to create a geospolygon
+///////////////////////////////////////////////////////////////////////////
+
+function createGeospolygon(geospolygon) {
+//    buildImage(marker);// set image with the correct symbol
+    var geometry=geospolygon.geometry;
+    var polygonoptions = {
+    	                path: google.maps.geometry.encoding.decodePath(geometry),
+                        editable: true,
+                        map: map,
+                        title:geospolygon.name,
+                        fillColor: '#000000',
+                        fillOpacity: 0.05,
+                        strokeWeight: 2,       
+                        clickable: true,
+                        zIndex: 1,
+                        draggable: true
+                        };
+    var polygon = new google.maps.Polygon(polygonoptions);
+    geospolygonArray.push(polygon);
+    setEventsOnPolygon(polygon,geospolygon);
+    return polygon;  
 }
 //////////////////////////////////////////////////////////
 // mouse mouvement on the map 
@@ -1224,6 +1366,40 @@ function listRectangles() {
         for (var i = 0 ; i < geosrectangles.length ; i++) {
           geosrectangle = geosrectangles[i].geosrectangle;  
           rectangle=createGeosrectangle(geosrectangle);
+        }; // end of for loop
+	} // end of function
+  }); //end of .ajax request
+}
+function listPolylines() {
+  $.ajax({
+  	async: false,
+  	type: "GET",
+	url: "listpolylines",
+	dataType: "json",
+    success: function(data, status){
+        var geospolyline;
+	var polyline;
+	geospolylines = data;
+        for (var i = 0 ; i < geospolylines.length ; i++) {
+          geospolyline = geospolylines[i].geospolyline;  
+          polyline=createGeospolyline(geospolyline);
+        }; // end of for loop
+	} // end of function
+  }); //end of .ajax request
+}
+function listPolygons() {
+  $.ajax({
+  	async: false,
+  	type: "GET",
+	url: "listpolygons",
+	dataType: "json",
+    success: function(data, status){
+        var geospolygon;
+	var polygon;
+	geospolygons = data;
+        for (var i = 0 ; i < geospolygons.length ; i++) {
+          geospolygon = geospolygons[i].geospolygon;  
+          polygon=createGeospolygon(geospolygon);
         }; // end of for loop
 	} // end of function
   }); //end of .ajax request
@@ -1578,6 +1754,8 @@ function initialize() {
     listMarkers();
     listCircles();
     listRectangles();
+    listPolygons();
+    listPolylines();
     google.maps.event.addListener(map,'click',function(event){
            createTrackInfoWindow(event.latLng);});  
     google.maps.event.addListener(map,'mousemove',function(event){
@@ -1620,7 +1798,7 @@ function initialize() {
 	         }); // end of the new Ajax.Request() call
   	        break;
           case google.maps.drawing.OverlayType.RECTANGLE :
-                var geosrectangle;
+            var geosrectangle;
   	        displayRectangleHook(event.overlay,true,null);
   	        var formValues=$("form#hookrectanglepanel").serialize();
                 $.ajax({
@@ -1634,15 +1812,42 @@ function initialize() {
               	                  displayRectangleHook(event.overlay,true,geosrectangle); 
   	          	          setEventsOnRectangle(event.overlay,geosrectangle);  	
                       } // end on success
-	         }); // end of the new Ajax.Request() call
+	            }); // end of the new Ajax.Request() call
   	        break;
           case google.maps.drawing.OverlayType.POLYLINE :
-          	setEventsOnPolyline(event.overlay);  	
-  	        displayPolylineHook(event.overlay,true);
+            var geospolyline;
+  	        displayPolylineHook(event.overlay,true,null);
+  	        var formValues=$("form#hookpolylinepanel").serialize();
+                $.ajax({
+         	      async: false,
+        	      type: "POST",
+	              url: "createpolyline",
+	              data: formValues,
+                      dataType: "json",
+                      success: function(data, status){
+              	                  geospolyline = data.geospolyline;
+              	                  displayPolylineHook(event.overlay,true,geospolyline); 
+  	          	          setEventsOnPolyline(event.overlay,geospolyline);  	
+                      } // end on success
+	            }); // end of the new Ajax.Request() call
+
   	        break;  	      
           case google.maps.drawing.OverlayType.POLYGON :
-          	setEventsOnPolygon(event.overlay);  	
-  	        displayPolygonHook(event.overlay,true);
+            var geospolygon;
+  	        displayPolygonHook(event.overlay,true,null);
+  	        var formValues=$("form#hookpolygonpanel").serialize();
+                $.ajax({
+         	      async: false,
+        	      type: "POST",
+	              url: "createpolygon",
+	              data: formValues,
+                      dataType: "json",
+                      success: function(data, status){
+              	                  geospolygon = data.geospolygon;
+              	                  displayPolygonHook(event.overlay,true,geospolygon); 
+  	          	          setEventsOnPolygon(event.overlay,geospolygon);  	
+                      } // end on success
+	            }); // end of the new Ajax.Request() call
   	        break;  	      
   	      default:
        } //switch

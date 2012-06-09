@@ -37,12 +37,21 @@ Antcc::Application.routes.draw do
   match '/geosmaps/:id/createrectangle' => "geosrectangles#create"
   match '/geosmaps/:id/destroyrectangle/:id' => "geosrectangles#destroy"
   match '/geosmaps/:id/updaterectangle/:id' => "geosrectangles#update"
-
+  match '/geosmaps/:id/listpolygons' => "geospolygons#list"
+  match '/geosmaps/:id/createpolygon' => "geospolygons#create"
+  match '/geosmaps/:id/destroypolygon/:id' => "geospolygons#destroy"
+  match '/geosmaps/:id/updatepolygon/:id' => "geospolygons#update"
+  match '/geosmaps/:id/listpolylines' => "geospolylines#list"
+  match '/geosmaps/:id/createpolyline' => "geospolylines#create"
+  match '/geosmaps/:id/destroypolyline/:id' => "geospolylines#destroy"
+  match '/geosmaps/:id/updatepolyline/:id' => "geospolylines#update"
   resources :geosmaps do
    resources :tracks
    resources :geosmarkers
    resources :geoscircles
    resources :geosrectangles
+   resources :geospolygons
+   resources :geospolylines
   end
   # match '/geosmaps/:id/list'  => "tracks/list"
   # The priority is based upon order of creation:
