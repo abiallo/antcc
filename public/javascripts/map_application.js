@@ -116,10 +116,74 @@ var drawingManager = new google.maps.drawing.DrawingManager({
 ///////////////////////////////////////////////////
 function buildImage(track) {
   if (track.category == 'land') {
-    if (track.icon == 'unknown') {image = new google.maps.MarkerImage("/images/unkland0.png",null,null, new google.maps.Point(17,17));}
-    if (track.icon == 'enemy') { image = new google.maps.MarkerImage("/images/enemyland0.png",null,null, new google.maps.Point(17,17));}
-    if (track.icon == 'friend') { image = new google.maps.MarkerImage("/images/friendland0.png",null,null, new google.maps.Point(17,12))}
-    if (track.icon == 'neutral') { image =  new google.maps.MarkerImage("/images/neutralland0.png",null,null, new google.maps.Point(15,15));}
+    if (track.icon == 'unknown') {image = new google.maps.MarkerImage("/images/unkland0.png",null,null, new google.maps.Point(17,17));
+             if (track.size == 'platoon'){
+             	image = new google.maps.MarkerImage("/images/unklandplt.png",null,null, new google.maps.Point(17,17));
+             }
+             if (track.size == 'company'){
+             	image = new google.maps.MarkerImage("/images/unklandcoy.png",null,null, new google.maps.Point(17,17));
+             }
+             if (track.size == 'battalion'){
+             	image = new google.maps.MarkerImage("/images/unklandbtl.png",null,null, new google.maps.Point(17,17));
+             }
+             if (track.size == 'battlegroup'){
+             	image = new google.maps.MarkerImage("/images/unklandbtg.png",null,null, new google.maps.Point(17,17));
+             }
+             if (track.size == 'brigade'){
+             	image = new google.maps.MarkerImage("/images/unklandbde.png",null,null, new google.maps.Point(17,17));
+             }             
+    }
+    if (track.icon == 'enemy') { image = new google.maps.MarkerImage("/images/enemyland0.png",null,null, new google.maps.Point(17,17));
+             if (track.size == 'platoon'){
+             	image = new google.maps.MarkerImage("/images/enemylandplt.png",null,null, new google.maps.Point(17,17));
+             }            
+             if (track.size == 'company'){
+             	image = new google.maps.MarkerImage("/images/enemylandcoy.png",null,null, new google.maps.Point(17,17));
+             }            
+             if (track.size == 'battalion'){
+             	image = new google.maps.MarkerImage("/images/enemylandbtl.png",null,null, new google.maps.Point(17,17));
+             }            
+             if (track.size == 'battlegroup'){
+             	image = new google.maps.MarkerImage("/images/enemylandbtg.png",null,null, new google.maps.Point(17,17));
+             }            
+             if (track.size == 'brigade'){
+             	image = new google.maps.MarkerImage("/images/enemylandbde.png",null,null, new google.maps.Point(17,17));
+             }            
+    }
+    if (track.icon == 'friend') { image = new google.maps.MarkerImage("/images/friendland0.png",null,null, new google.maps.Point(17,12))
+             if (track.size == 'platoon'){
+             	image = new google.maps.MarkerImage("/images/friendlandplt.png",null,null, new google.maps.Point(17,12));
+             }            
+             if (track.size == 'company'){
+             	image = new google.maps.MarkerImage("/images/friendlandcoy.png",null,null, new google.maps.Point(17,12));
+             }            
+             if (track.size == 'battalion'){
+             	image = new google.maps.MarkerImage("/images/friendlandbtl.png",null,null, new google.maps.Point(17,12));
+             }            
+             if (track.size == 'battlegroup'){
+             	image = new google.maps.MarkerImage("/images/friendlandbtg.png",null,null, new google.maps.Point(17,12));
+             }            
+             if (track.size == 'brigade'){
+             	image = new google.maps.MarkerImage("/images/friendlandbde.png",null,null, new google.maps.Point(17,12));
+             }            
+    }
+    if (track.icon == 'neutral') { image =  new google.maps.MarkerImage("/images/neutralland0.png",null,null, new google.maps.Point(15,15));
+             if (track.size == 'platoon'){
+             	image = new google.maps.MarkerImage("/images/neutrallandplt.png",null,null, new google.maps.Point(15,15));
+             }            
+             if (track.size == 'company'){
+             	image = new google.maps.MarkerImage("/images/neutrallandcoy.png",null,null, new google.maps.Point(15,15));
+             }            
+             if (track.size == 'battalion'){
+             	image = new google.maps.MarkerImage("/images/neutrallandbtl.png",null,null, new google.maps.Point(15,15));
+             }            
+             if (track.size == 'battlegroup'){
+             	image = new google.maps.MarkerImage("/images/neutrallandbtg.png",null,null, new google.maps.Point(15,15));
+             }            
+             if (track.size == 'brigade'){
+             	image = new google.maps.MarkerImage("/images/neutrallandbde.png",null,null, new google.maps.Point(15,15));
+             }            
+    }
   }
   if (track.category == 'air') {
     if (track.icon == 'unknown') {image = new google.maps.MarkerImage("/images/unkair0.png",null,null, new google.maps.Point(17,17));}
@@ -172,6 +236,14 @@ function updateInfoWindow(marker,location,track) {
     '<option value="land">Land</option> ' +
     '<option value="air">Air</option> ' +
     '<option value="sea">Sea</option>'; 
+  var selectedOptionSize= 
+    '<option value="nosize">No Size</option> ' +
+    '<option value="platoon">Platoon</option> ' +
+    '<option value="company">Company</option> ' +
+    '<option value="battalion">Battalion</option> ' +
+    '<option value="battlegroup">Regiment/Battlegroup</option> ' +
+    '<option value="brigade">Brigade</option>';
+ var sizeDisabled=""; 
   switch (track.icon)
   {
     case 'unknown':
@@ -201,20 +273,70 @@ function updateInfoWindow(marker,location,track) {
     switch (track.category)
   {
     case 'land':
+      sizeDisabled="";
       break;
     case 'air':
+      sizeDisabled='disabled="disabled"';
       selectedOptionCategory=
             '<option value="land">Land</option> ' +
     '<option value="air" selected="selected">Air</option> ' +
     '<option value="sea">Sea</option>';
       break;
     case 'sea':
+      sizeDisabled='disabled="disabled"';
       selectedOptionCategory=
             '<option value="land">Land</option> ' +
     '<option value="air" >Air</option> ' +
     '<option value="sea"selected="selected">Sea</option>';
       break;
   }
+    switch (track.size)
+  {
+    case 'nosize':
+      break;
+    case 'platoon':
+      selectedOptionSize=
+            '<option value="platoon" selected="selected">Platoon</option> ' +
+            '<option value="company">Company</option> ' +
+            '<option value="battalion">Battalion</option> ' +
+            '<option value="battlegroup">Regiment/Battlegroup</option> ' +
+            '<option value="brigade">Brigade</option>';
+      break;
+    case 'company':
+      selectedOptionSize=
+            '<option value="platoon" >Platoon</option> ' +
+            '<option value="company" selected="selected">Company</option> ' +
+            '<option value="battalion">Battalion</option> ' +
+            '<option value="battlegroup">Regiment/Battlegroup</option> ' +
+            '<option value="brigade">Brigade</option>';
+      break;
+    case 'battalion':
+      selectedOptionSize=
+            '<option value="platoon" >Platoon</option> ' +
+            '<option value="company">Company</option> ' +
+            '<option value="battalion" selected="selected">Battalion</option> ' +
+            '<option value="battlegroup">Regiment/Battlegroup</option> ' +
+            '<option value="brigade">Brigade</option>';
+      break;
+    case 'battlegroup':
+      selectedOptionSize=
+            '<option value="platoon" >Platoon</option> ' +
+            '<option value="company">Company</option> ' +
+            '<option value="battalion">Battalion</option> ' +
+            '<option value="battlegroup" selected="selected">Regiment/Battlegroup</option> ' +
+            '<option value="brigade">Brigade</option>';
+      break;
+    case 'brigade':
+      selectedOptionSize=
+            '<option value="platoon" >Platoon</option> ' +
+            '<option value="company">Company</option> ' +
+            '<option value="battalion">Battalion</option> ' +
+            '<option value="battlegroup">Regiment/Battlegroup</option> ' +
+            '<option value="brigade" selected="selected">Brigade</option>';
+      break;
+  }
+
+
   //retrieve lat and long of the click point
   var lat = location.lat();
   var lng = location.lng();
@@ -235,11 +357,11 @@ function updateInfoWindow(marker,location,track) {
     '<br>' +
     '<label for="latitude">Lat </label>' +
     '<input type="text" id="lat" name="m[lat]" maxlength="10" style="width:60%;"' + 
-     'value="'+ format_number(lat,4) + '"/>' +
+     'value="'+ lat.toFixed(4) + '"/>' +
     '<br>' +
     '<label for="longitude">Lng </label>' +
     '<input type="text" id="long" name="m[long]" style="width:60%;" maxlength="10" value="' +
-      format_number(lng,4) + '"/>' +
+      lng.toFixed(4) + '"/>' +
     '<br>' +
     '<select name="m[category]">' +
        selectedOptionCategory +
@@ -247,6 +369,10 @@ function updateInfoWindow(marker,location,track) {
     '<br>' +
     '<select name="m[icon]">' +
        selectedOptionIdentity +
+    '</select>' + 
+    '<br>' +   
+    '<select name="m[size]"' + sizeDisabled + '>' +
+       selectedOptionSize +
     '</select>' + 
     '<br>' +   
     '<label for="course">Course </label>' +
@@ -257,7 +383,6 @@ function updateInfoWindow(marker,location,track) {
     '<input type="text" id="speed" name="m[speed]" style="width:60%;"' +
     'value="'+  track.speed + '"/>'+
     '<br>' +
-
     '<input type="submit" value="Save" />' +
     '</fieldset>';
 
@@ -332,6 +457,8 @@ function createUpdateTrackForm(track,marker,location) {
     '<br>' +
     '<label for="icon">Identity </label>' + track.icon + 
     '<br>' +
+    '<label for="size">Size </label>' + track.size + 
+    '<br>' +
     '<label for="course">Course </label>' + track.course +
     '<br>' +
     '<label for="speed">Speed </label>' + track.speed +
@@ -391,7 +518,7 @@ function displayMarkerHook(marker,visibility,address,geosmarker)
      marker.getPosition().lng().toFixed(4) + '"/>' +
     '<br>' +
     
-    '<label for="category">Address </label>' +   
+    '<label for="address">Address </label>' +   
     '<br>' +
     '<input type="text" id="addresstxt" name="geosmarker[address]" style="width:90%;"' +
     'value="'+  geosmarkeraddress + '"/>'+   
@@ -961,6 +1088,8 @@ function displayTrackHook(marker,track,location,visibility)
     '<br>' +
     '<label for="icon">Identity </label>' + track.icon + 
     '<br>' +
+    '<label for="size">Size </label>' + track.size + 
+    '<br>' +
     '<label for="course">Course </label>' + track.course + 
     '<br>' +
     '<label for="speed">Speed </label>' + track.speed + 
@@ -1249,11 +1378,11 @@ function createTrackInfoWindow(location) {
     '<label for="cstName">Name </label>' +
     '<input type="text" id="cstName" name="track[cstName]" style="width:60%;"/>'+
     '<br>' +
-    '<label for="latitude">Lat </label>' + format_number(lat,4) + 
+    '<label for="latitude">Lat </label>' + lat.toFixed(4) + 
     '<input type="hidden" id="latitude" name="track[lat]" maxlength="10" value="' +
       lat + '"/>' +
     '<br>' +
-    '<label for="longitude">Lng </label>' + format_number(lng,4) +
+    '<label for="longitude">Lng </label>' + lng.toFixed(4) +
     '<input type="hidden" id="longitude" name="track[long]" maxlength="10" value="' +
       lng + '"/>' +
     '<br>' +
@@ -1270,6 +1399,16 @@ function createTrackInfoWindow(location) {
     '<option value="friend">Friend</option> ' +
     '<option value="enemy">Enemy</option>' +
     '<option value="neutral">Neutral</option>' +
+    '</select>' +
+    '<br>' +
+    '<label for="size">Size  </label>'+
+    '<select name="track[size]">' +
+    '<option value="nosize">No Size</option> ' +
+    '<option value="platoon">Platoon</option> ' +
+    '<option value="company">Company</option>' +
+    '<option value="battalion">Battalion</option>' +
+    '<option value="battlegroup">Regiment/Battlegroup</option>' +
+    '<option value="brigade">Brigade</option>' +
     '</select>' +
     '<br>' +
     '<label for="course">Course </label>' +
@@ -1309,7 +1448,8 @@ function listTracks() {
         }; // end of for loop
 	} // end of function
   }); //end of .ajax request
-  initPostime();
+//  initPostime();
+  updateListTracks();
 }
 ///////////////////////////////////////////////////////////////////////////////
 // during initialisation of page
@@ -1447,7 +1587,7 @@ function updateListTracks() {
         }; // end of for loop
 	} // end of function
   }); //end of .ajax request
-    t=setTimeout("updateListTracks()",30000);
+    t=setTimeout("updateListTracks()",10000);
 }
 /////////////////////////////////////////////////////////////
 // on submit Create button click
@@ -1467,7 +1607,7 @@ function createTrack (location) {
 	    } // end on success
 	}); // end of the new Ajax.Request() call
 	updateListTracks();
-	initPostime();
+//	initPostime();
 }
 ////////////////////////////////////////////////////////////
 //
