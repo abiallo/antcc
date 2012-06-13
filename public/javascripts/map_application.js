@@ -72,7 +72,7 @@ var polygonHookVisibility = false;
 var geoForm = document.createElement("form");
 var displayLat;
 var displayLong;
-var placesFlag = false;
+var newTrackFlag = false;
 var drawingManager = new google.maps.drawing.DrawingManager({
       drawingControl: true,
       drawingControlOptions: {
@@ -1166,8 +1166,12 @@ function setEventsOnMarker(marker,geosmarker) {
 }
 ////////////////////////////////////////////////////////////////////////////
 function setEventsOnCircle(circle,geoscircle) {
-  google.maps.event.addListener(circle,'click',function(){
-   displayCircleHook(circle,true,geoscircle);
+  google.maps.event.addListener(circle,'click',function(event){
+  	if (newTrackFlag==true){
+  	         createTrackInfoWindow(event.latLng);}
+  	else {
+             displayCircleHook(circle,true,geoscircle);
+   }
   });
   google.maps.event.addListener(circle,'radius_changed',function(){
    displayCircleHook(circle,true,geoscircle);
@@ -1178,8 +1182,14 @@ function setEventsOnCircle(circle,geoscircle) {
 }
 ////////////////////////////////////////////////////////////////////////////
 function setEventsOnRectangle(rectangle,geosrectangle) {
-  google.maps.event.addListener(rectangle,'click',function(){
-   displayRectangleHook(rectangle,true,geosrectangle);
+  google.maps.event.addListener(rectangle,'click',function(event){
+  	
+  	  	if (newTrackFlag==true){
+  	         createTrackInfoWindow(event.latLng);}
+  	    else {
+             displayRectangleHook(rectangle,true,geosrectangle);
+        }
+  	
   });
   google.maps.event.addListener(rectangle,'bounds_changed',function(){
    displayRectangleHook(rectangle,true,geosrectangle);
@@ -1187,14 +1197,22 @@ function setEventsOnRectangle(rectangle,geosrectangle) {
 }
 ////////////////////////////////////////////////////////////////////////////
 function setEventsOnPolyline(polyline,geospolyline) {
-  google.maps.event.addListener(polyline,'click',function(){
-   displayPolylineHook(polyline,true,geospolyline);
+  google.maps.event.addListener(polyline,'click',function(event){
+  	  	if (newTrackFlag==true){
+  	         createTrackInfoWindow(event.latLng);}
+  	    else {
+             displayPolylineHook(polyline,true,geospolyline);
+        }
   });
 }
 ////////////////////////////////////////////////////////////////////////////
 function setEventsOnPolygon(polygon,geospolygon) {
-  google.maps.event.addListener(polygon,'click',function(){
-   displayPolygonHook(polygon,true,geospolygon);
+  google.maps.event.addListener(polygon,'click',function(event){
+  	  	if (newTrackFlag==true){
+  	         createTrackInfoWindow(event.latLng);}
+  	    else {
+             displayPolygonHook(polygon,true,geospolygon);
+        }
   });
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -1440,7 +1458,7 @@ function listTracks() {
 		var marker;
 		tracks = data;
 		nTracks = tracks.length;
-        document.getElementById("ntracks").setAttribute("value",nTracks);
+//        document.getElementById("ntracks").setAttribute("value",nTracks);
         for (var i = 0 ; i < tracks.length ; i++) {
           track = tracks[i].track;  
           marker=createMarker(track);
@@ -1574,7 +1592,7 @@ function updateListTracks() {
     success: function(data, status){
 		tracks = data;
         nTracks = tracks.length;
-        document.getElementById("ntracks").setAttribute("value",nTracks);
+//        document.getElementById("ntracks").setAttribute("value",nTracks);
         for (var j = 0; j<markerArray.length;j++){
           markerArray[j].setMap(null);
         }
@@ -1679,15 +1697,13 @@ function displayGeoPanel() {
     '<input type="text" id="geolng" name="geo[lng]" maxlength="10" style="width:90%;' + 
      'value="'+ centerLongitude.toFixed(4) + '"/>' +
     '<br>' +
-    '<input type="button" id="geo1" value="Find Address" style="width:90%;" onclick="displayReverseGeocode()"/>' +
+    '<input type="button" id="geo1" value="Find Address from Lat/Long" style="width:90%;" onclick="displayReverseGeocode()"/>' +
     '<br>' +
     '<input type="text" id="geocodetxt" name="geo[geocodetxt]" style="width:90%;" ' + 
     '<br>' +
-    '<input type="button" id="geocode" value="Geocode" style="width:90%;" onclick="displayGeocode()"/>' +
-    '<input type="button" id="myposition" value="My Position" style="width:90%;" onclick="displayMyPosition()"/>' +
-    '<label for="ntracks">NTracks </label>' +
-    '<input type="text" id="ntracks" name="geo[ntracks]" maxlength="4" style="width:90%;' + 
-     'value="'+ nTracks + '"/>' +
+    '<input type="button" id="geocode" value="Geocode an Address" style="width:90%;" onclick="displayGeocode()"/>' +
+    '<input type="button" id="myposition" value="My Position" style="width:40%;" onclick="displayMyPosition()"/>' +
+    '<input type="button" id="newtrackbuttonid" value="New Track" style="width:40%;" onclick="newTrackOnOff()"/>' +
     '</fieldset>';
     document.getElementById("sidebar").appendChild(geoForm);
  }
@@ -1848,23 +1864,26 @@ geocoder.geocode({'latLng': latlng}, function(results, status) {
         });
 } 
 //////////////////////////////////////////////////////////////////////
-function placesOnOff(){
-	if (placesFlag == false) {
-		placesFlag = true;
-		$("#geo1").prop('value','Search');
+function newTrackOnOff(){
+	if (newTrackFlag == false) {
+		newTrackFlag = true;
+		$("#newtrackbuttonid").prop('value','ClickOnMap');
 		drawingManager.setOptions({
-            drawingControlOptions: {
-                   position: google.maps.ControlPosition.TOP_CENTER,
-                   drawingModes: [google.maps.drawing.OverlayType.CIRCLE]
-            }
+//            drawingControlOptions: {
+//                   position: google.maps.ControlPosition.TOP_CENTER
+//                   drawingModes: [google.maps.drawing.OverlayType.CIRCLE]
+//            }
+              drawingMode: null
         });
 	}
 	else {
-	    placesFlag = false;
+	    newTrackFlag = false;
 //        document.getElementById("geo1").value = "Places";
-		$("#geo1").prop("value","Places");
+		$("#newtrackbuttonid").prop("value","New Track");
 		drawingManager.setOptions({
            drawingControlOptions: {
+           	        drawingControl: true,
+           	        map: map,
                     position: google.maps.ControlPosition.TOP_CENTER,
                     drawingModes: [google.maps.drawing.OverlayType.MARKER,
                                            google.maps.drawing.OverlayType.CIRCLE,
@@ -2006,6 +2025,7 @@ function loadCurrentMap() {
     	myOptions = {
            zoom: geosmap.zoom,
            scaleControl: true,
+           disableDoubleClickZoom: false,
            center: new google.maps.LatLng(geosmap.centerlat,geosmap.centerlng),
            mapTypeId: google.maps.MapTypeId.ROADMAP
         };
