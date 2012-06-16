@@ -1467,7 +1467,8 @@ function listTracks() {
 	} // end of function
   }); //end of .ajax request
 //  initPostime();
-  updateListTracks();
+//  updateListTracks();
+  t=setTimeout("updateListTracks()",10000);
 }
 ///////////////////////////////////////////////////////////////////////////////
 // during initialisation of page
@@ -1620,11 +1621,14 @@ function createTrack (location) {
 	    url: "create",
 	    data: formValues,
         dataType: "json",
-        success: function(data, status){    	
-             infoCreateWindow.close();
+        success: function(data, status){
+          infoCreateWindow.close();
+		  var track = data.track;
+          var marker;
+          marker=createMarker(track);
 	    } // end on success
 	}); // end of the new Ajax.Request() call
-	updateListTracks();
+//	updateListTracks();
 //	initPostime();
 }
 ////////////////////////////////////////////////////////////
