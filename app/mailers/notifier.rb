@@ -9,7 +9,7 @@ class Notifier < ActionMailer::Base
   def email_friend(article, sender_name, receiver_email)
     @article = article
     @sender_name = sender_name
-    attachments["enemy3.gif"] = File.read(Rails.root.join("public/images/enemy3.gif"))
+    attachments["enemyair0.png"] = File.read(Rails.root.join("public/images/enemyair0.png"))
     mail :to => receiver_email, :subject=>"Interesting Article"
   end
   
