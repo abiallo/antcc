@@ -449,9 +449,9 @@ function createUpdateTrackForm(track,marker,location) {
     '<br>' +
     '<label for="cstName">Name </label>' + track.cstName +
     '<br>' +
-    '<label for="latitude">Lat </label>' + format_number(track.lat,4) +
+    '<label for="latitude">Lat </label>' + track.lat.toFixed(4) +
     '<br>' +
-    '<label for="longitude">Lng </label>' + format_number(track.long,4) +
+    '<label for="longitude">Lng </label>' + track.long.toFixed(4) +
     '<br>' +
     '<label for="category">Category </label>' + track.category +
     '<br>' +
@@ -1080,9 +1080,9 @@ function displayTrackHook(marker,track,location,visibility)
     '<br>' +
     '<label for="cstName">Name </label>' + track.cstName +
     '<br>' +
-    '<label for="latitude">Lat </label>' + format_number(track.lat,4) +
+    '<label for="latitude">Lat </label>' + track.lat.toFixed(4) +
     '<br>' +
-    '<label for="longitude">Lng </label>' + format_number(track.long,4) +
+    '<label for="longitude">Lng </label>' + track.long.toFixed(4) +
     '<br>' +
     '<label for="category">Category </label>' + track.category + 
     '<br>' +
@@ -1868,6 +1868,8 @@ function newTrackOnOff(){
 	if (newTrackFlag == false) {
 		newTrackFlag = true;
 		$("#newtrackbuttonid").prop('value','ClickOnMap');
+	    google.maps.event.addListener(map,'click',function(event){
+        createTrackInfoWindow(event.latLng);});  
 		drawingManager.setOptions({
 //            drawingControlOptions: {
 //                   position: google.maps.ControlPosition.TOP_CENTER
@@ -1878,6 +1880,7 @@ function newTrackOnOff(){
 	}
 	else {
 	    newTrackFlag = false;
+	    google.maps.event.clearListeners(map,'click');
 //        document.getElementById("geo1").value = "Places";
 		$("#newtrackbuttonid").prop("value","New Track");
 		drawingManager.setOptions({
@@ -1915,8 +1918,8 @@ function initialize() {
     listRectangles();
     listPolygons();
     listPolylines();
-    google.maps.event.addListener(map,'click',function(event){
-           createTrackInfoWindow(event.latLng);});  
+//    google.maps.event.addListener(map,'click',function(event){
+//           createTrackInfoWindow(event.latLng);});  
     google.maps.event.addListener(map,'mousemove',function(event){
            displayLatLong(event.latLng);});  
     google.maps.event.addListener(drawingManager, 'overlaycomplete', function(event) {
@@ -2060,34 +2063,5 @@ function loadCurrentMap() {
   }); //end of .ajax request
 
 }
-/////////////////////////////////////////////////////////////
-function format_number(pnumber,decimals){
-	    if (isNaN(pnumber)) { return 0};
-	    if (pnumber=='') { return 0};
-	    var snum = new String(pnumber);
-	    var sec = snum.split('.');
-	    var whole = parseFloat(sec[0]);
-	    var result = '';
-	    if(sec.length > 1){
-	        var dec = new String(sec[1]);
-	        dec = String(parseFloat(sec[1])/Math.pow(10,(dec.length - decimals)));
-	        dec = String(whole + Math.round(parseFloat(dec))/Math.pow(10,decimals));
-	        var dot = dec.indexOf('.');
-	        if(dot == -1){
-	            dec += '.';
-	            dot = dec.indexOf('.');
-	        }
-	        while(dec.length <= dot + decimals) { dec += '0'; }
-	        result = dec;
-	    } else{
-	        var dot;
-	        var dec = new String(whole);
-	        dec += '.';
-	        dot = dec.indexOf('.');
-	        while(dec.length <= dot + decimals) { dec += '0'; }
-	        result = dec;
-	    }
-	    return result;
-	}
 //////////////////////////////////////////////////////////////
 window.onload = initialize;
