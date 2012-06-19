@@ -1,0 +1,12 @@
+<%= render @user %>
+
+<h3>Profile</h3>
+<div id="profile">
+NickName: <%= @profile.name %> <br />
+Birthday: <%= @profile.birthday %> <br />
+Color: <%= @profile.color %> <br />
+Bio: <%= @profile.bio %> <br />
+Twitter: <%= @profile.twitter %> <br />
+<%= link_to "Update Profile", edit_profile_path(@profile)%>
+</div>
+

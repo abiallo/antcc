@@ -26,10 +26,11 @@
 		<div id="user_bar">
 			<% if logged_in? %>
 			  <%= current_user.name + "  "%> |
+  			  <%= link_to "All Users", users_path %> |
 			  <%= link_to "Select Map", geosmaps_path %> |
 			  <%= link_to "New Map", new_geosmap_path %> |
 			  <%= link_to "New Article", new_article_path %> |
-			  <%= link_to "Edit Profile", edit_user_path(current_user)%> |
+			  <%= link_to "Edit Account", edit_user_path(current_user)%> |
 			  <%= link_to "Logout", logout_path %>
 			<% else %>
 			  <%= link_to "Registration", new_user_path %> |

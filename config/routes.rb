@@ -7,7 +7,9 @@ Antcc::Application.routes.draw do
     end
     resources :comments
   end
-  resources :users
+  resources :users 
+  resources :profiles
+
   resource :session
   match '/login' => "sessions#new", :as => "login"
   match '/logout' => "sessions#destroy", :as => "logout"

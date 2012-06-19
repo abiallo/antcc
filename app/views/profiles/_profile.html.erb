@@ -1,0 +1,9 @@
+<%= div_for profile do %>
+   <h3>
+   	<%= link_to current_user.name, current_user %>
+     	<span class='actions'>
+     		<%= link_to "Edit Profile", edit_profile_path(profile)%>
+        </span>
+   </h3>
+ <% end %>
+ 
