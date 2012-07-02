@@ -1,12 +1,15 @@
 <%= render @user %>
 
+<%= link_to 'Email this user','#',:onclick=> "$('#email_geoscontact_form').slideDown()"%>
+<%= render 'email_geoscontact' %>
+
 <h3>Profile</h3>
 <div id="profile">
 NickName: <%= @profile.name %> <br />
 Birthday: <%= @profile.birthday %> <br />
 Color: <%= @profile.color %> <br />
 Bio: <%= @profile.bio %> <br />
-Twitter: <%= @profile.twitter %> <br />
+Twitter: <%= @profile.twitter %> <br /><br />
 <%= link_to "Update Profile", edit_profile_path(@profile)%>
 </div>
 

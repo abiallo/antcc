@@ -25,8 +25,8 @@ Antcc::Application.configure do
     :enable_starttls_auto => true,
     :port => 587,
     :authentication => :plain,
-    :user_name => "abiallo2@gmail.com",
-    :password => 'biallo66'
+    :user_name => "geosbook@gmail.com",
+    :password => 'pa66word'
   }
 
   # Print deprecation notices to the Rails logger

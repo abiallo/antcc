@@ -1,0 +1,27 @@
+<%= form_tag(email_geoscontact_user_path(@user), :id => 'email_geoscontact_form',
+:style=>'display:none') do %>
+  <div class="field">
+  	<%= label_tag :name, 'your name'%>
+  	<%= text_field_tag :name, current_user.name %>
+  </div>
+  <div class="field">
+  	<%= label_tag :reply_to, 'reply_to'%>
+  	<%= text_field_tag :reply_to, current_user.email %>
+  </div>
+  <div class="field">
+  	<%= label_tag :email, "email" %>
+  	<%= text_field_tag :email, @user.email %>
+  </div>
+  <div class="field">
+  	<%= label_tag :subject, "subject" %>
+  	<%= text_field_tag :subject %>
+  </div>
+  <div class="field">
+  	<%= label_tag :body, "body" %>
+  	<%= text_area_tag :email_body %>
+  </div>
+  <div class="actions">
+  	<%= submit_tag 'Send'%> or
+  	<%= link_to 'Cancel','#',:onclick => "$('#email_geoscontact_form').slideUp()" %>
+  </div>
+<% end %>

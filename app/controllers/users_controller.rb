@@ -57,7 +57,7 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.xml
   def show
-          puts ("show user--------------------------------------------") 
+    puts ("show user--------------------------------------------") 
     @user = User.find(params[:id])
     @profile = @user.profile
 
@@ -66,4 +66,10 @@ class UsersController < ApplicationController
       format.xml  { render :xml => @user }
     end
   end
+  
+  def email_geoscontact
+    @user = User.find(params[:id])
+    Geosmailer.email_geoscontact(params[:email], params[:name], params[:reply_to], params[:subject], params[:email_body]).deliver
+    redirect_to @user, :notice => "Successfully sent a message"
+  end  
 end

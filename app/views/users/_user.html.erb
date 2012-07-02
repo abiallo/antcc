@@ -2,12 +2,11 @@
 <h3>
    	<%= link_to user.name, user %> 
    	<span class='actions'> 		
-    <%= link_to "Send a Message | ", users_path %>
-   	<%= link_to "Request Connection | ", users_path %>
-   	<%= link_to "Edit Account ", edit_user_path(current_user) %>
-        </span>
+   	<%= link_to "Request Connection ", users_path %>
+    </span>
    	
    	
  </h3>
  <%= simple_format "Email: " + user.email %>    
  <% end %>
+

@@ -7,7 +7,11 @@ Antcc::Application.routes.draw do
     end
     resources :comments
   end
-  resources :users 
+  resources :users do
+    member do
+      post :email_geoscontact
+    end
+  end
   resources :profiles
 
   resource :session
