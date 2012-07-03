@@ -1,9 +1,11 @@
 <%= div_for user do %>
 <h3>
    	<%= link_to user.name, user %> 
+    <% if user != current_user %>
    	<span class='actions'> 		
-   	<%= link_to "Request Connection ", users_path %>
+   	<%= link_to "Request_connection ", users_path %>
     </span>
+    <% end %>
    	
    	
  </h3>

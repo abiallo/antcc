@@ -1,0 +1,2 @@
+class GeoscoisController < ApplicationController
+end
