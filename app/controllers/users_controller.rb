@@ -24,7 +24,7 @@ class UsersController < ApplicationController
       @profile.save
       @geoscoi = Geoscoi.new
       @geoscoi.name = "_peer_connection_"+@user.email
-      @geoscoi.note = "peer connections for the user "+ @user.name
+      @geoscoi.note = "peer connections for the user "+ @user.email
       @geoscoi.save
       redirect_to articles_path, :notice => 'User successfully added. Default map successfully created'
     else

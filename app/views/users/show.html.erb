@@ -10,6 +10,8 @@ Birthday: <%= @profile.birthday %> <br />
 Color: <%= @profile.color %> <br />
 Bio: <%= @profile.bio %> <br />
 Twitter: <%= @profile.twitter %> <br /><br />
+<% if @user == current_user %>
 <%= link_to "Update Profile", edit_profile_path(@profile)%>
+<% end %>
 </div>
 
