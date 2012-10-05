@@ -519,8 +519,7 @@ function displayMarkerHook(marker,visibility,address,geosmarker)
     '<br>' +
     
     '<label for="address">Address </label>' +   
-    '<br>' +
-    '<input type="text" id="addresstxt" name="geosmarker[address]" style="width:90%;"' +
+    '<input type="text" id="addresstxt" name="geosmarker[address]" ' +
     'value="'+  geosmarkeraddress + '"/>'+   
     '<br>' +
     '<input type="submit" id="cancelMarker" value="Delete Marker" />' +
@@ -1694,11 +1693,11 @@ function displayGeoPanel() {
     '<input type="button" id="savemap" value="Save Map" style="width:90%;" onclick="saveMap()"/>' +
     '<br>' +
     '<label for="latitude">Lat </label>' +
-    '<input type="text" id="geolat" name="geo[lat]" maxlength="10" style="width:90%;' + 
+    '<input type="text" id="geolat" name="geo[lat]" maxlength="10"' + 
      'value="'+ centerLatitude.toFixed(4) + '"/>' +
     '<br>' +
     '<label for="longitude">Lng </label>' +
-    '<input type="text" id="geolng" name="geo[lng]" maxlength="10" style="width:90%;' + 
+    '<input type="text" id="geolng" name="geo[lng]" maxlength="10" ' + 
      'value="'+ centerLongitude.toFixed(4) + '"/>' +
     '<br>' +
     '<input type="button" id="geo1" value="Find Address from Lat/Long" style="width:90%;" onclick="displayReverseGeocode()"/>' +
