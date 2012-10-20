@@ -1,0 +1,29 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  type: MyString
+  country: MyString
+  image: MyString
+  observation: 1
+  fireair: 1
+  fireland: 1
+  maxspeed: 1
+  cruisespeed: 1
+  crew: 1
+  function: MyString
+  note: MyText
+
+two:
+  name: MyString
+  type: MyString
+  country: MyString
+  image: MyString
+  observation: 1
+  fireair: 1
+  fireland: 1
+  maxspeed: 1
+  cruisespeed: 1
+  crew: 1
+  function: MyString
+  note: MyText

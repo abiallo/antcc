@@ -9,15 +9,17 @@
   </script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
-<!--  <%= javascript_include_tag 'googleearth','jquery-1.6.4', 'rails', 'map_application' %> -->
-  <%= javascript_include_tag 'jquery-1.6.4', 'rails', 'map_application' %> 
+<!--   <%= javascript_include_tag 'googleearth','jquery-1.6.4', 'rails', 'global','map_application' %> -->
+ <%= javascript_include_tag 'jquery-1.6.4', 'rails', 'global','map_application' %> 
 
   <%= csrf_meta_tag %>
 
 <!--
+	
   <script type="text/javascript">
  google.load('earth','1'); 	
   </script>
+
 --> 
 </head>
 <body id="body">
@@ -45,7 +47,7 @@
 
 		<%= yield %>
     </div>
-<!--    <div id="footer">
+<!--   <div id="footer">
     	An experimental site built with RubyOnRails & GoogleMaps
     </div>  -->    
 </body>

@@ -1,0 +1,53 @@
+<h1>Listing aircraft_classes</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Country</th>
+    <th>Image</th>
+    <th>Observationair</th>
+    <th>Observationsurf</th>
+    <th>Observationunder</th>
+    <th>Fireair</th>
+    <th>Fireland</th>
+    <th>Firesurf</th>
+    <th>Fireunder</th>
+    <th>Maxspeed</th>
+    <th>Cruisespeed</th>
+    <th>Crew</th>
+    <th>Function</th>
+    <th>Note</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @aircraft_classes.each do |aircraft_class| %>
+  <tr>
+    <td><%= aircraft_class.name %></td>
+    <td><%= aircraft_class.type %></td>
+    <td><%= aircraft_class.country %></td>
+    <td><%= aircraft_class.image %></td>
+    <td><%= aircraft_class.observationair %></td>
+    <td><%= aircraft_class.observationsurf %></td>
+    <td><%= aircraft_class.observationunder %></td>
+    <td><%= aircraft_class.fireair %></td>
+    <td><%= aircraft_class.fireland %></td>
+    <td><%= aircraft_class.firesurf %></td>
+    <td><%= aircraft_class.fireunder %></td>
+    <td><%= aircraft_class.maxspeed %></td>
+    <td><%= aircraft_class.cruisespeed %></td>
+    <td><%= aircraft_class.crew %></td>
+    <td><%= aircraft_class.function %></td>
+    <td><%= aircraft_class.note %></td>
+    <td><%= link_to 'Show', aircraft_class %></td>
+    <td><%= link_to 'Edit', edit_aircraft_class_path(aircraft_class) %></td>
+    <td><%= link_to 'Destroy', aircraft_class, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Aircraft class', new_aircraft_class_path %>

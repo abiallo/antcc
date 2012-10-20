@@ -11,7 +11,28 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120610182834) do
+ActiveRecord::Schema.define(:version => 20121020035023) do
+
+  create_table "aircraft_classes", :force => true do |t|
+    t.string   "name"
+    t.string   "type"
+    t.string   "country"
+    t.string   "image"
+    t.integer  "observationair"
+    t.integer  "observationsurf"
+    t.integer  "observationunder"
+    t.integer  "fireair"
+    t.integer  "fireland"
+    t.integer  "firesurf"
+    t.integer  "fireunder"
+    t.integer  "maxspeed"
+    t.integer  "cruisespeed"
+    t.integer  "crew"
+    t.string   "function"
+    t.text     "note"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "articles", :force => true do |t|
     t.string   "title"
@@ -159,6 +180,27 @@ ActiveRecord::Schema.define(:version => 20120610182834) do
     t.datetime "updated_at"
   end
 
+  create_table "helo_classes", :force => true do |t|
+    t.string   "name"
+    t.string   "type"
+    t.string   "country"
+    t.string   "image"
+    t.integer  "observationair"
+    t.integer  "observationsurf"
+    t.integer  "observationunder"
+    t.integer  "fireair"
+    t.integer  "fireland"
+    t.integer  "firesurf"
+    t.integer  "fireunder"
+    t.integer  "maxspeed"
+    t.integer  "cruisespeed"
+    t.integer  "crew"
+    t.string   "function"
+    t.text     "note"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "profiles", :force => true do |t|
     t.integer  "user_id"
     t.string   "name"
@@ -179,6 +221,48 @@ ActiveRecord::Schema.define(:version => 20120610182834) do
 
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
+
+  create_table "ship_classes", :force => true do |t|
+    t.string   "name"
+    t.string   "type"
+    t.string   "country"
+    t.string   "image"
+    t.integer  "observationair"
+    t.integer  "observationsurf"
+    t.integer  "observationunders"
+    t.integer  "fireair"
+    t.integer  "fireland"
+    t.integer  "firesurf"
+    t.integer  "fireunder"
+    t.integer  "maxspeed"
+    t.integer  "cruisespeed"
+    t.integer  "crew"
+    t.string   "function"
+    t.text     "note"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "sub_classes", :force => true do |t|
+    t.string   "name"
+    t.string   "type"
+    t.string   "country"
+    t.string   "image"
+    t.integer  "observationair"
+    t.integer  "observationsurf"
+    t.integer  "observationunder"
+    t.integer  "fireair"
+    t.integer  "fireland"
+    t.integer  "firesurf"
+    t.integer  "fireunder"
+    t.integer  "maxspeed"
+    t.integer  "cruisespeed"
+    t.integer  "crew"
+    t.string   "function"
+    t.text     "note"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "tracks", :force => true do |t|
     t.float    "lat"
@@ -202,6 +286,23 @@ ActiveRecord::Schema.define(:version => 20120610182834) do
     t.datetime "updated_at"
     t.string   "name"
     t.integer  "geosmap_id"
+  end
+
+  create_table "vehicle_models", :force => true do |t|
+    t.string   "name"
+    t.string   "type"
+    t.string   "country"
+    t.string   "image"
+    t.integer  "observation"
+    t.integer  "fireair"
+    t.integer  "fireland"
+    t.integer  "maxspeed"
+    t.integer  "cruisespeed"
+    t.integer  "crew"
+    t.string   "function"
+    t.text     "note"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
 end

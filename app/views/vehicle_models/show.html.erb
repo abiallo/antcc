@@ -1,0 +1,65 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @vehicle_model.name %>
+</p>
+
+<p>
+  <b>Type:</b>
+  <%= @vehicle_model.type %>
+</p>
+
+<p>
+  <b>Country:</b>
+  <%= @vehicle_model.country %>
+</p>
+
+<p>
+  <b>Image:</b>
+  <%= @vehicle_model.image %>
+</p>
+
+<p>
+  <b>Observation:</b>
+  <%= @vehicle_model.observation %>
+</p>
+
+<p>
+  <b>Fireair:</b>
+  <%= @vehicle_model.fireair %>
+</p>
+
+<p>
+  <b>Fireland:</b>
+  <%= @vehicle_model.fireland %>
+</p>
+
+<p>
+  <b>Maxspeed:</b>
+  <%= @vehicle_model.maxspeed %>
+</p>
+
+<p>
+  <b>Cruisespeed:</b>
+  <%= @vehicle_model.cruisespeed %>
+</p>
+
+<p>
+  <b>Crew:</b>
+  <%= @vehicle_model.crew %>
+</p>
+
+<p>
+  <b>Function:</b>
+  <%= @vehicle_model.function %>
+</p>
+
+<p>
+  <b>Note:</b>
+  <%= @vehicle_model.note %>
+</p>
+
+
+<%= link_to 'Edit', edit_vehicle_model_path(@vehicle_model) %> |
+<%= link_to 'Back', vehicle_models_path %>

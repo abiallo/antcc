@@ -1,5 +1,15 @@
 Antcc::Application.routes.draw do
   
+  resources :sub_classes
+
+  resources :helo_classes
+
+  resources :aircraft_classes
+
+  resources :ship_classes
+
+  resources :vehicle_models
+
   root :to => "articles#index"
   resources :articles do
     member do

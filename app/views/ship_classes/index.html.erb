@@ -1,0 +1,53 @@
+<h1>Listing ship_classes</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Country</th>
+    <th>Image</th>
+    <th>Observationair</th>
+    <th>Observationsurf</th>
+    <th>Observationunders</th>
+    <th>Fireair</th>
+    <th>Fireland</th>
+    <th>Firesurf</th>
+    <th>Fireunder</th>
+    <th>Maxspeed</th>
+    <th>Cruisespeed</th>
+    <th>Crew</th>
+    <th>Function</th>
+    <th>Note</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @ship_classes.each do |ship_class| %>
+  <tr>
+    <td><%= ship_class.name %></td>
+    <td><%= ship_class.type %></td>
+    <td><%= ship_class.country %></td>
+    <td><%= ship_class.image %></td>
+    <td><%= ship_class.observationair %></td>
+    <td><%= ship_class.observationsurf %></td>
+    <td><%= ship_class.observationunders %></td>
+    <td><%= ship_class.fireair %></td>
+    <td><%= ship_class.fireland %></td>
+    <td><%= ship_class.firesurf %></td>
+    <td><%= ship_class.fireunder %></td>
+    <td><%= ship_class.maxspeed %></td>
+    <td><%= ship_class.cruisespeed %></td>
+    <td><%= ship_class.crew %></td>
+    <td><%= ship_class.function %></td>
+    <td><%= ship_class.note %></td>
+    <td><%= link_to 'Show', ship_class %></td>
+    <td><%= link_to 'Edit', edit_ship_class_path(ship_class) %></td>
+    <td><%= link_to 'Destroy', ship_class, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Ship class', new_ship_class_path %>

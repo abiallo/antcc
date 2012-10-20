@@ -1490,6 +1490,7 @@ function listMarkers() {
         }; // end of for loop
 	} // end of function
   }); //end of .ajax request
+
 }
 ///////////////////////////////////////////////////////////////////////////////
 // during initialisation of page
@@ -1906,8 +1907,7 @@ function newTrackOnOff(){
 /////////////////////////////////////////////////////////////////////
 function initialize() {
 //  handleResize();
-  loadCurrentMap();
-   
+  loadCurrentMap();   
 //  var ge = new GoogleEarth(map);
  ////////////////////////////////////////////////////
  ////
