@@ -2,7 +2,7 @@ class CreateVehicleModels < ActiveRecord::Migration
   def self.up
     create_table :vehicle_models do |t|
       t.string :name
-      t.string :type
+      t.string :vehicletype
       t.string :country
       t.string :image
       t.integer :observation

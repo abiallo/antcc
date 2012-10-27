@@ -2,8 +2,6 @@ Antcc::Application.routes.draw do
   
   resources :sub_classes
 
-  resources :helo_classes
-
   resources :aircraft_classes
 
   resources :ship_classes

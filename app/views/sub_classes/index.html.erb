@@ -6,41 +6,15 @@
     <th>Type</th>
     <th>Country</th>
     <th>Image</th>
-    <th>Observationair</th>
-    <th>Observationsurf</th>
-    <th>Observationunder</th>
-    <th>Fireair</th>
-    <th>Fireland</th>
-    <th>Firesurf</th>
-    <th>Fireunder</th>
-    <th>Maxspeed</th>
-    <th>Cruisespeed</th>
-    <th>Crew</th>
-    <th>Function</th>
-    <th>Note</th>
-    <th></th>
-    <th></th>
     <th></th>
   </tr>
 
 <% @sub_classes.each do |sub_class| %>
   <tr>
     <td><%= sub_class.name %></td>
-    <td><%= sub_class.type %></td>
+    <td><%= sub_class.subtype %></td>
     <td><%= sub_class.country %></td>
     <td><%= sub_class.image %></td>
-    <td><%= sub_class.observationair %></td>
-    <td><%= sub_class.observationsurf %></td>
-    <td><%= sub_class.observationunder %></td>
-    <td><%= sub_class.fireair %></td>
-    <td><%= sub_class.fireland %></td>
-    <td><%= sub_class.firesurf %></td>
-    <td><%= sub_class.fireunder %></td>
-    <td><%= sub_class.maxspeed %></td>
-    <td><%= sub_class.cruisespeed %></td>
-    <td><%= sub_class.crew %></td>
-    <td><%= sub_class.function %></td>
-    <td><%= sub_class.note %></td>
     <td><%= link_to 'Show', sub_class %></td>
     <td><%= link_to 'Edit', edit_sub_class_path(sub_class) %></td>
     <td><%= link_to 'Destroy', sub_class, :confirm => 'Are you sure?', :method => :delete %></td>

@@ -2,7 +2,7 @@ class CreateShipClasses < ActiveRecord::Migration
   def self.up
     create_table :ship_classes do |t|
       t.string :name
-      t.string :type
+      t.string :shiptype
       t.string :country
       t.string :image
       t.integer :observationair

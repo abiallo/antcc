@@ -6,33 +6,15 @@
     <th>Type</th>
     <th>Country</th>
     <th>Image</th>
-    <th>Observation</th>
-    <th>Fireair</th>
-    <th>Fireland</th>
-    <th>Maxspeed</th>
-    <th>Cruisespeed</th>
-    <th>Crew</th>
-    <th>Function</th>
-    <th>Note</th>
-    <th></th>
-    <th></th>
     <th></th>
   </tr>
 
 <% @vehicle_models.each do |vehicle_model| %>
   <tr>
     <td><%= vehicle_model.name %></td>
-    <td><%= vehicle_model.type %></td>
+    <td><%= vehicle_model.vehicletype %></td>
     <td><%= vehicle_model.country %></td>
     <td><%= vehicle_model.image %></td>
-    <td><%= vehicle_model.observation %></td>
-    <td><%= vehicle_model.fireair %></td>
-    <td><%= vehicle_model.fireland %></td>
-    <td><%= vehicle_model.maxspeed %></td>
-    <td><%= vehicle_model.cruisespeed %></td>
-    <td><%= vehicle_model.crew %></td>
-    <td><%= vehicle_model.function %></td>
-    <td><%= vehicle_model.note %></td>
     <td><%= link_to 'Show', vehicle_model %></td>
     <td><%= link_to 'Edit', edit_vehicle_model_path(vehicle_model) %></td>
     <td><%= link_to 'Destroy', vehicle_model, :confirm => 'Are you sure?', :method => :delete %></td>

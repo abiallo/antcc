@@ -1,4 +1,4 @@
-* {
+{
 	margin: 5 auto;
 	font-size: 10px;
 }
@@ -234,7 +234,7 @@ label {
 }
 #map-wrapper {
   position:absolute;
-  width: 80%;
+  width: 79%;
   height: 100%;
   margin-top:5px;
 }

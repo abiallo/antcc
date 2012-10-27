@@ -2,7 +2,7 @@ class CreateSubClasses < ActiveRecord::Migration
   def self.up
     create_table :sub_classes do |t|
       t.string :name
-      t.string :type
+      t.string :subtype
       t.string :country
       t.string :image
       t.integer :observationair
