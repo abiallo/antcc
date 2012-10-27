@@ -28,6 +28,13 @@
 		<div id="user_bar">
 			<% if logged_in? %>
 			  <%= current_user.name + "  "%> |
+              <select name="models" ONCHANGE="location = this.options[this.selectedIndex].value;">
+              <option value="/">Platforms</option>
+              <option value="/ship_classes">Ships</option>
+              <option value="/aircraft_classes">Aircrafts</option>
+              <option value="/sub_classes">Submarines</option>
+              <option value="/vehicle_models">Vehicles</option>
+              </select>
   			  <%= link_to "All Users", users_path %> |
 			  <%= link_to "Select Map", geosmaps_path %> |
 			  <%= link_to "New Map", new_geosmap_path %> |
