@@ -11,7 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121020080448) do
+ActiveRecord::Schema.define(:version => 20121028121559) do
+
+  create_table "air_functions", :force => true do |t|
+    t.string   "name"
+    t.string   "symbol"
+    t.string   "code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "aircraft_classes", :force => true do |t|
     t.string   "name"
@@ -180,6 +188,14 @@ ActiveRecord::Schema.define(:version => 20121020080448) do
     t.datetime "updated_at"
   end
 
+  create_table "ground_functions", :force => true do |t|
+    t.string   "name"
+    t.string   "symbol"
+    t.string   "code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "profiles", :force => true do |t|
     t.integer  "user_id"
     t.string   "name"
@@ -187,6 +203,22 @@ ActiveRecord::Schema.define(:version => 20121020080448) do
     t.text     "bio"
     t.string   "color"
     t.string   "twitter"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "seasub_functions", :force => true do |t|
+    t.string   "name"
+    t.string   "symbol"
+    t.string   "code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "seasurf_functions", :force => true do |t|
+    t.string   "name"
+    t.string   "symbol"
+    t.string   "code"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -256,6 +288,11 @@ ActiveRecord::Schema.define(:version => 20121020080448) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "size"
+    t.integer  "height"
+    t.integer  "platform_id"
+    t.integer  "report_to"
+    t.integer  "function_id"
+    t.string   "function_txt"
   end
 
   create_table "users", :force => true do |t|

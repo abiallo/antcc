@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @ground_function.name %>
+</p>
+
+<p>
+  <b>Symbol:</b>
+  <%= @ground_function.symbol %>
+</p>
+
+<p>
+  <b>Code:</b>
+  <%= @ground_function.code %>
+</p>
+
+
+<%= link_to 'Edit', edit_ground_function_path(@ground_function) %> |
+<%= link_to 'Back', ground_functions_path %>

@@ -1,0 +1,2 @@
+module SeasubFunctionsHelper
+end

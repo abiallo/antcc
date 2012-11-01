@@ -1,5 +1,13 @@
 Antcc::Application.routes.draw do
   
+  resources :seasub_functions
+
+  resources :seasurf_functions
+
+  resources :ground_functions
+
+  resources :air_functions
+
   resources :sub_classes
 
   resources :aircraft_classes

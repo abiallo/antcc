@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @seasub_function.name %>
+</p>
+
+<p>
+  <b>Symbol:</b>
+  <%= @seasub_function.symbol %>
+</p>
+
+<p>
+  <b>Code:</b>
+  <%= @seasub_function.code %>
+</p>
+
+
+<%= link_to 'Edit', edit_seasub_function_path(@seasub_function) %> |
+<%= link_to 'Back', seasub_functions_path %>

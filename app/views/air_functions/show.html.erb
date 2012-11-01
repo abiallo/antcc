@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @air_function.name %>
+</p>
+
+<p>
+  <b>Symbol:</b>
+  <%= @air_function.symbol %>
+</p>
+
+<p>
+  <b>Code:</b>
+  <%= @air_function.code %>
+</p>
+
+
+<%= link_to 'Edit', edit_air_function_path(@air_function) %> |
+<%= link_to 'Back', air_functions_path %>

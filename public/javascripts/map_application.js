@@ -380,6 +380,10 @@ function updateInfoWindow(marker,location,track) {
     '<input type="text" id="long" name="m[long]" style="width:60%;" maxlength="10" value="' +
       lng.toFixed(4) + '"/>' +
     '<br>' +
+    '<label for="height">Height </label>' +
+    '<input type="text" id="height" name="m[height]" style="width:60%;" maxlength="10" value="' +
+      track.height + '"/>' +
+    '<br>' +
     '<select name="m[category]">' +
        selectedOptionCategory +
     '</select>' + 
@@ -469,6 +473,8 @@ function createUpdateTrackForm(track,marker,location) {
     '<label for="latitude">Lat </label>' + track.lat.toFixed(4) +
     '<br>' +
     '<label for="longitude">Lng </label>' + track.long.toFixed(4) +
+    '<br>' +
+    '<label for="height">Height </label>' + track.height +
     '<br>' +
     '<label for="category">Category </label>' + track.category +
     '<br>' +
@@ -1602,6 +1608,8 @@ function displayTrackNormalHook(marker,track,location)
     '<br>' +
     '<label for="longitude">Lng </label>' + track.long.toFixed(4) +
     '<br>' +
+    '<label for="height">Height </label>' + track.height +
+    '<br>' +
     '<label for="category">Category </label>' + track.category + 
     '<br>' +
     '<label for="icon">Identity </label>' + track.icon + 
@@ -1668,6 +1676,8 @@ function displayTrackAltHook(marker,track,location)
     '<label for="latitude">Lat </label>' + track.lat.toFixed(4) +
     '<br>' +
     '<label for="longitude">Lng </label>' + track.long.toFixed(4) +
+    '<br>' +
+    '<label for="height">Height </label>' + track.height +
     '<br>' +
     '<label for="category">Category </label>' + track.category + 
     '<br>' +
@@ -1988,6 +1998,9 @@ function createTrackInfoWindow(location) {
     '<label for="longitude">Lng </label>' + lng.toFixed(4) +
     '<input type="hidden" id="longitude" name="track[long]" maxlength="10" value="' +
       lng + '"/>' +
+    '<br>' +
+    '<label for="cstHeight">Height </label>' +
+    '<input type="text" id="cstHeight" name="track[height]" style="width:60%;"/>'+
     '<br>' +
     '<label for="category">Category </label>' +
     '<select name="track[category]">' +

@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @seasurf_function.name %>
+</p>
+
+<p>
+  <b>Symbol:</b>
+  <%= @seasurf_function.symbol %>
+</p>
+
+<p>
+  <b>Code:</b>
+  <%= @seasurf_function.code %>
+</p>
+
+
+<%= link_to 'Edit', edit_seasurf_function_path(@seasurf_function) %> |
+<%= link_to 'Back', seasurf_functions_path %>
