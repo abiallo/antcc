@@ -1,6 +1,6 @@
 class GeosrectanglesController < ApplicationController
   
-  
+  before_filter :authenticate  
     def create
       puts ("create rectangle--------------------------------------------") 
       @geosmap = Geosmap.find(current_user.geosmap_id)

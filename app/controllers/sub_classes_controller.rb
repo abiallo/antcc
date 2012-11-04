@@ -1,4 +1,5 @@
 class SubClassesController < ApplicationController
+  before_filter :authenticate
   # GET /sub_classes
   # GET /sub_classes.xml
   def index

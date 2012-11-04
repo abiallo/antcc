@@ -1,4 +1,5 @@
 class SeasurfFunctionsController < ApplicationController
+  before_filter :authenticate
   # GET /seasurf_functions
   # GET /seasurf_functions.xml
   def index

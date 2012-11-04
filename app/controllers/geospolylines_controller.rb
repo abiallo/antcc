@@ -1,5 +1,5 @@
 class GeospolylinesController < ApplicationController
-  
+    before_filter :authenticate
       def create
       puts ("create polyline--------------------------------------------") 
       @geosmap = Geosmap.find(current_user.geosmap_id)

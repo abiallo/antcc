@@ -1,5 +1,5 @@
 class GeosmarkersController < ApplicationController
-  
+  before_filter :authenticate  
     def create
     puts ("create marker--------------------------------------------") 
       @geosmap = Geosmap.find(current_user.geosmap_id)

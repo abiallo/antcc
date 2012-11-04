@@ -107,6 +107,7 @@ a:hover {
 	text-align: left;
 	font-family: sans-serif;
     font-size: 10px;
+
 }
 
 #main form label{
@@ -237,6 +238,10 @@ label {
   width: 79%;
   height: 100%;
   margin-top:5px;
+}
+
+#map-canvas form {
+	opacity: 0.75;
 }
 #sidebar {
   position: absolute;

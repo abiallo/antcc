@@ -1,5 +1,5 @@
 class GeoscirclesController < ApplicationController
-  
+   before_filter :authenticate 
     def create
       puts ("create circle--------------------------------------------") 
       @geosmap = Geosmap.find(current_user.geosmap_id)

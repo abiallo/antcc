@@ -1,4 +1,5 @@
 class VehicleModelsController < ApplicationController
+  before_filter :authenticate
   # GET /vehicle_models
   # GET /vehicle_models.xml
   def index

@@ -1,4 +1,5 @@
 class ShipClassesController < ApplicationController
+  before_filter :authenticate
   # GET /ship_classes
   # GET /ship_classes.xml
   def index

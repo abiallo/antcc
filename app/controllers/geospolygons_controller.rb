@@ -1,5 +1,5 @@
 class GeospolygonsController < ApplicationController
-
+  before_filter :authenticate
     def create
       puts ("create polygon--------------------------------------------") 
       @geosmap = Geosmap.find(current_user.geosmap_id)

@@ -594,7 +594,7 @@ function displayMarkerAltHook(marker,address,geosmarker)
    	hookedAltOverlay.setMap(map);
    } 	
    if (hookedOverlay != null) {	
-   	hookedOverlay.setOptions({strokeColor: '#FF0000'});
+   	hookedOverlay.setOptions({strokeColor: '#0000FF'});
    	hookedOverlay.setMap(map);
    } 	
    hookedAltOverlay = null; 	
@@ -757,7 +757,7 @@ function displayCircleNormalHook(circle,geoscircle)
    }
 //   hookMarker.setPosition(circle.getCenter());
   hookMarker.setMap(null);
-  circle.setOptions({strokeColor: '#FF0000'});
+  circle.setOptions({strokeColor: '#0000FF'});
   //Hook HTML DOM form element
   hookCircleForm.id = "hookcirclepanel";
   hookCircleForm.setAttribute("action","");
@@ -820,7 +820,7 @@ function displayCircleAltHook(circle,geoscircle)
    	hookedAltOverlay.setMap(map);
    }
    if (hookedOverlay != null){
-   	hookedOverlay.setOptions({strokeColor: '#FF0000'});   		
+   	hookedOverlay.setOptions({strokeColor: '#0000FF'});   		
    	hookedOverlay.setMap(map);
    }	
    hookedAltOverlay = circle;
@@ -978,7 +978,7 @@ function displayRectangleNormalHook(rectangle,geosrectangle)
    	geosrectanglelngNE=geosrectangle.lngNE;
    }   
   hookMarker.setMap(null);
-  rectangle.setOptions({strokeColor: '#FF0000'});
+  rectangle.setOptions({strokeColor: '#0000FF'});
   //Hook HTML DOM form element
   hookRectangleForm.id = "hookrectanglepanel";
   hookRectangleForm.setAttribute("action","");
@@ -1047,7 +1047,7 @@ function displayRectangleAltHook(rectangle,geosrectangle)
    	hookedAltOverlay.setMap(map);
    }
    if (hookedOverlay != null){
-   	hookedOverlay.setOptions({strokeColor: '#FF0000'});   		
+   	hookedOverlay.setOptions({strokeColor: '#0000FF'});   		
    	hookedOverlay.setMap(map);
    }	
    hookedAltOverlay = rectangle;
@@ -1212,7 +1212,7 @@ function displayPolylineNormalHook(polyline,geospolyline)
  	geospolylinegeometry=geospolyline.geometry; 	
  }  
  hookMarker.setMap(null);
- polyline.setOptions({strokeColor: '#FF0000'});
+ polyline.setOptions({strokeColor: '#0000FF'});
  //Hook HTML DOM form element
  hookPolylineForm.id = "hookpolylinepanel";
  hookPolylineForm.setAttribute("action","");
@@ -1267,7 +1267,7 @@ function displayPolylineAltHook(polyline,geospolyline)
    	hookedAltOverlay.setMap(map);
    }
    if (hookedOverlay != null){
-   	hookedOverlay.setOptions({strokeColor: '#FF0000'});   		
+   	hookedOverlay.setOptions({strokeColor: '#0000FF'});   		
    	hookedOverlay.setMap(map);
    }	
  hookedAltOverlay = polyline;
@@ -1403,7 +1403,7 @@ function displayPolygonNormalHook(polygon,geospolygon)
  }   
    
   hookMarker.setMap(null);
-  polygon.setOptions({strokeColor: '#FF0000'});
+  polygon.setOptions({strokeColor: '#0000FF'});
   //Hook HTML DOM form element
   hookPolygonForm.id = "hookpolygonpanel";
   hookPolygonForm.setAttribute("action","");
@@ -1458,7 +1458,7 @@ function displayPolygonAltHook(polygon,geospolygon)
    	hookedAltOverlay.setMap(map);
    }
    if (hookedOverlay != null){
-   	hookedOverlay.setOptions({strokeColor: '#FF0000'});   		
+   	hookedOverlay.setOptions({strokeColor: '#0000FF'});   		
    	hookedOverlay.setMap(map);
    }	
  hookedAltOverlay = polygon;
@@ -1654,7 +1654,7 @@ function displayTrackAltHook(marker,track,location)
    	hookedAltOverlay.setMap(map);
    }
    if (hookedOverlay != null) {	
-   	hookedOverlay.setOptions({strokeColor: '#FF0000'});
+   	hookedOverlay.setOptions({strokeColor: '#0000FF'});
    	hookedOverlay.setMap(map);
    }
    hookedAltOverlay = null;

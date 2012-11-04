@@ -1,4 +1,5 @@
 class GroundFunctionsController < ApplicationController
+  before_filter :authenticate
   # GET /ground_functions
   # GET /ground_functions.xml
   def index

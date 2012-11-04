@@ -1,4 +1,5 @@
 class TracksController < ApplicationController
+#  before_filter :authenticate
 #  before_filter  :load_geosmap
   layout 'map' # will use the layout app/views/layouts/map.html.erb
 

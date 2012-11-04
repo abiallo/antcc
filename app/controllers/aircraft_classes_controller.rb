@@ -1,4 +1,5 @@
 class AircraftClassesController < ApplicationController
+  before_filter :authenticate
   # GET /aircraft_classes
   # GET /aircraft_classes.xml
   def index
