@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121028121559) do
+ActiveRecord::Schema.define(:version => 20121104172710) do
 
   create_table "air_functions", :force => true do |t|
     t.string   "name"
@@ -293,6 +293,7 @@ ActiveRecord::Schema.define(:version => 20121028121559) do
     t.integer  "report_to"
     t.integer  "function_id"
     t.string   "function_txt"
+    t.string   "country"
   end
 
   create_table "users", :force => true do |t|

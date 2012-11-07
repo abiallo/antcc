@@ -1,8 +1,3 @@
-{
-	margin: 5 auto;
-	font-size: 10px;
-}
-
 body {
 	background-color: #fff;
 	color: #333;
@@ -59,6 +54,10 @@ a:hover {
 #header #user_bar {
 	float: right;
 	font-size: 10px;
+}
+
+#user_bar select {
+	font-size: 10px;	
 }
 
 #footer {
@@ -243,6 +242,27 @@ label {
 #map-canvas form {
 	opacity: 0.75;
 }
+
+
+#map_canvas {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display:block;
+}
+#geocode {
+	position:relative;
+	left:0;
+	float:left;
+}
+
+#sidebar form {
+    width: 91%;
+	text-align: left;
+	font-family: sans-serif;
+    font-size: 10px;
+}
+
 #sidebar {
   position: absolute;
   margin-top: 5px;
@@ -256,27 +276,8 @@ label {
   font-size: 10px;
   border-bottom: 1px solid gray;
   right: 5px;
-  display:block;
-  
+  display: block;
 }
-#sidebar form {
-    width: 91%;
-	text-align: left;
-	font-family: sans-serif;
-    font-size: 10px;
-}
-#map_canvas {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	display:block;
-}
-#geocode {
-	position:relative;
-	left:0;
-	float:left;
-}
-
 #sidebar form label{
 	width: 20%;
 	padding-right: 5px;
@@ -284,10 +285,13 @@ label {
 	background-color: #F0F0F0;
 	border: 1px solid #ccc;
 	margin-right: 10px;
+	font-family: sans-serif;
+    font-size: 10px;
 }
 
 #sidebar form input[type=text]  {
 	float:left;
+	font-family: sans-serif;
 	font-size: 10px;
 	width: 70%;
 	padding: 1px;
@@ -308,4 +312,14 @@ label {
 	float:left;
 	font-family: sans-serif;
     font-size: 10px;
+}
+
+#sidebar td {
+	font-family: sans-serif;
+    font-size: 10px;
+	
+}
+#sidebar td label {
+    width: auto;
+	
 }

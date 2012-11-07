@@ -384,6 +384,10 @@ function updateInfoWindow(marker,location,track) {
     '<input type="text" id="height" name="m[height]" style="width:60%;" maxlength="10" value="' +
       track.height + '"/>' +
     '<br>' +
+    '<label for="country">Country </label>' +
+    '<input type="text" id="country" name="m[country]" style="width:60%;"  value="' +
+      track.country + '"/>' +
+    '<br>' +
     '<select name="m[category]">' +
        selectedOptionCategory +
     '</select>' + 
@@ -475,6 +479,8 @@ function createUpdateTrackForm(track,marker,location) {
     '<label for="longitude">Lng </label>' + track.long.toFixed(4) +
     '<br>' +
     '<label for="height">Height </label>' + track.height +
+    '<br>' +
+    '<label for="country">Country </label>' + track.country +
     '<br>' +
     '<label for="category">Category </label>' + track.category +
     '<br>' +
@@ -1598,28 +1604,58 @@ function displayTrackNormalHook(marker,track,location)
   	                    return false;};
   hookForm.innerHTML =  
     '<fieldset style="width:100%;">' +
+    '<table>'+
+    '<tr>'+
+    '<td>'+
     '<label for="id">Id </label>' + track.id +
-    '<br>' +
+    '</td>'+
+    '</tr>'+
+    '<tr>'+
+    '<td>'+
     '<label for="cstId">TrackId </label>' + track.cstId +
-    '<br>' +
+    '</td>'+
+    '<td>'+
     '<label for="cstName">Name </label>' + track.cstName +
-    '<br>' +
+    '</td>'+
+    '</tr>'+
+    '<tr>'+
+    '<td>'+
     '<label for="latitude">Lat </label>' + track.lat.toFixed(4) +
-    '<br>' +
+    '</td>'+
+    '<td>'+
     '<label for="longitude">Lng </label>' + track.long.toFixed(4) +
-    '<br>' +
-    '<label for="height">Height </label>' + track.height +
-    '<br>' +
+    '</td>'+
+    '</tr>'+
+    '<tr>'+
+    '<td>'+
+    '<label for="height">Hgt </label>' + track.height +
+    '</td>'+
+    '</tr>'+
+    '<tr>'+
+    '<td>'+
+    '<label for="country">Country </label>' + track.country +
+    '</td>'+
+    '<td>'+
     '<label for="category">Category </label>' + track.category + 
-    '<br>' +
+    '</td>'+
+    '</tr>'+
+    '<tr>'+
+    '<td>'+
     '<label for="icon">Identity </label>' + track.icon + 
-    '<br>' +
+    '</td>'+
+    '<td>'+
     '<label for="size">Size </label>' + track.size + 
-    '<br>' +
+    '</td>'+
+    '</tr>'+
+    '<tr>'+
+    '<td>'+
     '<label for="course">Course </label>' + track.course + 
-    '<br>' +
+    '</td>'+
+    '<td>'+
     '<label for="speed">Speed </label>' + track.speed + 
-    '<br>' +
+    '</td>'+
+    '</tr>'+
+    '</table>'+
     '<input type="submit" id="cancel" value="Delete Track" />' +
     '<input type="button" id="prova" value="Center" onclick="centerMapOnHook();" />' +
     '</fieldset>';
@@ -1667,28 +1703,58 @@ function displayTrackAltHook(marker,track,location)
   hookAltForm.setAttribute("action","");
   hookAltForm.innerHTML =  
     '<fieldset style="width:100%;">' +
+    '<table>'+
+    '<tr>'+
+    '<td>'+
     '<label for="id">Id </label>' + track.id +
-    '<br>' +
+    '</td>'+
+    '</tr>'+
+    '<tr>'+
+    '<td>'+
     '<label for="cstId">TrackId </label>' + track.cstId +
-    '<br>' +
+    '</td>'+
+    '<td>'+
     '<label for="cstName">Name </label>' + track.cstName +
-    '<br>' +
+    '</td>'+
+    '</tr>'+
+    '<tr>'+
+    '<td>'+
     '<label for="latitude">Lat </label>' + track.lat.toFixed(4) +
-    '<br>' +
+    '</td>'+
+    '<td>'+
     '<label for="longitude">Lng </label>' + track.long.toFixed(4) +
-    '<br>' +
-    '<label for="height">Height </label>' + track.height +
-    '<br>' +
+    '</td>'+
+    '</tr>'+
+    '<tr>'+
+    '<td>'+
+    '<label for="height">Hgt </label>' + track.height +
+    '</td>'+
+    '</tr>'+
+    '<tr>'+
+    '<td>'+
+    '<label for="country">Country </label>' + track.country +
+    '</td>'+
+    '<td>'+
     '<label for="category">Category </label>' + track.category + 
-    '<br>' +
+    '</td>'+
+    '</tr>'+
+    '<tr>'+
+    '<td>'+
     '<label for="icon">Identity </label>' + track.icon + 
-    '<br>' +
+    '</td>'+
+    '<td>'+
     '<label for="size">Size </label>' + track.size + 
-    '<br>' +
+    '</td>'+
+    '</tr>'+
+    '<tr>'+
+    '<td>'+
     '<label for="course">Course </label>' + track.course + 
-    '<br>' +
+    '</td>'+
+    '<td>'+
     '<label for="speed">Speed </label>' + track.speed + 
-    '<br>' +
+    '</td>'+
+    '</tr>'+
+    '</table>'+
     '<input type="button" id="altprova" value="Center" onclick="centerMapOnAltHook();" />' +
     '</fieldset>';
     if (markerAltHookVisibility == true){
@@ -2001,6 +2067,9 @@ function createTrackInfoWindow(location) {
     '<br>' +
     '<label for="cstHeight">Height </label>' +
     '<input type="text" id="cstHeight" name="track[height]" style="width:60%;"/>'+
+    '<br>' +
+    '<label for="cstCountry">Country </label>' +
+    '<input type="text" id="cstCountry" name="track[country]" style="width:60%;"/>'+
     '<br>' +
     '<label for="category">Category </label>' +
     '<select name="track[category]">' +
