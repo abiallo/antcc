@@ -1840,6 +1840,9 @@ function setEventsOnCircle(circle,geoscircle) {
   google.maps.event.addListener(circle,'center_changed',function(){
    displayCircleHook(circle,geoscircle);
   });    
+  google.maps.event.addListener(circle,'mousemove',function(event){
+           displayLatLong(event.latLng);});  
+
 }
 ////////////////////////////////////////////////////////////////////////////
 function setEventsOnRectangle(rectangle,geosrectangle) {
@@ -1850,11 +1853,13 @@ function setEventsOnRectangle(rectangle,geosrectangle) {
   	    else {
              displayRectangleHook(rectangle,geosrectangle);
         }
-  	
   });
   google.maps.event.addListener(rectangle,'bounds_changed',function(){
    displayRectangleHook(rectangle,geosrectangle);
   });
+  google.maps.event.addListener(rectangle,'mousemove',function(event){
+           displayLatLong(event.latLng);});  
+
 }
 ////////////////////////////////////////////////////////////////////////////
 function setEventsOnPolyline(polyline,geospolyline) {
@@ -1875,6 +1880,9 @@ function setEventsOnPolygon(polygon,geospolygon) {
              displayPolygonHook(polygon,geospolygon);
         }
   });
+  google.maps.event.addListener(polygon,'mousemove',function(event){
+           displayLatLong(event.latLng);});  
+
 }
 ////////////////////////////////////////////////////////////////////////////
 //after track creation to create a marker

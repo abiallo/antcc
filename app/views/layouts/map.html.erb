@@ -39,7 +39,9 @@
 			  <%= link_to "Select Map", geosmaps_path %> |
 			  <%= link_to "New Map", new_geosmap_path %> |
 			  <%= link_to "New Article", new_article_path %> |
-			  <%= link_to "Edit Account", edit_user_path(current_user)%> |
+			  <% if current_user.email != "geosbook@gmail.com" %>
+			     <%= link_to "Edit Account", edit_user_path(current_user)%> |
+			  <% end %>
 			  <%= link_to "Logout", logout_path %>
 			<% else %>
 			  <%= link_to "Registration", new_user_path %> |
