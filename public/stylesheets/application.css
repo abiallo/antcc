@@ -269,7 +269,7 @@ label {
   width: 20%;
   height: 100%;
   overflow: auto;
-  border: 1px solid black;
+  border: 1px solid red;
   background-color: white;
   color: maroon; 
   font-family: sans-serif;
