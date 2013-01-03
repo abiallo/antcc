@@ -1,6 +1,6 @@
 class AirFunctionsController < ApplicationController
   before_filter :authenticate
-  # GET /air_functions
+  # GET /air_functions air
   # GET /air_functions.xml
   def index
     @air_functions = AirFunction.all
