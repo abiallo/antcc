@@ -43,6 +43,7 @@ var hookMarker = new google.maps.Marker({
                         position: initlatlng,
                         map: map,
                         icon: hookImage});
+ 
 var hookAltMarker = new google.maps.Marker({
                         position: initlatlng,
                         map: map,
@@ -525,20 +526,26 @@ function displayMarkerNormalHook(marker,address,geosmarker)
    hookedGeosmarker = geosmarker;
    var geosmarkername;
    var geosmarkeraddress;
+   var geosmarkerphotoname;
+   var imagehtml;
    if (geosmarker == null) {
    	geosmarkername="";
    	geosmarkeraddress="";
+   	geosmarkerphotoname="";
+   	imagehtml="";
    }
    else {
    	geosmarkername=geosmarker.name;
    	geosmarkeraddress=geosmarker.address;
+   	geosmarkerphotoname=geosmarker.photo_file_name;
+   	imagehtml="/system/photos/"+geosmarker.id+"/small/"+geosmarker.photo_file_name;
    }
    hookMarker.setPosition(marker.getPosition());
    hookMarker.setMap(map);
   //Hook HTML DOM form element
   hookMarkerForm.id = "hookmarkerpanel";
   hookMarkerForm.setAttribute("action","");
-  hookMarkerForm.onsubmit = function() {
+ hookMarkerForm.onsubmit = function() {
   	                    deleteMarker(geosmarker,marker); 
   	                    hookMarker.setMap(null); 
   	                    document.getElementById("sidebar").removeChild(hookMarkerForm);
@@ -563,11 +570,12 @@ function displayMarkerNormalHook(marker,address,geosmarker)
     '<label for="address">Address </label>' +   
     '<input type="text" id="addresstxt" name="geosmarker[address]" ' +
     'value="'+  geosmarkeraddress + '"/>'+   
-    '<br>' +
     '<input type="submit" id="cancelMarker" value="Delete Marker" />' +
     '<input type="button" id="centerMarker" value="Center" onclick="centerMapOnMarkerHook();" />' +
     '<input type="button" id="addressMarker" value="Find Address" onclick="displayReverseGeocodeOnHook();" />' +
     '<input type="button" id="saveMarker" value="Update Marker" onclick="saveMarkerOnDB();" />' +
+    '<input type="button" id="ListMarkers" value="List Markers" onclick="listMarkers();" />' +
+    '<img alt="'+geosmarkerphotoname+'" src= "' +imagehtml+ '" />'+
     '</fieldset>';
 
     if (trackHookVisibility == true){
@@ -687,8 +695,11 @@ function saveMarkerOnDB(){
     $.ajax({
     	async: false,
     	type: "POST",
-	    url: "updatemarker/"+hookedGeosmarker.id,
-	    data: formValues,
+	    url: "updatemapmarker/"+hookedGeosmarker.id,
+       data: formValues,
+ //      contentType: false,
+ //      processDara: false,
+ //      cache: false,
         dataType: "json",
         success: function(data, status){
         	 hookedGeosmarker=data.content.geosmarker;
@@ -702,7 +713,7 @@ function saveAltMarkerOnDB(){
     $.ajax({
     	async: false,
     	type: "POST",
-	    url: "updatemarker/"+hookedAltGeosmarker.id,
+	    url: "updatemapmarker/"+hookedAltGeosmarker.id,
 	    data: formValues,
         dataType: "json",
         success: function(data, status){
@@ -2385,6 +2396,7 @@ function displayGeoPanel() {
     '<input type="button" id="myposition" value="My Position" style="width:30%;" onclick="displayMyPosition()"/>' +
     '<input type="button" id="newtrackbuttonid" value="New Track" style="width:30%;" onclick="newTrackOnOff()"/>' +
     '<input type="button" id="althookbuttonid" value="Alt Hook" style="width:30%;" onclick="altHookOnOff()"/>' +
+    '<p> <a href="/geosmaps/1/indexmarkers">List Markers</a> </p>' +
     '</fieldset>';
     document.getElementById("sidebar").appendChild(geoForm);
  }

@@ -1,0 +1,33 @@
+<%= div_for geosmarker do %>
+   <h3>
+   	Id number: 
+   	<%= link_to geosmarker.id, geosmarker %>
+     	<span class='actions'>
+     		<%= link_to "Update", edit_geosmarker_path(geosmarker)%>
+   	    	<%= link_to "Delete", geosmarker, :confirm=>"Are you sure?",
+   		       :method=>:delete %>
+
+        </span>
+   </h3>
+<div class="field">
+    <%= "Name: " + geosmarker.name %>
+  </div>    
+  <div class="field">
+    <%= "Lat: " + geosmarker.lat.to_s() %>
+  </div>
+  <div class="field">
+    <%= "Long: " + geosmarker.lng.to_s() %>
+  </div>
+    <div class="field">
+    <%= "Create at: " + geosmarker.created_at.to_s() %>
+  </div>
+    <div class="field">
+     <%=  "Updated_at:" + geosmarker.updated_at.to_s() %>
+  </div>
+  <div class="field">
+    <%= "Address: " + geosmarker.address %>
+  </div>
+  <div class="field">
+  <%=  image_tag geosmarker.photo.url (:small) %>
+  </div>
+ <% end %>

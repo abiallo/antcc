@@ -1,10 +1,13 @@
 class GeosmarkersController < ApplicationController
   before_filter :authenticate  
+
+
     def create
     puts ("create marker--------------------------------------------") 
       @geosmap = Geosmap.find(current_user.geosmap_id)
       puts(params[:geosmarker])
       geosmarker = Geosmarker.new(params[:geosmarker])
+      geosmarker.photo = nil
       if geosmarker.save
         @geosmap.geosmarkers<<(geosmarker)
         puts('ssssssuuuuuuuccccceeeeeesssss')
@@ -26,8 +29,24 @@ class GeosmarkersController < ApplicationController
       end
       render :text=>res.to_json
     end
-  
-    def update
+  # PUT /geosmarkers/1
+  # PUT /geosmarkers/1.json
+  def update
+#    @article = current_user.articles.find(params[:id])
+      @geosmarker = Geosmarker.find(params[:id])
+
+    respond_to do |format|
+      if @geosmarker.update_attributes(params[:geosmarker])
+        format.html { redirect_to @geosmarker, notice: 'Geosmarker was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @geosmarker.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+    
+    def updatemap
       puts ("update marker--------------------------------------------") 
 
       @geosmarker = Geosmarker.find(params[:id])
@@ -47,4 +66,33 @@ class GeosmarkersController < ApplicationController
 #    render :text=>(Track.find :all).to_json
     end
   
+
+
+  # GET /geosmarkers
+  # GET /geosmarkers.xml
+  def index
+      @geosmap = Geosmap.find(current_user.geosmap_id)
+      @geosmarkers = @geosmap.geosmarkers
+      respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @geosmarkers }
+      end
+  end
+ 
+     # GET /geosmarkes/1/edit
+  def edit
+          puts ("edit geosmarker--------------------------------------------") 
+    @geosmarker = Geosmarker.find(params[:id])
+  end
+   # GET /geosmaps/1
+  # GET /geosmaps/1.xml
+  def show
+          puts ("show geosmarker--------------------------------------------") 
+    @geosmarker = Geosmarker.find(params[:id])
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml => @geosmarker }
+    end
+  end
 end

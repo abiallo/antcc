@@ -1,5 +1,6 @@
 Antcc::Application.routes.draw do
   
+  resources :geosmarkers
   resources :seasub_functions
 
   resources :seasurf_functions
@@ -43,6 +44,7 @@ Antcc::Application.routes.draw do
   match '/geosmaps/:id/update' => "geosmaps#update"
   match '/geosmaps/:id/save' => "geosmaps#save"
   match '/geosmaps/:id/list' => "tracks#list"
+  match '/geosmaps/:id/indexmarkers' => "geosmarkers#index", :as => :geosmarkers_geosmap
   match '/geosmaps/:id/listmarkers' => "geosmarkers#list"
   match '/geosmaps/:id/create' => "tracks#create"
   match '/geosmaps/:id/createmarker' => "geosmarkers#create"
@@ -50,6 +52,7 @@ Antcc::Application.routes.draw do
   match '/geosmaps/:id/destroymarker/:id' => "geosmarkers#destroy"
   match '/geosmaps/:id/update/:id' => "tracks#update"
   match '/geosmaps/:id/updatemarker/:id' => "geosmarkers#update"
+  match '/geosmaps/:id/updatemapmarker/:id' => "geosmarkers#updatemap"
   match '/geosmaps/:id/updatepostime/:id' => "tracks#updatepostime"
   match '/geosmaps/:id/listcircles' => "geoscircles#list"
   match '/geosmaps/:id/createcircle' => "geoscircles#create"
