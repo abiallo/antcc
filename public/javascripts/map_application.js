@@ -574,7 +574,7 @@ function displayMarkerNormalHook(marker,address,geosmarker)
     '<input type="button" id="centerMarker" value="Center" onclick="centerMapOnMarkerHook();" />' +
     '<input type="button" id="addressMarker" value="Find Address" onclick="displayReverseGeocodeOnHook();" />' +
     '<input type="button" id="saveMarker" value="Update Marker" onclick="saveMarkerOnDB();" />' +
-    '<input type="button" id="ListMarkers" value="List Markers" onclick="listMarkers();" />' +
+   '<p></p> <p> <a href="/geosmarkers/' + geosmarker.id +'/edit"> Upload photo</a> </p>' +
     '<img alt="'+geosmarkerphotoname+'" src= "' +imagehtml+ '" />'+
     '</fieldset>';
 
@@ -2396,7 +2396,7 @@ function displayGeoPanel() {
     '<input type="button" id="myposition" value="My Position" style="width:30%;" onclick="displayMyPosition()"/>' +
     '<input type="button" id="newtrackbuttonid" value="New Track" style="width:30%;" onclick="newTrackOnOff()"/>' +
     '<input type="button" id="althookbuttonid" value="Alt Hook" style="width:30%;" onclick="altHookOnOff()"/>' +
-    '<p> <a href="/geosmaps/1/indexmarkers">List Markers</a> </p>' +
+    '<p> <a href="/geosmaps/' + geosmap.id +'/indexmarkers">List Markers</a> </p>' +
     '</fieldset>';
     document.getElementById("sidebar").appendChild(geoForm);
  }
