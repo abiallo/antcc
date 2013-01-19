@@ -2322,7 +2322,7 @@ function createTrack (location) {
 //
 ////////////////////////////////////////////////////////////
 function deleteTrack(location,track,marker) {
-	alert ("before ajax");
+//	alert ("before ajax");
     $.ajax({
     	async: false,
     	type: "PUT",
@@ -2461,31 +2461,56 @@ function showMyPosition(position){
 function displayGeocode(){
 	var geoTxt = document.getElementById("geopanel").geocodetxt.value;
     geocoder.geocode( { 'address': geoTxt}, function(results, status) {
-       
+     var image = new google.maps.MarkerImage('/images/marker_green.png' ,
+           // This marker is 20 pixels wide by 34 pixels tall.
+      new google.maps.Size(20, 34),
+      // The origin for this image is 0,0.
+      new google.maps.Point(0,0),
+      // The anchor for this image is the base of the marker at 10,34.
+      new google.maps.Point(10, 34));
+  var shadow = new google.maps.MarkerImage('/images/shadow50.png',
+      // The shadow image is larger in the horizontal dimension
+      // while the position and offset are the same as for the main image.
+      new google.maps.Size(37, 34),
+      new google.maps.Point(0,0),
+      new google.maps.Point(10, 34));
+      // Shapes define the clickable region of the icon.
+      // The type defines an HTML <area> element 'poly' which
+      // traces out a polygon as a series of X,Y points. The final
+      // coordinate closes the poly by connecting to the first
+      // coordinate.
+  var shape = {
+      coord: [1, 1, 1, 20, 18, 20, 18 , 1],
+      type: 'poly'
+  }; 
        if (status == google.maps.GeocoderStatus.OK) {
           map.setCenter(results[0].geometry.location);
           var marker = new google.maps.Marker({
              map: map,
-             position: results[0].geometry.location
+             shadow: shadow,
+             icon: image,
+             shape: shape,
+             position: results[0].geometry.location,
+             zIndex: 3
           });
 
-  	      displayMarkerHook(marker,results[0].formatted_address,null);
+//  	      displayMarkerHook(marker,results[0].formatted_address,null);
 
-          var geosmarker;
-          var formValues=$("form#hookmarkerpanel").serialize();
-          $.ajax({
-    	      async: false,
-    	      type: "POST",
-	          url: "createmarker",
-	          data: formValues,
-              dataType: "json",
-              success: function(data, status){ 
-              geosmarker = data.geosmarker;
+//          var geosmarker;
+ //         var formValues=$("form#hookmarkerpanel").serialize();
+  //        $.ajax({
+  //  	      async: false,
+  //  	      type: "POST",
+//	          url: "createmarker",
+//	          data: formValues,
+ //             dataType: "json",
+  //            success: function(data, status){ 
+   //           geosmarker = data.geosmarker;
  	
-              displayMarkerHook(marker,"",geosmarker);
-              setEventsOnMarker(marker,geosmarker);    	
-                	    } // end on success
-	         }); // end of the new Ajax.Request() call
+  //            displayMarkerHook(marker,"",geosmarker);
+  //            setEventsOnMarker(marker,geosmarker);    	
+  //              	    } // end on success
+	 //        }); // end of the new Ajax.Request() call
 
 
        } 
