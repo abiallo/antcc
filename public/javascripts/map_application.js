@@ -1606,7 +1606,7 @@ function displayTrackNormalHook(marker,track,location)
    hookMarker.setPosition(location);
    hookMarker.setMap(map);
   //Hook HTML DOM form element
-  hookForm.id = "hookpanel";
+  hookForm.id = "hookform";
   hookForm.setAttribute("action","");
   hookForm.onsubmit = function() { hookMarker.setMap(null); 
   	                    document.getElementById("sidebar").removeChild(hookForm);
@@ -2322,14 +2322,18 @@ function createTrack (location) {
 //
 ////////////////////////////////////////////////////////////
 function deleteTrack(location,track,marker) {
+	alert ("before ajax");
     $.ajax({
     	async: false,
     	type: "PUT",
     	url: "destroy/"+track.id,
     	success: function(data,status){
-    		marker.setMap(null);
+
+            marker.setMap(null);
+
     		hookMarker.setMap(null);
-            document.getElementById("sidebar").removeChild(hookForm);
+
+//            document.getElementById("sidebar").removeChild(hookForm);
     	}
     })
 }

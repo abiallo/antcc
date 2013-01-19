@@ -54,8 +54,13 @@
 		<%= content_tag :p, alert, :class=> 'alert' if alert.present?%>
 	</div>
 	<div id="main">
-
+       <div id="map-wrapper">
+         <div id="map_canvas"></div>
 		<%= yield %>
+           </div> 
+       <div id="sidebar">
+     </div>
+
     </div>
 <!--   <div id="footer">
     	An experimental site built with RubyOnRails & GoogleMaps
