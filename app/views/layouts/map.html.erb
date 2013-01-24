@@ -5,7 +5,7 @@
   <title>GeosBook</title>
   <%= stylesheet_link_tag :all %>
   <script type="text/javascript"
-    src="http://maps.googleapis.com/maps/api/js?sensor=true&libraries=drawing,places,geometry">
+    src="http://maps.googleapis.com/maps/api/js?sensor=true&libraries=panoramio,drawing,places,geometry">
   </script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
@@ -35,7 +35,6 @@
               <option value="/sub_classes">Submarines</option>
               <option value="/vehicle_models">Vehicles</option>
               </select>
-  			  <%= link_to "All Markers", geosmarkers_geosmap_path %> |
   			  <%= link_to "All Users", users_path %> |
 			  <%= link_to "Select Map", geosmaps_path %> |
 			  <%= link_to "New Map", new_geosmap_path %> |

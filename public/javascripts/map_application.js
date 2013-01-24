@@ -153,6 +153,8 @@ var drawingManager = new google.maps.drawing.DrawingManager({
       coord: [1, 1, 1, 20, 18, 20, 18 , 1],
       type: 'poly'
   }; 
+var panoramioLayer = new google.maps.panoramio.PanoramioLayer();
+var panoramioFlag = false; 
 ///////////////////////////////////////////////////
 function buildImage(track) {
   if (track.category == 'land') {
@@ -2427,6 +2429,7 @@ function displayGeoPanel() {
     '<input type="button" id="myposition" value="My Position" style="width:30%;" onclick="displayMyPosition()"/>' +
     '<input type="button" id="newtrackbuttonid" value="New Track" style="width:30%;" onclick="newTrackOnOff()"/>' +
     '<input type="button" id="althookbuttonid" value="Alt Hook" style="width:30%;" onclick="altHookOnOff()"/>' +
+    '<input type="button" id="panoramiobuttonid" value="Panoramio" style="width:30%;" onclick="showPanoramio()"/>' +
     '<p> <a href="/geosmaps/' + geosmap.id +'/indexmarkers">List Markers</a> </p>' +
     '</fieldset>';
     document.getElementById("sidebar").appendChild(geoForm);
@@ -2610,6 +2613,19 @@ function altHookOnOff(){
 	    altHookFlag = false;
 		$("#althookbuttonid").prop("value","HaltHook");
 	};
+}
+//////////////////////////////////////////////////////////////////////
+function showPanoramio() {
+	if (panoramioFlag == false) {
+		panoramioFlag = true;
+		panoramioLayer.setMap(map);
+	}
+	else {
+	    panoramioFlag = false;
+	    panoramioLayer.setMap(null);
+
+	};
+	
 }
 //////////////////////////////////////////////////////////////////////
 // when the page is loaded
