@@ -131,6 +131,28 @@ var drawingManager = new google.maps.drawing.DrawingManager({
         editable: true
       }
     });
+     var greenimage = new google.maps.MarkerImage('/images/marker_green.png' ,
+           // This marker is 20 pixels wide by 34 pixels tall.
+      new google.maps.Size(20, 34),
+      // The origin for this image is 0,0.
+      new google.maps.Point(0,0),
+      // The anchor for this image is the base of the marker at 10,34.
+      new google.maps.Point(10, 34));
+  var shadow = new google.maps.MarkerImage('/images/shadow50.png',
+      // The shadow image is larger in the horizontal dimension
+      // while the position and offset are the same as for the main image.
+      new google.maps.Size(37, 34),
+      new google.maps.Point(0,0),
+      new google.maps.Point(10, 34));
+      // Shapes define the clickable region of the icon.
+      // The type defines an HTML <area> element 'poly' which
+      // traces out a polygon as a series of X,Y points. The final
+      // coordinate closes the poly by connecting to the first
+      // coordinate.
+  var shape = {
+      coord: [1, 1, 1, 20, 18, 20, 18 , 1],
+      type: 'poly'
+  }; 
 ///////////////////////////////////////////////////
 function buildImage(track) {
   if (track.category == 'land') {
@@ -528,17 +550,23 @@ function displayMarkerNormalHook(marker,address,geosmarker)
    var geosmarkeraddress;
    var geosmarkerphotoname;
    var imagehtml;
+   var uploadref;
    if (geosmarker == null) {
    	geosmarkername="";
    	geosmarkeraddress="";
    	geosmarkerphotoname="";
    	imagehtml="";
+   	uploadref="";
+   	
    }
    else {
    	geosmarkername=geosmarker.name;
    	geosmarkeraddress=geosmarker.address;
    	geosmarkerphotoname=geosmarker.photo_file_name;
    	imagehtml="/system/photos/"+geosmarker.id+"/small/"+geosmarker.photo_file_name;
+    uploadref=   '<p></p> <p> <a href="/geosmarkers/' + geosmarker.id +'/edit"> Upload photo</a> </p>' +
+    '<img alt="'+geosmarkerphotoname+'" src= "' +imagehtml+ '" />';
+
    }
    hookMarker.setPosition(marker.getPosition());
    hookMarker.setMap(map);
@@ -574,9 +602,8 @@ function displayMarkerNormalHook(marker,address,geosmarker)
     '<input type="button" id="centerMarker" value="Center" onclick="centerMapOnMarkerHook();" />' +
     '<input type="button" id="addressMarker" value="Find Address" onclick="displayReverseGeocodeOnHook();" />' +
     '<input type="button" id="saveMarker" value="Update Marker" onclick="saveMarkerOnDB();" />' +
-   '<p></p> <p> <a href="/geosmarkers/' + geosmarker.id +'/edit"> Upload photo</a> </p>' +
-    '<img alt="'+geosmarkerphotoname+'" src= "' +imagehtml+ '" />'+
-    '</fieldset>';
+    uploadref +
+   '</fieldset>';
 
     if (trackHookVisibility == true){
     	document.getElementById("sidebar").removeChild(hookForm);
@@ -2461,37 +2488,15 @@ function showMyPosition(position){
 function displayGeocode(){
 	var geoTxt = document.getElementById("geopanel").geocodetxt.value;
     geocoder.geocode( { 'address': geoTxt}, function(results, status) {
-     var image = new google.maps.MarkerImage('/images/marker_green.png' ,
-           // This marker is 20 pixels wide by 34 pixels tall.
-      new google.maps.Size(20, 34),
-      // The origin for this image is 0,0.
-      new google.maps.Point(0,0),
-      // The anchor for this image is the base of the marker at 10,34.
-      new google.maps.Point(10, 34));
-  var shadow = new google.maps.MarkerImage('/images/shadow50.png',
-      // The shadow image is larger in the horizontal dimension
-      // while the position and offset are the same as for the main image.
-      new google.maps.Size(37, 34),
-      new google.maps.Point(0,0),
-      new google.maps.Point(10, 34));
-      // Shapes define the clickable region of the icon.
-      // The type defines an HTML <area> element 'poly' which
-      // traces out a polygon as a series of X,Y points. The final
-      // coordinate closes the poly by connecting to the first
-      // coordinate.
-  var shape = {
-      coord: [1, 1, 1, 20, 18, 20, 18 , 1],
-      type: 'poly'
-  }; 
        if (status == google.maps.GeocoderStatus.OK) {
           map.setCenter(results[0].geometry.location);
           var marker = new google.maps.Marker({
              map: map,
              shadow: shadow,
-             icon: image,
+             icon: greenimage,
              shape: shape,
-             position: results[0].geometry.location,
-             zIndex: 3
+             position: results[0].geometry.location
+//             zIndex: 3
           });
 
 //  	      displayMarkerHook(marker,results[0].formatted_address,null);
@@ -2543,46 +2548,21 @@ var lat = parseFloat(document.getElementById("geolat").value);
 var lng = parseFloat(document.getElementById("geolng").value);
 var latlng = new google.maps.LatLng(lat, lng);
 geocoder.geocode({'latLng': latlng}, function(results, status) {
-
-        var marker = new google.maps.Marker({
-               position: latlng,
-               map: map
-              });
-        map.setCenter(latlng);
-          	      displayMarkerHook(marker," ",null);
-          var geosmarker;
-          var formValues=$("form#hookmarkerpanel").serialize();
-          $.ajax({
-    	      async: false,
-    	      type: "POST",
-	          url: "createmarker",
-	          data: formValues,
-              dataType: "json",
-              success: function(data, status){ 
-            	geosmarker = data.geosmarker;
-            	hookedGeosmarker = geosmarker;
- 
-              	displayMarkerHook(marker,"",geosmarker);
-   	            setEventsOnMarker(marker,geosmarker);               	   	
-                	    } // end on success
-	         }); // end of the new Ajax.Request() call
         if (status == google.maps.GeocoderStatus.OK) {
-           if (results[0]) {
-           	  hookedGeosmarker.address = results[0].formatted_address;
-           	  hookedGeosmarker.name = document.getElementById("hookmarkerpanel").namemarkertxt.value;
-              displayMarkerHook(marker, results[0].formatted_address,hookedGeosmarker)
-           } else {
-               alert("No results found");
-           	  hookedGeosmarker.address = "";
-           	  hookedGeosmarker.name = document.getElementById("hookmarkerpanel").namemarkertxt.value;    
-               displayMarkerHook(marker, "", hookedGeosmarker);
-             }
-         } else {
+        document.getElementById("geopanel").geocodetxt.value=results[0].formatted_address;
+        map.setCenter(latlng);
+          var marker = new google.maps.Marker({
+             map: map,
+             shadow: shadow,
+             icon: greenimage,
+             shape: shape,
+             position: results[0].geometry.location
+//             zIndex: 3
+          });
+         } 
+         else {
              alert("Geocoder status: " + status);
-           	  hookedGeosmarker.address = "";
-           	  hookedGeosmarker.name = document.getElementById("hookmarkerpanel").namemarkertxt.value;   
-               displayMarkerHook(marker, "", hookedGeosmarker);
-           }
+         }
         });
 } 
 //////////////////////////////////////////////////////////////////////
