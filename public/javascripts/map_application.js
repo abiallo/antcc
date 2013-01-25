@@ -153,7 +153,9 @@ var drawingManager = new google.maps.drawing.DrawingManager({
       coord: [1, 1, 1, 20, 18, 20, 18 , 1],
       type: 'poly'
   }; 
-var panoramioLayer = new google.maps.panoramio.PanoramioLayer();
+var panoramioLayer = new google.maps.panoramio.PanoramioLayer({
+	          suppressInfoWindows: true
+});
 var panoramioFlag = false; 
 ///////////////////////////////////////////////////
 function buildImage(track) {
@@ -2403,6 +2405,7 @@ function confirmSaveGeosmap() {
 //////////////////////////////////////////////////////////////////////
 function displayGeoPanel() {
 	  //Hook HTML DOM form element
+	  var address="'indexmarkers'";
   geoForm.id = "geopanel";
   geoForm.setAttribute("action","");
   geoForm.onsubmit = function() {  
@@ -2430,7 +2433,7 @@ function displayGeoPanel() {
     '<input type="button" id="newtrackbuttonid" value="New Track" style="width:30%;" onclick="newTrackOnOff()"/>' +
     '<input type="button" id="althookbuttonid" value="Alt Hook" style="width:30%;" onclick="altHookOnOff()"/>' +
     '<input type="button" id="panoramiobuttonid" value="Panoramio" style="width:30%;" onclick="showPanoramio()"/>' +
-    '<p> <a href="/geosmaps/' + geosmap.id +'/indexmarkers">List Markers</a> </p>' +
+    '<input type="button" id="markerlistbuttonid" value="Marker List" style="width:30%;" onclick="document.location.href='+address+';"/>' +
     '</fieldset>';
     document.getElementById("sidebar").appendChild(geoForm);
  }
@@ -2628,11 +2631,66 @@ function showPanoramio() {
 	
 }
 //////////////////////////////////////////////////////////////////////
+function setPhotoWidget() {
+        // The photoDiv defines the DIV within the info window for
+        // displaying the Panoramio photo within its PhotoWidget.
+        var photoDiv =  document.createElement('div');
+
+        // The PhotoWidget width and height are expressed as number values,
+        // not string values.
+//        var photoWidgetOptions = {
+//          width: 640,
+//          height: 500
+//        };
+        var photoWidgetOptions = {
+          'width': 640,
+          'height': 380
+        };
+//        photoDiv.style.width = '640px';
+//        photoDiv.style.height = '500px';
+
+        // The PhotoWidget width and height are expressed as number values,
+        // not string values so we need to turn them into floats.
+//        var photoWidgetOptions = {
+//         'width': parseFloat(photoDiv.style.width),
+ //        'height': parseFloat(photoDiv.style.height)
+ //       };
+        // We construct a PhotoWidget here with a blank (null) request as we
+        // don't yet have a photo to populate it.
+        var photoWidget = new panoramio.PhotoWidget(photoDiv, null,
+            photoWidgetOptions);
+
+        var infoWindow = new google.maps.InfoWindow();
+
+        google.maps.event.addListener(panoramioLayer, 'click', function(e) {
+          var photoRequestOptions = {
+            ids: [{
+              'photoId': e.featureDetails.photoId,
+              'userId': e.featureDetails.userId
+            }]
+          };
+          photoWidget.setRequest(photoRequestOptions);
+          photoWidget.setPosition(0);
+          infoWindow.setPosition(e.latLng);
+          infoWindow.open(map);
+          infoWindow.setContent(photoDiv);
+        });        
+}
+//////////////////////////////////////////////////////////////////////
 // when the page is loaded
 /////////////////////////////////////////////////////////////////////
 function initialize() {
 //  handleResize();
-  loadCurrentMap();   
+  loadCurrentMap(); 
+  setPhotoWidget();
+   var tag = document.getElementById('tag');
+   var button = document.getElementById('filter-button');
+
+   google.maps.event.addDomListener(button, 'click', function() {
+          panoramioLayer.setTag(tag.value);
+   });
+   map.controls[google.maps.ControlPosition.TOP].push(
+            document.getElementById('filter'));  
 //  var ge = new GoogleEarth(map);
  ////////////////////////////////////////////////////
  ////

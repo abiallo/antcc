@@ -8,7 +8,7 @@
     src="http://maps.googleapis.com/maps/api/js?sensor=true&libraries=panoramio,drawing,places,geometry">
   </script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-
+    <script type="text/javascript" src="https://ssl.panoramio.com/wapi/wapi.js?v=1"></script>
 <!--   <%= javascript_include_tag 'googleearth','jquery-1.6.4', 'rails', 'global','map_application' %> -->
  <%= javascript_include_tag 'jquery-1.6.4', 'rails', 'global','map_application' %> 
 
@@ -53,10 +53,14 @@
 		<%= content_tag :p, alert, :class=> 'alert' if alert.present?%>
 	</div>
 	<div id="main">
-       <div id="map-wrapper">
+       <div id="map-wrapper"> 
          <div id="map_canvas"></div>
 		<%= yield %>
            </div> 
+         <div id="filter">
+           <button id="filter-button">Panoramio Filter</button>
+           <input id="tag" value="">
+          </div>
        <div id="sidebar">
      </div>
 
