@@ -157,6 +157,11 @@ var panoramioLayer = new google.maps.panoramio.PanoramioLayer({
 	          suppressInfoWindows: true
 });
 var panoramioFlag = false; 
+var weatherFlag = false;
+var weatherLayer = new google.maps.weather.WeatherLayer({
+          temperatureUnits: google.maps.weather.TemperatureUnit.CELSIUS
+        });
+var cloudLayer = new google.maps.weather.CloudLayer();
 ///////////////////////////////////////////////////
 function buildImage(track) {
   if (track.category == 'land') {
@@ -2433,6 +2438,7 @@ function displayGeoPanel() {
     '<input type="button" id="newtrackbuttonid" value="New Track" style="width:30%;" onclick="newTrackOnOff()"/>' +
     '<input type="button" id="althookbuttonid" value="Alt Hook" style="width:30%;" onclick="altHookOnOff()"/>' +
     '<input type="button" id="panoramiobuttonid" value="Panoramio" style="width:30%;" onclick="showPanoramio()"/>' +
+    '<input type="button" id="weatherbuttonid" value="Weather" style="width:30%;" onclick="showWeather()"/>' +
     '<input type="button" id="markerlistbuttonid" value="Marker List" style="width:30%;" onclick="document.location.href='+address+';"/>' +
     '</fieldset>';
     document.getElementById("sidebar").appendChild(geoForm);
@@ -2468,25 +2474,28 @@ function showMyPosition(position){
    map.setCenter(myLatLng);
    var marker = new google.maps.Marker({
                 map: map,
-                position: myLatLng
+                shadow: shadow,
+                icon: greenimage,
+                shape: shape,
+                 position: myLatLng
           });
 	
-  	      displayMarkerHook(marker," ",null);
-          var geosmarker;
-          var formValues=$("form#hookmarkerpanel").serialize();
-          $.ajax({
-    	      async: false,
-    	      type: "POST",
-	          url: "createmarker",
-	          data: formValues,
-              dataType: "json",
-              success: function(data, status){ 
-            	geosmarker = data.geosmarker;
-
-              	displayMarkerHook(marker,"",geosmarker); 
-  	            setEventsOnMarker(marker,geosmarker);    	
-                	    } // end on success
-	         }); // end of the new Ajax.Request() call
+//  	      displayMarkerHook(marker," ",null);
+//          var geosmarker;
+//          var formValues=$("form#hookmarkerpanel").serialize();
+ //         $.ajax({
+  //  	      async: false,
+ //   	      type: "POST",
+//	          url: "createmarker",
+//	          data: formValues,
+ //             dataType: "json",
+ //             success: function(data, status){ 
+ //           	geosmarker = data.geosmarker;
+//
+//              	displayMarkerHook(marker,"",geosmarker); 
+//  	            setEventsOnMarker(marker,geosmarker);    	
+//                	    } // end on success
+//	         }); // end of the new Ajax.Request() call
 
 }
 
@@ -2677,6 +2686,21 @@ function setPhotoWidget() {
         });        
 }
 //////////////////////////////////////////////////////////////////////
+function showWeather() {
+	if (weatherFlag == false) {
+		weatherFlag = true;
+        weatherLayer.setMap(map);
+        cloudLayer.setMap(map);
+
+	}
+	else {
+	    weatherFlag = false;
+        weatherLayer.setMap(null);
+        cloudLayer.setMap(null);
+
+	};
+	
+}//////////////////////////////////////////////////////////////////////
 // when the page is loaded
 /////////////////////////////////////////////////////////////////////
 function initialize() {
