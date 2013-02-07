@@ -162,6 +162,10 @@ var weatherLayer = new google.maps.weather.WeatherLayer({
           temperatureUnits: google.maps.weather.TemperatureUnit.CELSIUS
         });
 var cloudLayer = new google.maps.weather.CloudLayer();
+var searchGoogle;
+var autocomplete;
+
+
 ///////////////////////////////////////////////////
 function buildImage(track) {
   if (track.category == 'land') {
@@ -2707,9 +2711,9 @@ function initialize() {
 //  handleResize();
   loadCurrentMap(); 
   setPhotoWidget();
+  
    var tag = document.getElementById('tag');
    var button = document.getElementById('filter-button');
-
    google.maps.event.addDomListener(button, 'click', function() {
           panoramioLayer.setTag(tag.value);
    });
@@ -2721,6 +2725,13 @@ function initialize() {
     drawingManager.setMap(map);
 /////////////////////////////////////////////////////////////
     displayGeoPanel();
+    var searchoptions = {
+    	types: ['geocode']
+    };
+    searchGoogle = document.getElementById('geocodetxt');
+    autocomplete = new google.maps.places.Autocomplete(searchGoogle,searchoptions);
+    autocomplete.bindTo('bounds',map); 
+
 //////////////////////////////////////////////////////////////
     listTracks();
     listMarkers();
