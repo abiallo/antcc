@@ -153,9 +153,7 @@ var drawingManager = new google.maps.drawing.DrawingManager({
       coord: [1, 1, 1, 20, 18, 20, 18 , 1],
       type: 'poly'
   }; 
-var panoramioLayer = new google.maps.panoramio.PanoramioLayer({
-	          suppressInfoWindows: true
-});
+var panoramioLayer;
 var panoramioFlag = false; 
 var weatherFlag = false;
 var weatherLayer = new google.maps.weather.WeatherLayer({
@@ -2444,7 +2442,11 @@ function displayGeoPanel() {
     '<input type="button" id="panoramiobuttonid" value="Panoramio" style="width:30%;" onclick="showPanoramio()"/>' +
     '<input type="button" id="weatherbuttonid" value="Weather" style="width:30%;" onclick="showWeather()"/>' +
     '<input type="button" id="markerlistbuttonid" value="Marker List" style="width:30%;" onclick="document.location.href='+address+';"/>' +
+    '<label for="tag">Tag </label>' +
+    '<input type="text" id="tag" name="geo[tag]" style="width:60%;" />' + 
+     '<input type="button" id="filter-button" value="Apply Panoramio filter" style="width:90%;" onclick=""/>' +
     '</fieldset>';
+
     document.getElementById("sidebar").appendChild(geoForm);
  }
 //////////////////////////////////////////////////////////////////////
@@ -2710,15 +2712,6 @@ function showWeather() {
 function initialize() {
 //  handleResize();
   loadCurrentMap(); 
-  setPhotoWidget();
-  
-   var tag = document.getElementById('tag');
-   var button = document.getElementById('filter-button');
-   google.maps.event.addDomListener(button, 'click', function() {
-          panoramioLayer.setTag(tag.value);
-   });
-   map.controls[google.maps.ControlPosition.TOP].push(
-            document.getElementById('filter'));  
 //  var ge = new GoogleEarth(map);
  ////////////////////////////////////////////////////
  ////
@@ -2731,6 +2724,19 @@ function initialize() {
     searchGoogle = document.getElementById('geocodetxt');
     autocomplete = new google.maps.places.Autocomplete(searchGoogle,searchoptions);
     autocomplete.bindTo('bounds',map); 
+
+  panoramioLayer = new google.maps.panoramio.PanoramioLayer({
+	          suppressInfoWindows: true
+});
+  setPhotoWidget();
+  
+  var tag = document.getElementById('tag');
+  var button = document.getElementById('filter-button');
+  google.maps.event.addDomListener(button, 'click', function() {
+          panoramioLayer.setTag(tag.value);
+   });
+   map.controls[google.maps.ControlPosition.TOP].push(
+            document.getElementById('filter'));  
 
 //////////////////////////////////////////////////////////////
     listTracks();
