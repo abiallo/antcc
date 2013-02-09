@@ -91,6 +91,10 @@ var geoForm = document.createElement("form");
 var displayLat;
 var displayLong;
 var newTrackFlag = false;
+var toFlag = false;
+var fromFlag = false;
+var markerFrom;
+var markerTo;
 var drawingManager = new google.maps.drawing.DrawingManager({
       drawingControl: true,
       drawingControlOptions: {
@@ -138,7 +142,21 @@ var drawingManager = new google.maps.drawing.DrawingManager({
       new google.maps.Point(0,0),
       // The anchor for this image is the base of the marker at 10,34.
       new google.maps.Point(10, 34));
-  var shadow = new google.maps.MarkerImage('/images/shadow50.png',
+      var purpleimageA = new google.maps.MarkerImage('/images/marker_purpleA.png' ,
+           // This marker is 20 pixels wide by 34 pixels tall.
+      new google.maps.Size(20, 34),
+      // The origin for this image is 0,0.
+      new google.maps.Point(0,0),
+      // The anchor for this image is the base of the marker at 10,34.
+      new google.maps.Point(10, 34));
+      var purpleimageB = new google.maps.MarkerImage('/images/marker_purpleB.png' ,
+           // This marker is 20 pixels wide by 34 pixels tall.
+      new google.maps.Size(20, 34),
+      // The origin for this image is 0,0.
+      new google.maps.Point(0,0),
+      // The anchor for this image is the base of the marker at 10,34.
+      new google.maps.Point(10, 34));
+       var shadow = new google.maps.MarkerImage('/images/shadow50.png',
       // The shadow image is larger in the horizontal dimension
       // while the position and offset are the same as for the main image.
       new google.maps.Size(37, 34),
@@ -162,8 +180,10 @@ var weatherLayer = new google.maps.weather.WeatherLayer({
 var cloudLayer = new google.maps.weather.CloudLayer();
 var searchGoogle;
 var autocomplete;
-
-
+var locationFrom;
+var locationTo;
+var directionsDisplay;
+var directionsService = new google.maps.DirectionsService();
 ///////////////////////////////////////////////////
 function buildImage(track) {
   if (track.category == 'land') {
@@ -2445,6 +2465,9 @@ function displayGeoPanel() {
     '<label for="tag">Tag </label>' +
     '<input type="text" id="tag" name="geo[tag]" style="width:60%;" />' + 
      '<input type="button" id="filter-button" value="Apply Panoramio filter" style="width:90%;" onclick=""/>' +
+     '<input type="button" id="frombuttonid" value="From" style="width:30%;" onclick="fromOnOff()"/>' +
+    '<input type="button" id="tobuttonid" value="To" style="width:30%;" onclick="toOnOff()"/>' +
+    '<input type="button" id="directionbuttonid" value="Direction" style="width:30%;" onclick="calculateDirection()"/>' +
     '</fieldset>';
 
     document.getElementById("sidebar").appendChild(geoForm);
@@ -2622,6 +2645,135 @@ function newTrackOnOff(){
 
 }
 //////////////////////////////////////////////////////////////////////
+function fromOnOff(){
+	if (fromFlag == false) {
+		fromFlag = true;
+		if (toFlag == true) {toOnOff();};
+		$("#frombuttonid").prop('value','ClickOnMap');
+	    google.maps.event.addListener(map,'click',function(event){
+        displayFrom(event.latLng);});  
+		drawingManager.setOptions({
+//            drawingControlOptions: {
+//                   position: google.maps.ControlPosition.TOP_CENTER
+//                   drawingModes: [google.maps.drawing.OverlayType.CIRCLE]
+//            }
+              drawingMode: null
+        });
+	}
+	else {
+	    fromFlag = false;
+	    google.maps.event.clearListeners(map,'click');
+//        document.getElementById("geo1").value = "Places";
+		$("#frombuttonid").prop("value","From");
+		drawingManager.setOptions({
+           drawingControlOptions: {
+           	        drawingControl: true,
+           	        map: map,
+                    position: google.maps.ControlPosition.TOP_CENTER,
+                    drawingModes: [google.maps.drawing.OverlayType.MARKER,
+                                           google.maps.drawing.OverlayType.CIRCLE,
+                                           google.maps.drawing.OverlayType.RECTANGLE,
+                                           google.maps.drawing.OverlayType.POLYLINE,
+                                           google.maps.drawing.OverlayType.POLYGON] 
+           }
+        });
+	};
+
+}
+//////////////////////////////////////////////////////////////////////
+function toOnOff(){
+	if (toFlag == false) {
+		toFlag = true;
+		if (fromFlag == true) {fromOnOff();};
+		$("#tobuttonid").prop('value','ClickOnMap');
+	    google.maps.event.addListener(map,'click',function(event){
+        displayTo(event.latLng);});  
+		drawingManager.setOptions({
+//            drawingControlOptions: {
+//                   position: google.maps.ControlPosition.TOP_CENTER
+//                   drawingModes: [google.maps.drawing.OverlayType.CIRCLE]
+//            }
+              drawingMode: null
+        });
+	}
+	else {
+	    toFlag = false;
+	    google.maps.event.clearListeners(map,'click');
+//        document.getElementById("geo1").value = "Places";
+		$("#tobuttonid").prop("value","To");
+		drawingManager.setOptions({
+           drawingControlOptions: {
+           	        drawingControl: true,
+           	        map: map,
+                    position: google.maps.ControlPosition.TOP_CENTER,
+                    drawingModes: [google.maps.drawing.OverlayType.MARKER,
+                                           google.maps.drawing.OverlayType.CIRCLE,
+                                           google.maps.drawing.OverlayType.RECTANGLE,
+                                           google.maps.drawing.OverlayType.POLYLINE,
+                                           google.maps.drawing.OverlayType.POLYGON] 
+           }
+        });
+	};
+
+}
+//////////////////////////////////////////////////////////////////////
+function displayFrom(location) {
+  markerFrom.setPosition(location);
+  markerFrom.setVisible(true);
+  locationFrom=location;
+//  	      displayMarkerHook(marker,results[0].formatted_address,null);
+//          var geosmarker;
+ //         var formValues=$("form#hookmarkerpanel").serialize();
+  //        $.ajax({
+  //  	      async: false,
+  //  	      type: "POST",
+//	          url: "createmarker",
+//	          data: formValues,
+ //             dataType: "json",
+  //            success: function(data, status){ 
+   //           geosmarker = data.geosmarker;
+ 	
+  //            displayMarkerHook(marker,"",geosmarker);
+  //            setEventsOnMarker(marker,geosmarker);    	
+  //              	    } // end on success
+	 //        }); // end of the new Ajax.Request() call
+}
+//////////////////////////////////////////////////////////////////////
+function displayTo(location) {
+  markerTo.setPosition(location);
+  markerTo.setVisible(true);
+  locationTo=location;
+//  	      displayMarkerHook(marker,results[0].formatted_address,null);
+//          var geosmarker;
+ //         var formValues=$("form#hookmarkerpanel").serialize();
+  //        $.ajax({
+  //  	      async: false,
+  //  	      type: "POST",
+//	          url: "createmarker",
+//	          data: formValues,
+ //             dataType: "json",
+  //            success: function(data, status){ 
+   //           geosmarker = data.geosmarker;
+ 	
+  //            displayMarkerHook(marker,"",geosmarker);
+  //            setEventsOnMarker(marker,geosmarker);    	
+  //              	    } // end on success
+	 //        }); // end of the new Ajax.Request() call
+}//////////////////////////////////////////////////////////////////////
+function calculateDirection() {
+	var request = {
+      origin:locationFrom,
+      destination:locationTo,
+      travelMode: google.maps.TravelMode.DRIVING
+  };
+  directionsService.route(request, function(result, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(result);
+    }
+  });
+}
+
+//////////////////////////////////////////////////////////////////////
 function altHookOnOff(){
 	if (altHookFlag == false) {
 		altHookFlag = true;
@@ -2737,7 +2889,24 @@ function initialize() {
    });
    map.controls[google.maps.ControlPosition.TOP].push(
             document.getElementById('filter'));  
-
+   markerFrom = new google.maps.Marker({
+             map: map,
+             shadow: shadow,
+             icon: purpleimageA,
+             shape: shape,
+          });
+   markerTo = new google.maps.Marker({
+   	         map: map,
+             shadow: shadow,
+             icon: purpleimageB,
+             shape: shape
+          });
+   markerFrom.setVisible(false);
+   markerTo.setVisible(false);
+   locationFrom=null;
+   locationTo=null;
+   directionsDisplay = new google.maps.DirectionsRenderer();
+   directionsDisplay.setMap(map);
 //////////////////////////////////////////////////////////////
     listTracks();
     listMarkers();
