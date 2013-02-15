@@ -36,6 +36,8 @@ var infoDeleteWindow = new google.maps.InfoWindow({
     disableAutoPan: false
     });
 var hookForm = document.createElement("form");
+//var directionsPanel = document.createElement('div');
+//directionsPanel.id = "directionsPanel"
 var hookAltForm = document.createElement("form");
 var hookImage = new google.maps.MarkerImage("/images/hook.png",new google.maps.Size(90,90),new google.maps.Point(0,0),new google.maps.Point(45,45))
 var hookAltImage = new google.maps.MarkerImage("/images/hookalt.png",new google.maps.Size(90,90),new google.maps.Point(0,0),new google.maps.Point(45,45))
@@ -183,6 +185,7 @@ var autocomplete;
 var locationFrom;
 var locationTo;
 var directionsDisplay;
+var directionsDisplayOptions;
 var directionsService = new google.maps.DirectionsService();
 ///////////////////////////////////////////////////
 function buildImage(track) {
@@ -475,7 +478,7 @@ function updateInfoWindow(marker,location,track) {
 // on submit Save button click
 ///////////////////////////////////////////////////////////////////
 function saveGeosmap() {
-
+   directionsDisplay.setPanel(document.getElementById(null));
   //create an HTML DOM form element
   var saveForm = document.createElement("form");
   saveForm.id = "saveFormId";
@@ -566,6 +569,7 @@ function displayMarkerHook(marker,address,geosmarker)
 }
 function displayMarkerNormalHook(marker,address,geosmarker)
 {
+   directionsDisplay.setPanel(document.getElementById(null));
    if (hookedOverlay != null) {	
    	hookedOverlay.setOptions({strokeColor: '#000000'});
    	hookedOverlay.setMap(map);
@@ -661,6 +665,7 @@ function displayMarkerNormalHook(marker,address,geosmarker)
 }
 function displayMarkerAltHook(marker,address,geosmarker)
 {
+   directionsDisplay.setPanel(document.getElementById(null));
    if (hookedAltOverlay != null) {	
    	hookedAltOverlay.setOptions({strokeColor: '#000000'});
    	hookedAltOverlay.setMap(map);
@@ -810,6 +815,7 @@ function displayCircleHook(circle,geoscircle){
 
 function displayCircleNormalHook(circle,geoscircle)
 {
+   directionsDisplay.setPanel(document.getElementById(null));
    if (hookedOverlay != null) {	
   	hookedOverlay.setOptions({strokeColor: '#000000'});
    	hookedOverlay.setMap(map);
@@ -890,6 +896,7 @@ function displayCircleNormalHook(circle,geoscircle)
 }
 function displayCircleAltHook(circle,geoscircle)
 {
+   directionsDisplay.setPanel(document.getElementById(null));
    if (hookedAltOverlay != null) {	
   	hookedAltOverlay.setOptions({strokeColor: '#000000'});
    	hookedAltOverlay.setMap(map);
@@ -1023,6 +1030,7 @@ function displayRectangleHook(rectangle,geosrectangle){
 
 function displayRectangleNormalHook(rectangle,geosrectangle)
 {
+   directionsDisplay.setPanel(document.getElementById(null));
    if (hookedOverlay != null) {	
   	hookedOverlay.setOptions({strokeColor: '#000000'});
    	hookedOverlay.setMap(map);
@@ -1117,6 +1125,7 @@ function displayRectangleNormalHook(rectangle,geosrectangle)
 
 function displayRectangleAltHook(rectangle,geosrectangle)
 {
+   directionsDisplay.setPanel(document.getElementById(null));
    if (hookedAltOverlay != null) {	
   	hookedAltOverlay.setOptions({strokeColor: '#000000'});
    	hookedAltOverlay.setMap(map);
@@ -1266,6 +1275,7 @@ function displayPolylineHook(polyline,geospolyline){
 
 function displayPolylineNormalHook(polyline,geospolyline)
 {
+   directionsDisplay.setPanel(document.getElementById(null));
    if (hookedOverlay != null) {	
   	hookedOverlay.setOptions({strokeColor: '#000000'});
    	hookedOverlay.setMap(map);
@@ -1337,6 +1347,7 @@ function displayPolylineNormalHook(polyline,geospolyline)
 
 function displayPolylineAltHook(polyline,geospolyline)
 {
+   directionsDisplay.setPanel(document.getElementById(null));
    if (hookedAltOverlay != null) {	
   	hookedAltOverlay.setOptions({strokeColor: '#000000'});
    	hookedAltOverlay.setMap(map);
@@ -1456,6 +1467,7 @@ function displayPolygonHook(polygon,geospolygon){
 
 function displayPolygonNormalHook(polygon,geospolygon)
 {
+   directionsDisplay.setPanel(document.getElementById(null));
    if (hookedOverlay != null) {	
   	hookedOverlay.setOptions({strokeColor: '#000000'});
    	hookedOverlay.setMap(map);
@@ -1528,6 +1540,7 @@ function displayPolygonNormalHook(polygon,geospolygon)
 
 function displayPolygonAltHook(polygon,geospolygon)
 {
+   directionsDisplay.setPanel(document.getElementById(null));
    if (hookedAltOverlay != null) {	
   	hookedAltOverlay.setOptions({strokeColor: '#000000'});
    	hookedAltOverlay.setMap(map);
@@ -1650,6 +1663,7 @@ function displayTrackHook(marker,track,location)
 function displayTrackNormalHook(marker,track,location)
 {
 
+   directionsDisplay.setPanel(document.getElementById(null));
    if (hookedOverlay != null) {	
    	hookedOverlay.setOptions({strokeColor: '#000000'});
    	hookedOverlay.setMap(map);
@@ -1754,6 +1768,7 @@ function displayTrackNormalHook(marker,track,location)
 function displayTrackAltHook(marker,track,location)
 {
 
+   directionsDisplay.setPanel(document.getElementById(null));
    if (hookedAltOverlay != null) {	
    	hookedAltOverlay.setOptions({strokeColor: '#000000'});
    	hookedAltOverlay.setMap(map);
@@ -2761,7 +2776,56 @@ function displayTo(location) {
 	 //        }); // end of the new Ajax.Request() call
 }//////////////////////////////////////////////////////////////////////
 function calculateDirection() {
-	var request = {
+    if (trackHookVisibility == true){
+    	document.getElementById("sidebar").removeChild(hookForm);
+    	trackHookVisibility = false;
+    }
+    if (markerHookVisibility == true){
+    	document.getElementById("sidebar").removeChild(hookMarkerForm);
+    	markerHookVisibility = false;
+    }
+    if (circleHookVisibility == true){
+    	document.getElementById("sidebar").removeChild(hookCircleForm);
+    	circleHookVisibility = false;
+    }
+    if (rectangleHookVisibility == true){
+    	document.getElementById("sidebar").removeChild(hookRectangleForm);
+    	rectangleHookVisibility = false;
+    }
+    if (polylineHookVisibility == true){
+    	document.getElementById("sidebar").removeChild(hookPolylineForm);
+    	polylineHookVisibility = false;
+    }    
+    if (polygonHookVisibility == true){
+    	document.getElementById("sidebar").removeChild(hookPolygonForm);
+    	polygonHookVisibility = false;
+    }    
+    if (trackAltHookVisibility == true){
+    	document.getElementById("sidebar").removeChild(hookAltForm);
+    	trackAltHookVisibility = false;
+    }
+    if (markerAltHookVisibility == true){
+    	document.getElementById("sidebar").removeChild(hookAltMarkerForm);
+    	markerAltHookVisibility = false;
+    }
+    if (circleAltHookVisibility == true){
+    	document.getElementById("sidebar").removeChild(hookAltCircleForm);
+    	circleAltHookVisibility = false;
+    }
+    if (rectangleAltHookVisibility == true){
+    	document.getElementById("sidebar").removeChild(hookAltRectangleForm);
+    	rectangleAltHookVisibility = false;
+    }
+    if (polylineAltHookVisibility == true){
+    	document.getElementById("sidebar").removeChild(hookAltPolylineForm);
+    	polylineAltHookVisibility = false;
+    }    
+    if (polygonAltHookVisibility == true){
+    	document.getElementById("sidebar").removeChild(hookAltPolygonForm);
+    	polygonAltHookVisibility = false;
+    }    
+   directionsDisplay.setPanel(document.getElementById("sidebar"));
+   	var request = {
       origin:locationFrom,
       destination:locationTo,
       travelMode: google.maps.TravelMode.DRIVING
@@ -2769,6 +2833,7 @@ function calculateDirection() {
   directionsService.route(request, function(result, status) {
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(result);
+//      document.getElementById("sidebar").appendChild(directionsPanel);
     }
   });
 }
@@ -2905,8 +2970,16 @@ function initialize() {
    markerTo.setVisible(false);
    locationFrom=null;
    locationTo=null;
-   directionsDisplay = new google.maps.DirectionsRenderer();
-   directionsDisplay.setMap(map);
+   directionsDisplayOptions = {
+   	 map: map,
+   	 preserveViewport:  true,
+   	 suppressInfoWindows: true,
+   	 suppressMarkers: true
+   };
+   directionsDisplay = new google.maps.DirectionsRenderer(directionsDisplayOptions);
+//   directionsDisplay.setMap(map);
+   directionsDisplay.setPanel(document.getElementById("sidebar"));
+//   directionsDisplay.setPanel(document.getElementById("directionsPanel"));
 //////////////////////////////////////////////////////////////
     listTracks();
     listMarkers();
