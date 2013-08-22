@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
     if user = User.authenticate(params[:email], params[:password])
       session[:user_id] = user.id
       @session_name = user.name
-      redirect_to root_path, :notice => "Hello " + @session_name + ", logged in successfully"
+      redirect_to geosmaps_path, :notice => "Hello " + @session_name + ", logged in successfully"
     else
       flash.now[:alert] = "Invaild login/password combination"
       render :action => 'new'
